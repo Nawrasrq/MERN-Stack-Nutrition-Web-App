@@ -3,8 +3,8 @@ require('mongodb');
 
 //load user model
 const User = require("./models/user.js");
-//load card model
-const Card = require("./models/card.js");
+//load meal model
+//const meal = require("./models/meal.js");
 
 exports.setApp = function ( app, client )
 {
