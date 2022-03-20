@@ -50,6 +50,7 @@ exports.setApp = function ( app, client )
     app.post('/api/login', async (req, res, next) => {
 
         const { login, password } = req.body;
+        const db = client.db();
         const results = await db.collection('Users').find({Login:login,Password:password});
 
         var id = -1;
