@@ -8,13 +8,13 @@ const User = require("./models/user.js");
 
 exports.setApp = function ( app, client )
 {
-    var token = require('./createJWT.js');
+    //var token = require('./createJWT.js');
 
     //endpoints
     app.post('/api/register', async (req, res, next) =>{
-        const { FirstName, LastName, Login, Password, Email, Birthday, jwtToken  } = req.body;
+        const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; //, jwtToken  
     
-        try{
+        /*try{
           if( token.isExpired(jwtToken)){
             var r = {error:'The JWT is no longer valid', jwtToken: ''};
             res.status(200).json(r);
@@ -24,7 +24,7 @@ exports.setApp = function ( app, client )
         catch(e){
           console.log(e.message);
         }
-
+        */
         const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday});
         var error = '';
 
@@ -35,16 +35,15 @@ exports.setApp = function ( app, client )
         catch(e){
             error = e.toString();
         }
-
-        var refreshedToken = null;
-        
+        //var refreshedToken = null;
+        /*
         try{
             refreshedToken = token.refresh(jwtToken);
         }
         catch(e){
             console.log(e.message);
-        }
-        var ret = { error: error, jwtToken: refreshedToken };
+        }*/
+        var ret = { error: error }; //, jwtToken: refreshedToken  
         res.status(200).json(ret);
     });
 
@@ -68,16 +67,19 @@ exports.setApp = function ( app, client )
             Email = results[0].Email;
             Birthday = results[0].Birthday;
             
+
             try{
-                const token = require("./createJWT.js");
-                ret = token.createToken( fn, ln, id );
+                //const token = require("./createJWT.js");
+                //ret = token.createToken( id, fn, ln, Email, Birthday );
+
+                ret = { id, fn, ln, Email, Birthday};
             }
 
             catch(e){
                 ret = {error:e.message};
             }
 
-            }
+        }
 
         else{
             ret = {error:"Login/Password incorrect"};
