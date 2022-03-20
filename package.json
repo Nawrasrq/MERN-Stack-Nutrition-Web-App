@@ -17,6 +17,7 @@
         "jsonwebtoken": "^8.5.1",
         "mongodb": "^4.4.0",
         "mongoose": "^6.2.7",
+        "mongoose-auto-increment": "^5.0.1",
         "mongoose-int32": "^0.6.0",
         "react-router-dom": "^5.2.0"
     }
