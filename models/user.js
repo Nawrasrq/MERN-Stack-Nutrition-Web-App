@@ -35,8 +35,27 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-
+  Verified: {
+    type: Boolean,
+    default: false
+  }
 });
+
+const secretCode = new Schema ({
+  email: {
+    type: String,
+    required: true,
+  },
+  code: {
+    type: String,
+    required: true,
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now(),
+    expires: 600,
+  },
+})
 
 UserSchema.plugin(autoIncrement.plugin, {model: 'User', field: 'UserId'});
 module.exports = user = mongoose.model('User', UserSchema);
