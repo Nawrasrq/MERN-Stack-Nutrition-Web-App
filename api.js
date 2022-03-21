@@ -82,4 +82,9 @@ exports.setApp = function ( app, client )
 
         res.status(200).json(ret);
     });
+
+    app.post('/api/login', async (req, res, next) => {
+
+    });
+
 }
