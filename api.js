@@ -6,7 +6,7 @@ const User = require("./models/user.js");
 //load meal model
 //const meal = require("./models/meal.js");
 
-exports.setApp = function ( app, client )
+exports.setApp = function (app, client )
 {
     //var token = require('./createJWT.js');
 
