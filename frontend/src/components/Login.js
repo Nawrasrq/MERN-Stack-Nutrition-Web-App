@@ -19,6 +19,7 @@ function Login()
     var loginName;
     var loginPassword;
     const [message,setMessage] = useState('');
+    
     const doLogin = async event => 
     {
         event.preventDefault();

@@ -84,7 +84,7 @@ exports.setApp = function ( app, client )
     });
 
     app.get('/', async (req, res, next) => {
-        console.log("found me!");
+        res.send('/')
     });
 
 }
