@@ -83,8 +83,8 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
 
-    app.post('/api/login', async (req, res, next) => {
-
+    app.get('/', async (req, res, next) => {
+        console.log("found me!");
     });
 
 }
