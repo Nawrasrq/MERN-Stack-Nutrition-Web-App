@@ -1,12 +1,12 @@
-exports = require('express');
-exports = require('mongodb');
+require('express');
+require('mongodb');
 
 //load user model
 const User = require("./models/user.js");
 //load meal model
 //const meal = require("./models/meal.js");
 
-exports.setApp = function (app, client )
+exports.setApp = function ( app, client )
 {
     //var token = require('./createJWT.js');
 
@@ -29,8 +29,7 @@ exports.setApp = function (app, client )
         var error = '';
 
         try{
-            const db = client.db();
-            const result = db.collection('Users').insertOne(newUser);
+            newUser.save();
         }
         catch(e){
             error = e.toString();
@@ -53,8 +52,7 @@ exports.setApp = function (app, client )
         error = '';
 
         try{
-            const db = client.db();
-            const results = await db.collection('Users').find({Login:login,Password:password});
+            const results = await Users.find({Login:login,Password:password});
         }
         catch(e){
             error = e.toString();
