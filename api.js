@@ -1,5 +1,5 @@
-require('express');
-require('mongodb');
+exports = require('express');
+exports = require('mongodb');
 
 //load user model
 const User = require("./models/user.js");
@@ -50,9 +50,16 @@ exports.setApp = function (app, client )
     app.post('/api/login', async (req, res, next) => {
 
         const { login, password } = req.body;
-        const db = client.db();
-        const results = await db.collection('Users').find({Login:login,Password:password});
+        error = '';
 
+        try{
+            const db = client.db();
+            const results = await db.collection('Users').find({Login:login,Password:password});
+        }
+        catch(e){
+            error = e.toString();
+        }
+        
         var id = -1;
         var fn = '';
         var ln = '';
