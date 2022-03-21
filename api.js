@@ -64,7 +64,7 @@ exports.setApp = function ( app, client )
         var Email = '';
         var Birthday = '';
 
-        var ret;
+        var ret = {error:"Login/Password incorrect"};;
 
         if( results.length > 0 ){
             id = results[0].UserId;
@@ -84,9 +84,6 @@ exports.setApp = function ( app, client )
                 ret = {error:e.message};
             }
 
-        }
-        else{
-            ret = {error:"Login/Password incorrect"};
         }
 
         res.status(200).json(ret);
