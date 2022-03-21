@@ -1,4 +1,18 @@
 import React, { useState } from 'react';
+
+const app_name = 'nutrition-app-27'
+function buildPath(route)
+{
+    if (process.env.NODE_ENV === 'production') 
+    {
+        return 'https://' + app_name +  '.herokuapp.com/' + route;
+    }
+    else
+    {        
+        return 'http://localhost:5000/' + route;
+    }
+}
+
 function Login()
 {
     var loginName;
@@ -11,7 +25,7 @@ function Login()
         var js = JSON.stringify(obj);
         try
         {    
-            const response = await fetch('http://localhost:5000/api/login',{method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(buildPath('api/login') ,{method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             if( res.id <= 0 )
             {
@@ -22,7 +36,7 @@ function Login()
                 var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
                 localStorage.setItem('user_data', JSON.stringify(user));
                 setMessage('');
-                window.location.href = '/cards';
+                window.location.href = '/Main';
             }
         }
         catch(e)
