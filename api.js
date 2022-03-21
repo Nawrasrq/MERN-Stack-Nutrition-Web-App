@@ -82,9 +82,5 @@ exports.setApp = function ( app, client )
 
         res.status(200).json(ret);
     });
-
-    app.get('/', async (req, res, next) => {
-        res.send('/')
-    });
-
+    
 }
