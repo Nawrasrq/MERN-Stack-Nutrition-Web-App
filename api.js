@@ -48,19 +48,19 @@ exports.setApp = function ( app, client )
 
     app.post('/api/login', async (req, res, next) => {
 
-        const { login, password } = req.body;
+        const { Login, Password } = req.body;
         error = '';
 
         try{
-            const results = await Users.find({Login:login,Password:password});
+            const results = await User.find({Login:Login, Password:Password});
         }
         catch(e){
             error = e.toString();
         }
         
         var id = -1;
-        var fn = '';
-        var ln = '';
+        var FirstName = '';
+        var LastName = '';
         var Email = '';
         var Birthday = '';
 
@@ -68,8 +68,8 @@ exports.setApp = function ( app, client )
 
         if( results.length > 0 ){
             id = results[0].UserId;
-            fn = results[0].FirstName;
-            ln = results[0].LastName;
+            FirstName = results[0].FirstName;
+            LastName = results[0].LastName;
             Email = results[0].Email;
             Birthday = results[0].Birthday;
             
@@ -77,8 +77,7 @@ exports.setApp = function ( app, client )
             try{
                 //const token = require("./createJWT.js");
                 //ret = token.createToken( id, fn, ln, Email, Birthday );
-
-                ret = { id, fn, ln, Email, Birthday};
+                ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday};
             }
 
             catch(e){
@@ -86,10 +85,10 @@ exports.setApp = function ( app, client )
             }
 
         }
-
         else{
             ret = {error:"Login/Password incorrect"};
         }
+
         res.status(200).json(ret);
     });
 }
