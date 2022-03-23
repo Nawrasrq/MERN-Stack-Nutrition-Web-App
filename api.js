@@ -8,7 +8,7 @@ const User = require("./models/user.js");
 //const meal = require("./models/meal.js");
 
 //load secret code 
-const secretCode = require("./models/user.js");
+const secretCode = require("./models/secretCode.js");
 
 exports.setApp = function ( app, client )
 {
