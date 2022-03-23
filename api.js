@@ -115,12 +115,8 @@ exports.setApp = function ( app, client )
             Verified = results[0].Verified;            
             
             if(Verified == false){
-<<<<<<< HEAD
-                ret = {error: "error: Account not verified, please accept the verification email or resend it if it expired"};
-=======
                 error = "error: Account not verified, please accept the verification email or resend it if it expired";
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
->>>>>>> fixing email verification
             }
             else{
                 try{
@@ -129,11 +125,7 @@ exports.setApp = function ( app, client )
                     ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
                 }
                 catch(e){
-<<<<<<< HEAD
                     ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:e.message};
-=======
-                    ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:e.message};
->>>>>>> fixing email verification
                 }
             }
 
