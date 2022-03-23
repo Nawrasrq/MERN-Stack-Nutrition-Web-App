@@ -53,14 +53,6 @@ exports.setApp = function ( app, client )
         const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
         const newCode = await new secretCode({Email:Email, code: randomCode})
 
-        const mailData = {
-            from: 'nutritionapp@gmail.com',  // sender address
-            to: Email,   // list of receivers
-            subject: 'Verification Email',
-            text: 'Click the url to verify your account',
-            html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
-        };
-
         try{
             //save new user in database
             newUser.save(); 
@@ -68,7 +60,15 @@ exports.setApp = function ( app, client )
             //save new verification code
             newCode.save();
             
-            //send verification email with url containing newUser:userId and newCode:randomCode 
+            //send verification email with url containing newUser:userId and newCode:randomCode
+            const mailData = {
+                from: 'nutritionapp@gmail.com',  // sender address
+                to: Email,   // list of receivers
+                subject: 'Verification Email',
+                text: 'Click the url to verify your account',
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
+            };
+             
             transporter.sendMail(mailData, function (err, info) {
                 if(err)
                   console.log(err)
