@@ -62,7 +62,7 @@ exports.setApp = function ( app, client )
             
             //send verification email with url containing newUser:userId and newCode:randomCode
             const mailData = {
-                from: testAccount,  // sender address
+                from: 'nutritionappverification@nutritionapp.com',  // sender address
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
@@ -136,8 +136,10 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
 
-    app.get('/api/verifyuser/:UserId/:code"', async (req, res, next) => {
-        const { UserId, Code } = req.params;
+    app.get('/api/verifyuser/:UserId/:Code', async (req, res, next) => {
+        const UserId = req.params['UserId'];
+        const Code = req.params['Code'];
+
         const findUser = await User.find({UserId:UserId});
 
         error = '';
