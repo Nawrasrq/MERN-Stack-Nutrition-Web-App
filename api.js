@@ -50,15 +50,15 @@ exports.setApp = function ( app, client )
         */
     
         //create new user and verification code
-        const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-        const newCode = new secretCode({Email:Email, code: randomCode})
+        const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
+        const newCode = await new secretCode({Email:Email, code: randomCode})
 
         const mailData = {
             from: 'nutritionapp@gmail.com',  // sender address
             to: Email,   // list of receivers
             subject: 'Verification Email',
             text: 'Click the url to verify your account',
-            html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode,
+            html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
         };
 
         try{
