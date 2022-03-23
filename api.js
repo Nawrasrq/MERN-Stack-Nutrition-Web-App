@@ -115,7 +115,8 @@ exports.setApp = function ( app, client )
             Verified = results[0].Verified;            
             
             if(Verified == false){
-                ret = {error: "error: Account not verified, please accept the verification email or resend it if it expired"};
+                error = "error: Account not verified, please accept the verification email or resend it if it expired";
+                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
             }
             else{
                 try{
@@ -130,7 +131,7 @@ exports.setApp = function ( app, client )
 
         }
         else{
-            var ret = {error:"error: Login/Password incorrect"};
+            var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
         }
 
         res.status(200).json(ret);
@@ -160,6 +161,9 @@ exports.setApp = function ( app, client )
         else{
             error = "error: Couldn't find user"
         }
+
+        ret = {error: error}
+        res.status(200).json(ret);
 
     });
     
