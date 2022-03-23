@@ -1,5 +1,10 @@
 require('express');
 require('mongodb');
+require('dotenv').config();
+
+//gmail login
+const GmailLogin = process.env.GMAILLOGIN;
+const GmailPass = process.env.GMAILPASS;
 
 //load user model
 const User = require("./models/user.js");
@@ -15,8 +20,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "nutritionapp315@gmail.com",
-        pass: "nutritionApp23",
+        user: GmailLogin,
+        pass: GmailPass
     }   
 });
 
