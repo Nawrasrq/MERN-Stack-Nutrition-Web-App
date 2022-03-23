@@ -10,6 +10,6 @@ function MainPage()
             <LoggedInName />
         </div>
     );
-}
+};
 
 export default MainPage;
