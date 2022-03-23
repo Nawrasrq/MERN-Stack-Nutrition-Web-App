@@ -62,7 +62,7 @@ exports.setApp = function ( app, client )
             
             //send verification email with url containing newUser:userId and newCode:randomCode
             const mailData = {
-                from: 'nutritionapp@gmail.com',  // sender address
+                from: testAccount,  // sender address
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
