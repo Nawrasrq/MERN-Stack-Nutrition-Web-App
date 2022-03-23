@@ -1,13 +1,15 @@
 import React from 'react';
 import PageTitle from '../components/PageTitle';
 import Login from '../components/Login';
-const LoginPage = () =>
+
+function LoginPage()
 {
-    return(
-      <div>
-        <PageTitle />
-        <Login />
-      </div>
-    );
+	return(
+		<div>
+			<PageTitle />
+			<Login />
+		</div>
+	);
 };
+	
 export default LoginPage;

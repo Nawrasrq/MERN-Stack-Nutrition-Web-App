@@ -2,18 +2,6 @@ import React, { useState } from 'react';
 
 const app_name = 'nutrition-app-27'
 
-function buildPath(route)
-{
-    if (process.env.NODE_ENV === 'production') 
-    {
-        return 'https://' + app_name +  '.herokuapp.com/' + route;
-    }
-    else
-    {        
-        return 'http://localhost:5000/' + route;
-    }
-}
-
 function Login()
 {
     var loginName;
@@ -23,21 +11,21 @@ function Login()
     const doLogin = async event => 
     {
         event.preventDefault();
-        var obj = {login:loginName.value,password:loginPassword.value};
+        var obj = {Login:loginName.value, Password:loginPassword.value};
         var js = JSON.stringify(obj);
         try
         {    
             var bp = require('./Path.js');
-            const response = await fetch(bp.buildPath('api/login'),{method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(bp.buildPath('api/login'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
-            if( res.id <= 0 )
+            if( res.UserId <= 0 )
             {
-                setMessage('User/Password combination incorrect');
+                setMessage(res.error);
             }
             else
             {
-                var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
+                var user = {firstName:res.FirstName, lastName:res.LastName, id:res.UserId}
                 localStorage.setItem('user_data', JSON.stringify(user));
                 setMessage('');
                 window.location.href = '/Main';
