@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 var connection = mongoose.createConnection(process.env.MONGODB_URI);
 
 const secretCode = new Schema ({
-    email: {
+    Email: {
       type: String,
       required: true,
     },
-    code: {
+    Code: {
       type: String,
       required: true,
     },
-    dateCreated: {
+    DateCreated: {
       type: Date,
       default: Date.now(),
       expires: 7200,

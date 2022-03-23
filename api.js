@@ -51,7 +51,7 @@ exports.setApp = function ( app, client )
     
         //create new user and verification code
         const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-        const newCode = new secretCode({Email:Email, code: randomCode});
+        const newCode = new secretCode({Email:Email, Code: randomCode});
 
         try{
             //save new user in database
@@ -71,7 +71,7 @@ exports.setApp = function ( app, client )
 
             transporter.sendMail(mailData, function (err, info) {
                 if(err)
-                  console.log(err)
+                  console.log(err);
                 else
                   console.log(info);
             });
@@ -137,7 +137,7 @@ exports.setApp = function ( app, client )
     });
 
     app.get('/api/verifyuser/:UserId/:code"', async (req, res, next) => {
-        const { UserId, code } = req.params;
+        const { UserId, Code } = req.params;
         const findUser = await User.find({UserId:UserId});
 
         error = '';
@@ -145,7 +145,7 @@ exports.setApp = function ( app, client )
         
         if(findUser.length > 0){
             Email = findUser[0].Email;
-            const findCode = await secretCode.find({Email:Email, code:code});
+            const findCode = await secretCode.find({Email:Email, Code:Code});
 
             if(findCode.length > 0){
                 findUser[0].Verified = true;
