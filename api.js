@@ -66,7 +66,7 @@ exports.setApp = function ( app, client )
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
-                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser.UserId + "/" + randomCode
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
             };
 
             transporter.sendMail(mailData, function (err, info) {
@@ -139,7 +139,6 @@ exports.setApp = function ( app, client )
 
     app.get('/api/verifyuser/:UserId/:Code', async (req, res, next) => {
         const { UserId, Code } = req.params;
-        console.log("api endpoint found");
         const findUser = await User.find({UserId:UserId});
         
         error = '';
@@ -147,11 +146,10 @@ exports.setApp = function ( app, client )
         
         if(findUser.length > 0){
             Email = findUser[0].Email;
-            console.log("user found");
             const findCode = await secretCode.find({Email:Email, Code:Code});
 
             if(findCode.length > 0){
-                findUser[0].Verified = true;
+                const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Verified:true});
             }
             else{
                 error = "error: likely expired authorization code"
