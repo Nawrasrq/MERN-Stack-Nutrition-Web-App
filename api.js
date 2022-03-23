@@ -12,14 +12,11 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
-const testAccount = nodemailer.createTestAccount();
 const transporter = nodemailer.createTransport({
-    port: 587,  // true for 465, false for other ports
-    host: "smtp.ethereal.email",
-    secure: false,
+    service: "gmail",
     auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
+        user: "nutritionapp315@gmail.com",
+        pass: "nutritionApp23",
     }   
 });
 
@@ -35,7 +32,6 @@ exports.setApp = function ( app, client )
         const randomCode = crypto.randomBytes(8).toString('hex');
 
         var error = '';
-
         /*try{
           if( token.isExpired(jwtToken)){
             var r = {error:'The JWT is no longer valid', jwtToken: ''};
@@ -60,12 +56,13 @@ exports.setApp = function ( app, client )
             newCode.save();
             
             //send verification email with url containing newUser:userId and newCode:randomCode
+            const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
             const mailData = {
-                from: 'nutritionappverification@nutritionapp.com',  // sender address
+                from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
-                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + findUser[0].UserId + "/" + randomCode
             };
 
             transporter.sendMail(mailData, function (err, info) {
@@ -129,7 +126,7 @@ exports.setApp = function ( app, client )
 
                 //send email
                 const mailData = {
-                    from: 'nutritionappverification@nutritionapp.com',  // sender address
+                    from: 'nutritionapp315@gmail.com',  // sender address
                     to: Email,   // reciever
                     subject: 'Verification Email',
                     text: 'Click the url to verify your account',
