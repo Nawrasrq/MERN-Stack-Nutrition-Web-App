@@ -35,8 +35,12 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-
+  Verified: {
+    type: Boolean,
+    default: false
+  }
 });
+
 
 UserSchema.plugin(autoIncrement.plugin, {model: 'User', field: 'UserId'});
 module.exports = user = mongoose.model('User', UserSchema);
