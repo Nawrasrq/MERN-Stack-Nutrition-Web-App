@@ -115,7 +115,7 @@ exports.setApp = function ( app, client )
             Verified = results[0].Verified;            
             
             if(Verified == false){
-                ret = ret = {error: "error: Account not verified, please accept the verification email or resend it if it expired"};
+                ret = {error: "error: Account not verified, please accept the verification email or resend it if it expired"};
             }
             else{
                 try{
@@ -124,7 +124,7 @@ exports.setApp = function ( app, client )
                     ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
                 }
                 catch(e){
-                    ret = {error:e.message};
+                    ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:e.message};
                 }
             }
 
@@ -137,16 +137,16 @@ exports.setApp = function ( app, client )
     });
 
     app.get('/api/verifyuser/:UserId/:Code', async (req, res, next) => {
-        const UserId = req.params['UserId'];
-        const Code = req.params['Code'];
-
+        const { UserId, Code } = req.params;
+        console.log("api endpoint found");
         const findUser = await User.find({UserId:UserId});
-
+        
         error = '';
         Email = '';
         
         if(findUser.length > 0){
             Email = findUser[0].Email;
+            console.log("user found");
             const findCode = await secretCode.find({Email:Email, Code:Code});
 
             if(findCode.length > 0){
