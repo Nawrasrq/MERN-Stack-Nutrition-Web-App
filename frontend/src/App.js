@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import './App.css';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
+
 function App() {
   return (
     <Router >
@@ -18,4 +19,5 @@ function App() {
     </Router>
   );
 }
+
 export default App;
