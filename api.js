@@ -10,6 +10,19 @@ const User = require("./models/user.js");
 //load secret code 
 const secretCode = require("./models/secretCode.js");
 
+// create reusable transporter object using the default SMTP transport
+const nodemailer = require('nodemailer');
+const testAccount = await nodemailer.createTestAccount();
+const transporter = nodemailer.createTransport({
+    port: 587,  // true for 465, false for other ports
+    host: "smtp.ethereal.email",
+    secure: false,
+    auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+    }   
+});
+
 exports.setApp = function ( app, client )
 {
     //var token = require('./createJWT.js');
@@ -20,20 +33,6 @@ exports.setApp = function ( app, client )
         
         const crypto = require('crypto');
         const randomCode = crypto.randomBytes(8).toString('hex');
-
-        // create reusable transporter object using the default SMTP transport
-        const nodemailer = require('nodemailer');
-        const testAccount = await nodemailer.createTestAccount();
-
-        const transporter = nodemailer.createTransport({
-            port: 465,  // true for 465, false for other ports
-            host: "smtp.ethereal.email",
-            secure: true,
-            auth: {
-                user: testAccount.user,
-                pass: testAccount.pass,
-            }   
-        });
 
         var error = '';
 
@@ -106,6 +105,7 @@ exports.setApp = function ( app, client )
         var Birthday = '';
         var Verified = false;
 
+        //if user found
         if(results.length > 0 ){
             id = results[0].UserId;
             FirstName = results[0].FirstName;
@@ -114,22 +114,50 @@ exports.setApp = function ( app, client )
             Birthday = results[0].Birthday;
             Verified = results[0].Verified;            
             
+            //if user hasnt been verified through email
             if(Verified == false){
-                error = "error: Account not verified, please accept the verification email or resend it if it expired";
+                error = "Account not verified, resending verification email";
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
+                
+                //generate random code
+                const crypto = require('crypto');
+                const randomCode = crypto.randomBytes(8).toString('hex');
+
+                //save code to database
+                const newCode = new secretCode({Email:Email, Code: randomCode});
+                newCode.save();
+
+                //send email
+                const mailData = {
+                    from: 'nutritionappverification@nutritionapp.com',  // sender address
+                    to: Email,   // reciever
+                    subject: 'Verification Email',
+                    text: 'Click the url to verify your account',
+                    html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + id + "/" + randomCode
+                };
+                transporter.sendMail(mailData, function (err, info) {
+                    if(err)
+                      console.log(err);
+                    else
+                      console.log(info);
+                });
             }
             else{
                 try{
                     //const token = require("./createJWT.js");
                     //ret = token.createToken( id, fn, ln, Email, Birthday );
+
+                    //user found, sending back data
                     ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
                 }
                 catch(e){
-                    ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:e.message};
+                    //failed to send back data
+                    ret = {error:e.message};
                 }
             }
 
         }
+        //no user found
         else{
             var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
         }
@@ -162,6 +190,18 @@ exports.setApp = function ( app, client )
 
         ret = {error: error}
         res.status(200).json(ret);
+    });
+
+    app.post('/api/passwordresetrequest', async (req, res, next) => {
+        const { Login } = req.body;
+        const findUser = await User.find({UserId:UserId});
+        
+        error = '';
+
+        //user found 
+        if(findUser.length > 0){
+            
+        }
 
     });
     
