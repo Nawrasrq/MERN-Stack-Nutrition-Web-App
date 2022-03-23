@@ -12,7 +12,7 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
-const testAccount = await nodemailer.createTestAccount();
+const testAccount = nodemailer.createTestAccount();
 const transporter = nodemailer.createTransport({
     port: 587,  // true for 465, false for other ports
     host: "smtp.ethereal.email",
