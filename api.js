@@ -50,8 +50,8 @@ exports.setApp = function ( app, client )
         */
     
         //create new user and verification code
-        const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-        const newCode = await new secretCode({Email:Email, code: randomCode})
+        const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
+        const newCode = new secretCode({Email:Email, code: randomCode})
 
         try{
             //save new user in database
@@ -68,7 +68,7 @@ exports.setApp = function ( app, client )
                 text: 'Click the url to verify your account',
                 html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
             };
-             
+
             transporter.sendMail(mailData, function (err, info) {
                 if(err)
                   console.log(err)
