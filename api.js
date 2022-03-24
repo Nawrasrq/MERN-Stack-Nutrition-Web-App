@@ -10,7 +10,7 @@ const GmailPass = process.env.GMAILPASS;
 const User = require("./models/user.js");
 
 //load meal model
-//const meal = require("./models/meal.js");
+const meal = require("./models/meal.js");
 
 //load secret code 
 const secretCode = require("./models/secretCode.js");
@@ -295,13 +295,13 @@ exports.setApp = function ( app, client )
         //get user input from frontend
         const { userId, name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol } = req.body;
 
-        const newMeal = {UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol};
+        //create new meal
+        const newMeal = await new Meal({UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol});
         var error = '';
 
         try {
             //store new meal in db
-            const db = client.db();
-            const result = db.collection('Meal').insertOne(newMeal);
+            await newMeal.save();
         }
 
         catch(e) {
