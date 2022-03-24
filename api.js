@@ -292,7 +292,7 @@ exports.setApp = function ( app, client )
     });
 
     //add meal endpoint
-    app.post('/api/addmeal', async (req, res, next) => {
+    app.post('/api/addmeal', async (req, res) => {
         //get user input from frontend
         const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
 
@@ -316,7 +316,7 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
     
-    app.delete('/api/deletemeal/:_id', async (req, res, next) => {
+    app.delete('/api/deletemeal/:id', async (req, res) => {
         //get user id from url
         const { id } = req.params;
 
@@ -324,21 +324,15 @@ exports.setApp = function ( app, client )
         const deletedMeal = await Meal.findById(id);
         error = '';
 
-        if(deletedMeal.length > 0) {
-            try {
-                //delete meal from db
-                Meal.remove(deletedMeal);
-            }
+        try {
+            //delete meal from db
+             Meal.remove(deletedMeal);
+        }
 
-            catch(e) {
-                error = e.toString();
-            }
+        catch(e) {
+            error = e.toString();
         }
         
-        else {
-            error = 'could not find meal';
-        }
-
         //set error status
         var ret = {error: error};
 
