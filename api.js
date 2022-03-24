@@ -20,8 +20,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "nutritionapp315@gmail.com",
-        pass: "nutritionApp23"
+        user: GmailLogin,
+        pass: GmailPass
     }   
 });
 
@@ -53,6 +53,7 @@ exports.setApp = function ( app, client )
         //create new user and verification code
         const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
         const newCode = new secretCode({Email:Email, Code: randomCode});
+        var id = -1;
 
         try{
             //save new user in database
@@ -63,6 +64,8 @@ exports.setApp = function ( app, client )
             
             //send verification email with url containing newUser:userId and newCode:randomCode
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
+            id = findUser[0].UserId;
+            
             const mailData = {
                 from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // list of receivers
