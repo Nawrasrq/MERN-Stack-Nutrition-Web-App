@@ -316,7 +316,7 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
     
-    app.delete('/api/deletemeal/:id', async (req, res, next) => {
+    app.delete('/api/deletemeal/:_id', async (req, res, next) => {
         //get user id from url
         const { id } = req.params;
 
