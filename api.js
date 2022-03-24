@@ -289,5 +289,29 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
 
     });
-    
+
+    //add meal endpoint
+    app.post('/api/addmeal', async (req, res, next) => {
+        //get user input from frontend
+        const { userId, name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol } = req.body;
+
+        const newMeal = {UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol};
+        var error = '';
+
+        try {
+            //store new meal in db
+            const db = client.db();
+            const result = db.collection('Meal').insertOne(newMeal);
+        }
+
+        catch(e) {
+            error = e.toString();
+        }
+
+        //set error status
+        var ret = {error: error};
+
+        //send error json data
+        res.status(200).json(ret);
+    });
 }

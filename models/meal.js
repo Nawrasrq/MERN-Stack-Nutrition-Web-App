@@ -16,7 +16,8 @@ const MealSchema = new Schema({
     required: true
   },
   Calories: {
-      type: Number
+    type: Number,
+    required: true
   },
   Protein: {
     type: Number
@@ -38,7 +39,7 @@ const MealSchema = new Schema({
   },
   Cholesterol: {
     type: Number
-  },
+  }
 });
 
 MealSchema.plugin(autoIncrement.plugin, {model: 'Meal', field: 'UserId'});
