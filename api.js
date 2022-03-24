@@ -229,7 +229,7 @@ exports.setApp = function ( app, client )
                 to: Email,   // reciever
                 subject: 'Verification Email',
                 text: 'Click the url to reset your password',
-                html: "nutrition-app-27.herokuapp.com/api/passwordreset/" + id
+                html: "nutrition-app-27.herokuapp.com/api/passwordreset/" + id //needs to be a link to a page in the frontend
             };
             transporter.sendMail(mailData, function (err, info) {
                 if(err)
@@ -253,7 +253,7 @@ exports.setApp = function ( app, client )
 
     });
 
-    app.get('/api/passwordreset/:UserId', async (req, res, next) => {
+    app.post('/api/passwordreset/:UserId', async (req, res, next) => {
         //get userId from url (will parse the link sent to their email which contains their userId)
         const { UserId } = req.params;
 
