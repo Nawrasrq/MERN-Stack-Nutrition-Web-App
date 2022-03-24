@@ -321,7 +321,7 @@ exports.setApp = function ( app, client )
         const { id } = req.params;
 
         //search database for meal
-        const deletedMeal = await Meal.findById(id);
+        const deletedMeal = await Meal.find(id);
         error = '';
 
         try {
