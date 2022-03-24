@@ -271,7 +271,7 @@ exports.setApp = function ( app, client )
                 const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Password:newPassword});      
             }
             else{
-                error = "Incorrect password"
+                error = "Incorrect password";
             }
             
         }
