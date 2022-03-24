@@ -17,6 +17,7 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
+const meal = require('./models/meal.js');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -320,13 +321,13 @@ exports.setApp = function ( app, client )
         const { Id } = req.params;
 
         //search database for meal
-        const findMeal = await Meal.find(meal => meal.Id == Id);
+        const deletedMeal = await Meal.findById(Id);
         error = '';
 
-        if(findMeal.length > 0) {
+        if(deletedMeal.length > 0) {
             try {
-                //remove meal
-                await findMeal.delete();
+                //delete meal from db
+                Meal.remove(deletedMeal);
             }
 
             catch(e) {
