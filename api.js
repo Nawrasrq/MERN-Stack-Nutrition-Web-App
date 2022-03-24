@@ -1,5 +1,10 @@
 require('express');
 require('mongodb');
+require('dotenv').config();
+
+//gmail login
+const GmailLogin = process.env.GMAILLOGIN;
+const GmailPass = process.env.GMAILPASS;
 
 //load user model
 const User = require("./models/user.js");
@@ -10,33 +15,29 @@ const User = require("./models/user.js");
 //load secret code 
 const secretCode = require("./models/secretCode.js");
 
+// create reusable transporter object using the default SMTP transport
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: GmailLogin,
+        pass: GmailPass
+    }   
+});
+
 exports.setApp = function ( app, client )
 {
     //var token = require('./createJWT.js');
 
-    //endpoints
     app.post('/api/register', async (req, res, next) =>{
+        //get registration data from frontend
         const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; //, jwtToken  
         
+        //generate random code
         const crypto = require('crypto');
         const randomCode = crypto.randomBytes(8).toString('hex');
 
-        // create reusable transporter object using the default SMTP transport
-        const nodemailer = require('nodemailer');
-        const testAccount = await nodemailer.createTestAccount();
-
-        const transporter = nodemailer.createTransport({
-            port: 465,  // true for 465, false for other ports
-            host: "smtp.ethereal.email",
-            secure: true,
-            auth: {
-                user: testAccount.user,
-                pass: testAccount.pass,
-            }   
-        });
-
         var error = '';
-
         /*try{
           if( token.isExpired(jwtToken)){
             var r = {error:'The JWT is no longer valid', jwtToken: ''};
@@ -50,23 +51,26 @@ exports.setApp = function ( app, client )
         */
     
         //create new user and verification code
-        const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-        const newCode = new secretCode({Email:Email, Code: randomCode});
+        const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
+        const newCode = await new secretCode({Email:Email, Code: randomCode});
+        var id = -1;
 
         try{
             //save new user in database
-            newUser.save(); 
+            await newUser.save(); 
 
             //save new verification code
-            newCode.save();
+            await newCode.save();
             
             //send verification email with url containing newUser:userId and newCode:randomCode
+            const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
+            
             const mailData = {
-                from: 'nutritionappverification@nutritionapp.com',  // sender address
+                from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
-                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + newUser[0].UserId + "/" + randomCode
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + findUser[0].UserId + "/" + randomCode
             };
 
             transporter.sendMail(mailData, function (err, info) {
@@ -106,6 +110,7 @@ exports.setApp = function ( app, client )
         var Birthday = '';
         var Verified = false;
 
+        //if user found
         if(results.length > 0 ){
             id = results[0].UserId;
             FirstName = results[0].FirstName;
@@ -114,18 +119,45 @@ exports.setApp = function ( app, client )
             Birthday = results[0].Birthday;
             Verified = results[0].Verified;            
             
+            //if user hasnt been verified through email set the error and resend the email
             if(Verified == false){
-                error = "error: Account not verified, please accept the verification email or resend it if it expired";
+                error = "Account not verified, resending verification email";
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
+                
+                //generate random code
+                const crypto = require('crypto');
+                const randomCode = await crypto.randomBytes(8).toString('hex');
+
+                //save code to database
+                const newCode = await new secretCode({Email:Email, Code: randomCode});
+                await newCode.save();
+
+                //send email
+                const mailData = {
+                    from: 'nutritionapp315@gmail.com',  // sender address
+                    to: Email,   // reciever
+                    subject: 'Verification Email',
+                    text: 'Click the url to verify your account',
+                    html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + id + "/" + randomCode
+                };
+                transporter.sendMail(mailData, function (err, info) {
+                    if(err)
+                      console.log(err);
+                    else
+                      console.log(info);
+                });
             }
             else{
                 try{
                     //const token = require("./createJWT.js");
                     //ret = token.createToken( id, fn, ln, Email, Birthday );
+
+                    //user found, sending back data
                     ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
                 }
                 catch(e){
-                    ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:e.message};
+                    //failed to send back data
+                    ret = {error:e.message};
                 }
             }
 
@@ -134,33 +166,126 @@ exports.setApp = function ( app, client )
             var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
         }
 
+        //send json to frontend
         res.status(200).json(ret);
     });
 
     app.get('/api/verifyuser/:UserId/:Code', async (req, res, next) => {
+        //get the userId and verification code based on the url parameters (in the email)
         const { UserId, Code } = req.params;
+        
+        //search the database for the user based on their id
         const findUser = await User.find({UserId:UserId});
         
         error = '';
         Email = '';
         
         if(findUser.length > 0){
+            //check the database if the code hasn't expired and matches the email
             Email = findUser[0].Email;
             const findCode = await secretCode.find({Email:Email, Code:Code});
 
             if(findCode.length > 0){
+                //update database to verify user
                 const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Verified:true});
             }
             else{
-                error = "error: likely expired authorization code"
+                error = "likely expired authorization code";
             }
 
         }
         else{
-            error = "error: Couldn't find user"
+            error = "Couldn't find user";
         }
 
-        ret = {error: error}
+        //set error status
+        ret = {error: error};
+        
+        //send the user back to the login page
+        //res.status(200).render("/index.html");
+        
+        //send error json data
+        res.status(200).json(ret);
+        
+    });
+
+    app.post('/api/passwordresetrequest', async (req, res, next) => {
+        //get login from frontend
+        const { Login } = req.body;
+
+        //search the database for the user based on their id
+        const findUser = await User.find({Login:Login});
+        
+        error = '';
+
+        //if user found 
+        if(findUser.length > 0){
+            //send email to reset your password
+            Email = findUser[0].Email;
+            id = findUser[0].UserId;
+
+            const mailData = {
+                from: 'nutritionapp315@gmail.com',  // sender address
+                to: Email,   // reciever
+                subject: 'Verification Email',
+                text: 'Click the url to reset your password',
+                html: "nutrition-app-27.herokuapp.com/api/passwordreset/" + id
+            };
+            transporter.sendMail(mailData, function (err, info) {
+                if(err)
+                  console.log(err);
+                else
+                  console.log(info);
+            });
+        }
+        else{
+            error = "Couldn't find user";
+        }
+
+        //set error status
+        ret = {error: error};
+        
+        //send the user back to the login page
+        //res.status(200).render("/index.html");
+        
+        //send error json data
+        res.status(200).json(ret);
+
+    });
+
+    app.get('/api/passwordreset/:UserId', async (req, res, next) => {
+        //get userId from url (will parse the link sent to their email which contains their userId)
+        const { UserId } = req.params;
+
+        //get the old and new password from the frontend
+        const { oldPassword, newPassword } = req.body;
+
+        //search database for user
+        const findUser = await User.find({UserId:UserId});
+
+        error = '';
+
+        //if user found and old password matches, update the password
+        if(findUser.length > 0){
+            if(findUser[0].Password == oldPassword){
+                const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Password:newPassword});      
+            }
+            else{
+                error = "Incorrect password"
+            }
+            
+        }
+        else{
+            error = "Couldn't find user";
+        }
+
+        //set error status
+        ret = {error: error};
+        
+        //send the user back to the login page
+        //res.status(200).render("/index.html");
+        
+        //send error json data
         res.status(200).json(ret);
 
     });

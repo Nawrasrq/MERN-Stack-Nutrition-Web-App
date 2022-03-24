@@ -1,7 +1,8 @@
 import React from 'react';
 import PageTitle from '../components/PageTitle';
-import LoggedInName from '../components/LoggedInName'
-const MainPage = () =>
+import LoggedInName from '../components/LoggedInName';
+
+function MainPage()
 {
     return(
         <div>
@@ -9,5 +10,6 @@ const MainPage = () =>
             <LoggedInName />
         </div>
     );
-}
+};
+
 export default MainPage;
