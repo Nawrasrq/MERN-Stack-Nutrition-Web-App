@@ -324,8 +324,14 @@ exports.setApp = function ( app, client )
         error = '';
 
         if(findMeal.length > 0) {
-            //remove meal
-            await findMeal.remove();
+            try {
+                //remove meal
+                await findMeal.remove();
+            }
+
+            catch(e) {
+                error = e.toString();
+            }
         }
         
         else {
