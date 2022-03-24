@@ -10,7 +10,7 @@ const GmailPass = process.env.GMAILPASS;
 const User = require("./models/user.js");
 
 //load meal model
-const meal = require("./models/meal.js");
+const Meal = require("./models/meal.js");
 
 //load secret code 
 const secretCode = require("./models/secretCode.js");
@@ -293,10 +293,10 @@ exports.setApp = function ( app, client )
     //add meal endpoint
     app.post('/api/addmeal', async (req, res, next) => {
         //get user input from frontend
-        const { userId, name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol } = await req.body;
+        const { userId, name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol } = req.body;
 
         //create new meal
-        const newMeal = await new meal({UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol});
+        const newMeal = await new Meal({UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol});
         var error = '';
 
         try {
