@@ -29,10 +29,11 @@ exports.setApp = function ( app, client )
 {
     //var token = require('./createJWT.js');
 
-    //endpoints
     app.post('/api/register', async (req, res, next) =>{
+        //get registration data from frontend
         const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; //, jwtToken  
         
+        //generate random code
         const crypto = require('crypto');
         const randomCode = crypto.randomBytes(8).toString('hex');
 
@@ -116,7 +117,7 @@ exports.setApp = function ( app, client )
             Birthday = results[0].Birthday;
             Verified = results[0].Verified;            
             
-            //if user hasnt been verified through email
+            //if user hasnt been verified through email set the error and resend the email
             if(Verified == false){
                 error = "Account not verified, resending verification email";
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
@@ -159,51 +160,131 @@ exports.setApp = function ( app, client )
             }
 
         }
-        //no user found
         else{
             var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
         }
 
+        //send json to frontend
         res.status(200).json(ret);
     });
 
     app.get('/api/verifyuser/:UserId/:Code', async (req, res, next) => {
+        //get the userId and verification code based on the url parameters (in the email)
         const { UserId, Code } = req.params;
+        
+        //search the database for the user based on their id
         const findUser = await User.find({UserId:UserId});
         
         error = '';
         Email = '';
         
         if(findUser.length > 0){
+            //check the database if the code hasn't expired and matches the email
             Email = findUser[0].Email;
             const findCode = await secretCode.find({Email:Email, Code:Code});
 
             if(findCode.length > 0){
+                //update database to verify user
                 const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Verified:true});
             }
             else{
-                error = "error: likely expired authorization code"
+                error = "likely expired authorization code";
             }
 
         }
         else{
-            error = "error: Couldn't find user"
+            error = "Couldn't find user";
         }
 
-        ret = {error: error}
+        //set error status
+        ret = {error: error};
+        
+        //send the user back to the login page
+        res.status(200).render("/index.html");
+        
+        //send error json data
         res.status(200).json(ret);
+        
     });
 
     app.post('/api/passwordresetrequest', async (req, res, next) => {
+        //get login from frontend
         const { Login } = req.body;
-        const findUser = await User.find({UserId:UserId});
+
+        //search the database for the user based on their id
+        const findUser = await User.find({Login:Login});
         
         error = '';
 
-        //user found 
+        //if user found 
         if(findUser.length > 0){
+            //send email to reset your password
+            Email = findUser[0].Email;
+            id = findUser[0].UserId;
+
+            const mailData = {
+                from: 'nutritionapp315@gmail.com',  // sender address
+                to: Email,   // reciever
+                subject: 'Verification Email',
+                text: 'Click the url to reset your password',
+                html: "nutrition-app-27.herokuapp.com/api/passwordreset/" + id
+            };
+            transporter.sendMail(mailData, function (err, info) {
+                if(err)
+                  console.log(err);
+                else
+                  console.log(info);
+            });
+        }
+        else{
+            error = "Couldn't find user";
+        }
+
+        //set error status
+        ret = {error: error};
+        
+        //send the user back to the login page
+        res.status(200).render("/index.html");
+        
+        //send error json data
+        res.status(200).json(ret);
+
+    });
+
+    app.get('/api/passwordreset/:UserId', async (req, res, next) => {
+        //get userId from url (will parse the link sent to their email which contains their userId)
+        const { UserId } = req.params;
+
+        //get the old and new password from the frontend
+        const { oldPassword, newPassword } = req.body;
+
+        //search database for user
+        const findUser = await User.find({UserId:UserId});
+
+        error = '';
+
+        //if user found and old password matches, update the password
+        if(findUser.length > 0){
+            if(findUser[0].Password == oldPassword){
+                const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Password:newPassword});      
+            }
+            else{
+                error = "Incorrect password"
+            }
             
         }
+        else{
+            error = "Couldn't find user";
+        }
+
+        //set error status
+        ret = {error: error};
+        
+        //send the user back to the login page
+        res.status(200).render("/index.html");
+        
+        //send error json data
+        res.status(200).json(ret);
 
     });
     
