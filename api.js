@@ -315,15 +315,12 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
     
-    app.delete('/api/deletemeal/:UserId', async (req, res, next) => {
-        //get user id
-        const { UserId } = req.params;
-
-        //get meal name from frontend
-        const { Name } = req.body;
+    app.delete('/api/deletemeal/:Id', async (req, res, next) => {
+        //get user id from url
+        const { Id } = req.params;
 
         //search database for meal
-        const findMeal = await Meal.find({UserId:UserId, Name:Name});
+        const findMeal = await Meal.find(meal => meal.Id == Id);
         error = '';
 
         if(findMeal.length > 0) {
