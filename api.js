@@ -326,7 +326,7 @@ exports.setApp = function ( app, client )
 
         try {
             //delete meal from db
-             Meal.findByIdAndRemove(id);
+             Meal.findOneAndRemove(id);
         }
 
         catch(e) {
