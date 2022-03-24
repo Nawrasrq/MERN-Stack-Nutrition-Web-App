@@ -314,4 +314,12 @@ exports.setApp = function ( app, client )
         //send error json data
         res.status(200).json(ret);
     });
+    
+    app.delete('/api/deletemeal/:UserId', async (req, res, next) => {
+        Meal.findById(req.params.id).then(meal =>
+            meal.remove().then(() => res.json({ success: true }))
+        );
+    })
+    .catch(err => res.status(404).json({ success: false }));
+
 }
