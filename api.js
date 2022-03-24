@@ -293,10 +293,10 @@ exports.setApp = function ( app, client )
     //add meal endpoint
     app.post('/api/addmeal', async (req, res, next) => {
         //get user input from frontend
-        const { userId, name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol } = req.body;
+        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
 
         //create new meal
-        const newMeal = await new Meal({UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol});
+        const newMeal = await new Meal({UserId:UserId, Name:Name, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
         var error = '';
 
         try {
