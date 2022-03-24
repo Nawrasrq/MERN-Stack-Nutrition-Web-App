@@ -316,10 +316,28 @@ exports.setApp = function ( app, client )
     });
     
     app.delete('/api/deletemeal/:UserId', async (req, res, next) => {
-        Meal.findById(req.params.id).then(meal =>
-            meal.remove().then(() => res.json({ success: true }))
-        );
-    })
-    .catch(err => res.status(404).json({ success: false }));
+        //get user input from frontend
+        const { UserId, Name } = req.body;
+
+        //search database for meal
+        const findMeal = await Meal.find({UserId:UserId, Name:Name});
+        error = '';
+
+        if(findMeal.length > 0) {
+            //remove meal
+            await findMeal.remove();
+        }
+        
+        else {
+            error = 'could not find meal';
+        }
+
+        //set error status
+        var ret = {error: error};
+
+        //send error json data
+        res.status(200).json(ret);
+
+    });
 
 }
