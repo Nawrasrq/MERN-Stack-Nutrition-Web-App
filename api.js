@@ -317,26 +317,14 @@ exports.setApp = function ( app, client )
     });
     
     app.delete('/api/deletemeal/:id', async (req, res) => {
-        //get id from url
-        const { id } = req.params.id;
-
-        //search database for meal
-        //const deletedMeal = await Meal.findById(id);
-        error = '';
-
-        try {
-            //delete meal from db
-             Meal.findOneAndRemove({_id:id});
-        }
-
-        catch(e) {
-            error = e.toString();
-        }
+        Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
+            res.send(meal);
+        });
         
         //set error status
-        var ret = {error: error};
+        //var ret = {error: error};
 
         //send error json data
-        res.status(200).json(ret);
+        //res.status(200).json(ret);
     });
 }
