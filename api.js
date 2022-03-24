@@ -316,12 +316,12 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
     
-    app.delete('/api/deletemeal/:Id', async (req, res, next) => {
+    app.delete('/api/deletemeal/:id', async (req, res, next) => {
         //get user id from url
-        const { Id } = req.params;
+        const { id } = req.params;
 
         //search database for meal
-        const deletedMeal = await Meal.findById(Id);
+        const deletedMeal = await Meal.findById(id);
         error = '';
 
         if(deletedMeal.length > 0) {

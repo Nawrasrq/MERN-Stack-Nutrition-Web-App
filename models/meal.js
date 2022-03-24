@@ -8,9 +8,7 @@ autoIncrement.initialize(connection);
 
 // Create Schema
 const MealSchema = new Schema({
-  Id: {
-    type: Number
-  },
+
   UserId: {
     type: Number
   },
