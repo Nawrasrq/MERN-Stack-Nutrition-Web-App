@@ -203,7 +203,7 @@ exports.setApp = function ( app, client )
         ret = {error: error};
         
         //send the user back to the login page
-        res.status(200).render("/index.html");
+        //res.status(200).render("/index.html");
         
         //send error json data
         res.status(200).json(ret);
@@ -247,7 +247,7 @@ exports.setApp = function ( app, client )
         ret = {error: error};
         
         //send the user back to the login page
-        res.status(200).render("/index.html");
+        //res.status(200).render("/index.html");
         
         //send error json data
         res.status(200).json(ret);
@@ -284,7 +284,7 @@ exports.setApp = function ( app, client )
         ret = {error: error};
         
         //send the user back to the login page
-        res.status(200).render("/index.html");
+        //res.status(200).render("/index.html");
         
         //send error json data
         res.status(200).json(ret);
