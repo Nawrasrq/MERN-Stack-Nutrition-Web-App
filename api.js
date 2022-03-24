@@ -317,8 +317,8 @@ exports.setApp = function ( app, client )
     });
     
     app.delete('/api/deletemeal/:id', async (req, res) => {
-        //get user id from url
-        const { id } = req.params;
+        //get id from url
+        const { id } = req.params.id;
 
         //search database for meal
         //const deletedMeal = await Meal.findById(id);
@@ -326,7 +326,7 @@ exports.setApp = function ( app, client )
 
         try {
             //delete meal from db
-             Meal.findOneAndRemove(id);
+             Meal.findOneAndRemove({_id:id});
         }
 
         catch(e) {
