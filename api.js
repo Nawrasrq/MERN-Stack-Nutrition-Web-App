@@ -296,7 +296,7 @@ exports.setApp = function ( app, client )
         const { userId, name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol } = req.body;
 
         //create new meal
-        const newMeal = await new Meal({UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol});
+        const newMeal = await new meal({UserId:userId, Name:name, Calories:calories, Protein:protein, Carbs:carbs, Fat:fat, Fiber:fiber, Sugar:sugar, Sodium:sodium, Cholesterol:cholesterol});
         var error = '';
 
         try {
