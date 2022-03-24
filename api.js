@@ -51,27 +51,26 @@ exports.setApp = function ( app, client )
         */
     
         //create new user and verification code
-        const newUser = new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-        const newCode = new secretCode({Email:Email, Code: randomCode});
+        const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
+        const newCode = await new secretCode({Email:Email, Code: randomCode});
         var id = -1;
 
         try{
             //save new user in database
-            newUser.save(); 
+            await newUser.save(); 
 
             //save new verification code
-            newCode.save();
+            await newCode.save();
             
             //send verification email with url containing newUser:userId and newCode:randomCode
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-            id = findUser[0].UserId;
             
             const mailData = {
                 from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
-                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + id + "/" + randomCode
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + findUser[0].UserId + "/" + randomCode
             };
 
             transporter.sendMail(mailData, function (err, info) {
@@ -127,11 +126,11 @@ exports.setApp = function ( app, client )
                 
                 //generate random code
                 const crypto = require('crypto');
-                const randomCode = crypto.randomBytes(8).toString('hex');
+                const randomCode = await crypto.randomBytes(8).toString('hex');
 
                 //save code to database
-                const newCode = new secretCode({Email:Email, Code: randomCode});
-                newCode.save();
+                const newCode = await new secretCode({Email:Email, Code: randomCode});
+                await newCode.save();
 
                 //send email
                 const mailData = {
