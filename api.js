@@ -321,12 +321,12 @@ exports.setApp = function ( app, client )
         const { id } = req.params;
 
         //search database for meal
-        const deletedMeal = await Meal.findById(id);
+        //const deletedMeal = await Meal.findById(id);
         error = '';
 
         try {
             //delete meal from db
-             Meal.deleteOne(deletedMeal);
+             Meal.findByIdAndRemove(id);
         }
 
         catch(e) {
