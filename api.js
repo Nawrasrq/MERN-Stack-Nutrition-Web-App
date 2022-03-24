@@ -71,7 +71,7 @@ exports.setApp = function ( app, client )
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
-                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + findUser[0].UserId + "/" + randomCode
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + id + "/" + randomCode
             };
 
             transporter.sendMail(mailData, function (err, info) {
