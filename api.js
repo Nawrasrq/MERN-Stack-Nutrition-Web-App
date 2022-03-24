@@ -326,7 +326,7 @@ exports.setApp = function ( app, client )
         if(findMeal.length > 0) {
             try {
                 //remove meal
-                await findMeal.delete();
+                await findMeal.remove();
             }
 
             catch(e) {
