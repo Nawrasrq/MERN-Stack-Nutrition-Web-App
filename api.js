@@ -328,18 +328,22 @@ exports.setApp = function ( app, client )
         }
     });
 
-    app.get('/api/searchmeal', async (req, res, next) => {
-        const filters = req.query;
-        const filteredUsers = Meal.filter(user => {
+    app.get('/api/searchmeal/:id', async (req, res, next) => {
+       let meal;
 
-            let isValid = true;
-            for (key in filters) {
-                console.log(key, user[key], filters[key]);
-                isValid = isValid && user[key] == filters[key];
-            }
-            return isValid;
+       try {
+           meal = await Meal.findById(req.params.id);
 
-        });
-        res.send(filteredUsers);
+           if(meal == null) {
+               return res.status(4040).json(ret);
+           }
+       }
+
+       catch(e) {
+           error = e.toString();
+       }
+
+       res.meal = meal;
+       res.send(res.meal.Name);
     });
 }
