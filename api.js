@@ -292,7 +292,7 @@ exports.setApp = function ( app, client )
     });
 
     //add meal endpoint
-    app.post('/api/addmeal', async (req, res) => {
+    app.post('/api/addmeal', async (req, res, next) => {
         //get user input from frontend
         const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
 
@@ -316,7 +316,7 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
     
-    app.delete('/api/deletemeal/:id', async (req, res) => {
+    app.delete('/api/deletemeal/:id', async (req, res, next) => {
         try {
             Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
                 res.send(meal);
@@ -326,5 +326,20 @@ exports.setApp = function ( app, client )
         catch(e) {
             error = e.toString();
         }
+    });
+
+    app.get('/api/searchmeal', async (req, res, next) => {
+        const filters = req.query;
+        const filteredUsers = Meal.filter(user => {
+
+            let isValid = true;
+            for (key in filters) {
+                console.log(key, user[key], filters[key]);
+                isValid = isValid && user[key] == filters[key];
+            }
+            return isValid;
+
+        });
+        res.send(filteredUsers);
     });
 }
