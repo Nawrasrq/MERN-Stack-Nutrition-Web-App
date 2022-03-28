@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordRequestPage from './pages/ResetPasswordRequestPage';
+import AddMealPage from './pages/AddMealPage';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
         </Route>
         <Route path="/Main" exact>
           <MainPage />
+        </Route>
+        <Route path="/AddMeal" exact>
+          <AddMealPage />
         </Route>
         <Redirect to="/" />
       </Switch>  
