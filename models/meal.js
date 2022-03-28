@@ -8,6 +8,7 @@ autoIncrement.initialize(connection);
 
 // Create Schema
 const MealSchema = new Schema({
+
   UserId: {
     type: Number
   },
@@ -16,7 +17,8 @@ const MealSchema = new Schema({
     required: true
   },
   Calories: {
-      type: Number
+    type: Number,
+    required: true
   },
   Protein: {
     type: Number
@@ -38,8 +40,9 @@ const MealSchema = new Schema({
   },
   Cholesterol: {
     type: Number
-  },
+  }
 });
 
 MealSchema.plugin(autoIncrement.plugin, {model: 'Meal', field: 'UserId'});
+MealSchema.plugin(autoIncrement.plugin, {model: 'Meal', field: 'Id'});
 module.exports = Meal = mongoose.model('Meal', MealSchema);

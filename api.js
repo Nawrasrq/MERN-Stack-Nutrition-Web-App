@@ -10,13 +10,14 @@ const GmailPass = process.env.GMAILPASS;
 const User = require("./models/user.js");
 
 //load meal model
-//const meal = require("./models/meal.js");
+const Meal = require("./models/meal.js");
 
 //load secret code 
 const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
+const meal = require('./models/meal.js');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -289,5 +290,60 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
 
     });
+
+    //add meal endpoint
+    app.post('/api/addmeal', async (req, res, next) => {
+        //get user input from frontend
+        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
+
+        //create new meal
+        const newMeal = await new Meal({UserId:UserId, Name:Name, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
+        var error = '';
+
+        try {
+            //store new meal in db
+            await newMeal.save();
+        }
+
+        catch(e) {
+            error = e.toString();
+        }
+
+        //set error status
+        var ret = {error: error};
+
+        //send error json data
+        res.status(200).json(ret);
+    });
     
+    app.delete('/api/deletemeal/:id', async (req, res, next) => {
+        try {
+            Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
+                res.send(meal);
+            });
+        }
+
+        catch(e) {
+            error = e.toString();
+        }
+    });
+
+    app.get('/api/searchmeal/:id', async (req, res, next) => {
+       let meal;
+
+       try {
+           meal = await Meal.findById(req.params.id);
+
+           if(meal == null) {
+               return res.status(4040).json(ret);
+           }
+       }
+
+       catch(e) {
+           error = e.toString();
+       }
+
+       res.meal = meal;
+       res.send(res.meal.Name);
+    });
 }
