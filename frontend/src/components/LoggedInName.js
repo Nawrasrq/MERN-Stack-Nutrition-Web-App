@@ -15,10 +15,17 @@ function LoggedInName()
 		window.location.href = '/';
 	};    
 
+	const goToAddMeal = event =>
+	{
+		event.preventDefault();
+		window.location.href = '/AddMeal';
+	};
+
 	return(
 		<div id="loggedInDiv">
 			<span id="userName">Logged In As {firstName} {lastName}</span><br />
-			<button type="button" id="logoutButton" class="buttons" onClick={doLogout}> Log Out </button>
+			<button type="button" id="logoutButton" class="buttons" onClick={doLogout}> Log Out </button><br />
+			<button type="button" id="addMealButton" class="buttons" onClick={goToAddMeal}> Add Meal </button>
 		</div>
 	);
 };
