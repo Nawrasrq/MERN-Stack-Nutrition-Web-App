@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordRequestPage from './pages/ResetPasswordRequestPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import AddMealPage from './pages/AddMealPage';
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
         </Route>
         <Route path="/ResetPasswordRequest" exact>
           <ResetPasswordRequestPage />
+        </Route>
+        <Route path="/api/passwordreset/:id" exact>
+          <ResetPasswordPage />
         </Route>
         <Route path="/Register" exact>
           <RegisterPage />

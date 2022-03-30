@@ -225,12 +225,24 @@ exports.setApp = function ( app, client )
             Email = findUser[0].Email;
             id = findUser[0].UserId;
 
+            // Made this to test api on local
+            linkPath = ""; //needs to be a link to a page in the frontend
+            route = "api/passwordreset/" + id;
+            if (process.env.NODE_ENV === 'production') 
+            {
+                linkPath = 'https://' + app_name +  '.herokuapp.com/' + route;
+            }
+            else
+            {        
+                linkPath = 'http://localhost:3000/' + route;
+            }
+
             const mailData = {
                 from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // reciever
                 subject: 'Verification Email',
                 text: 'Click the url to reset your password',
-                html: "nutrition-app-27.herokuapp.com/api/passwordreset/" + id //needs to be a link to a page in the frontend
+                html: linkPath
             };
             transporter.sendMail(mailData, function (err, info) {
                 if(err)
@@ -259,7 +271,8 @@ exports.setApp = function ( app, client )
         const { UserId } = req.params;
 
         //get the old and new password from the frontend
-        const { oldPassword, newPassword } = req.body;
+        //const { oldPassword, newPassword } = req.body;
+        const { NewPassword } = req.body;
 
         //search database for user
         const findUser = await User.find({UserId:UserId});
@@ -268,11 +281,14 @@ exports.setApp = function ( app, client )
 
         //if user found and old password matches, update the password
         if(findUser.length > 0){
-            if(findUser[0].Password == oldPassword){
-                const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Password:newPassword});      
+            //if(findUser[0].Password == oldPassword)
+            if(findUser[0].Password != NewPassword)
+            {
+                const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Password:NewPassword});      
             }
             else{
-                error = "Incorrect password";
+                //error = "Incorrect password";
+                error = "Need to Change to a New Password";
             }
             
         }
