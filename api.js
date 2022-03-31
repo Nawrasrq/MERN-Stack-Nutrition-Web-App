@@ -368,12 +368,18 @@ exports.setApp = function ( app, client )
         const {UserId, search} = req.body;
         var _search = search.trim();
 
-        const results = await Meal.find({Meal: {$regex:_search+'.*', $options:'r'}}).toArray();
+        try {
+            const results = await Meal.find({Meal: {$regex:_search+'.*', $options:'r'}}).toArray();
 
-        var _ret = [];
-        for(var i = 0;i < results.length; i++)
-        {
-            _ret.push(results[i].Meal);
+            var _ret = [];
+            for(var i = 0;i < results.length; i++)
+            {
+                _ret.push(results[i].Meal);
+            }
+        }
+
+        catch(e) {
+            error = e.toString();
         }
 
         var ret = {results:_ret, error:error};
