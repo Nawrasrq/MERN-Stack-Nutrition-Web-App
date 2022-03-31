@@ -364,10 +364,12 @@ exports.setApp = function ( app, client )
     });
 
     app.post('/api/filtersearch', async (req, res, next) => {
+        //initialization
         var error = '';
         const {UserId, search} = req.body;
         var _search = search.trim();
 
+        //filtering the results with partial string
         try {
             const results = await Meal.find({"Meal": {$regex:_search+'.*', $options:'r'}}).toArray();
 
@@ -382,6 +384,7 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
+        //returning results
         var ret = {results:_ret, error:error};
         res.status(200).json(ret);
     });
