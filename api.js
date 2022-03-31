@@ -369,10 +369,10 @@ exports.setApp = function ( app, client )
         var _search = search.trim();
 
         try {
-            const results = await Meal.find({Meal: {$regex:_search+'.*', $options:'r'}}).toArray();
+            const results = await Meal.find({"Meal": {$regex:_search+'.*', $options:'r'}}).toArray();
 
             var _ret = [];
-            for(var i = 0;i < results.length; i++)
+            for(var i = 0; i < results.length; i++)
             {
                 _ret.push(results[i].Meal);
             }
