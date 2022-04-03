@@ -351,7 +351,7 @@ exports.setApp = function ( app, client )
            meal = await Meal.findById(req.params.id);
 
            if(meal == null) {
-               return res.status(4040).json(ret);
+               return res.status(404).json(ret);
            }
        }
 
@@ -361,5 +361,31 @@ exports.setApp = function ( app, client )
 
        res.meal = meal;
        res.send(res.meal.Name);
+    });
+
+    app.post('/api/filtersearch', async (req, res, next) => {
+        //initialization
+        var error = '';
+        const {UserId, search} = req.body;
+        var _search = search.trim();
+
+        //filtering the results with partial string
+        try {
+            const results = await Meal.find({"Meal": {$regex:_search+'.*', $options:'r'}}).toArray();
+
+            var _ret = [];
+            for(var i = 0; i < results.length; i++)
+            {
+                _ret.push(results[i].Meal);
+            }
+        }
+
+        catch(e) {
+            error = e.toString();
+        }
+
+        //returning results
+        var ret = {results:_ret, error:error};
+        res.status(200).json(ret);
     });
 }
