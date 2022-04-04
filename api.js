@@ -394,11 +394,12 @@ exports.setApp = function ( app, client )
 
         //const {UserId, search} = req.body; 
 
-        let partialToMatchId = new RegExp(req.params.UserId,'i');
+        let UserId = new RegExp(req.params.UserId,'i');
         let partialToMatchName = new RegExp(req.params.name,'i');
-        Meal.find({UserId, Name: partialToMatchId, partialToMatchName}, function(err, foundMeal) {
+        Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal) {
-                res.send(foundMeal)
+                if(foundMeal.UserId == UserId)
+                    res.send(foundMeal)
             } else {
                 res.send("No meal matching that name was found.");
             }
