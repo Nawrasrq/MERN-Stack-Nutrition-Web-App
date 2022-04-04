@@ -392,8 +392,11 @@ exports.setApp = function ( app, client )
         var ret = {results:_ret, error:error};
         res.status(200).json(ret);*/
 
-        let partialToMatch = new RegExp(req.params.Name,'i');
-        Meal.find({Name: partialToMatch}, function(err, foundMeal) {
+        const {UserId, search} = req.body; 
+
+        let partialToMatchId = new RegExp(UserId,'i');
+        let partialToMatchName = new RegExp(search,'i');
+        Meal.find({UserId: partialToMatchId}, {Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal) {
                 res.send(foundMeal)
             } else {
