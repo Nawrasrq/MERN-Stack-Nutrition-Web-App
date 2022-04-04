@@ -367,7 +367,7 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
-    app.get('/api/filtersearch/:name', async (req, res, next) => {
+    app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
         /*//initialization
         var error = '';
         const {UserId, search} = req.body;
@@ -394,9 +394,9 @@ exports.setApp = function ( app, client )
 
         //const {UserId, search} = req.body; 
 
-        //let partialToMatchId = new RegExp(UserId,'i');
+        let partialToMatchId = new RegExp(req.params.UserId,'i');
         let partialToMatchName = new RegExp(req.params.name,'i');
-        Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
+        Meal.find({UserId: partialToMatchId}, {Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal) {
                 res.send(foundMeal)
             } else {
