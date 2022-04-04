@@ -335,6 +335,7 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
     
+    //delete meal
     app.delete('/api/deletemeal/:id', async (req, res, next) => {
         try {
             Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
@@ -415,5 +416,18 @@ exports.setApp = function ( app, client )
 
         //send error json data
         res.status(200).json(ret);
+    });
+
+    //delete goal
+    app.delete('/api/deletegoal/:id', async (req, res, next) => {
+        try {
+            Goal.findByIdAndRemove({_id: req.params.id}).then(function(goal){
+                res.send(goal);
+            });
+        }
+
+        catch(e) {
+            error = e.toString();
+        }
     });
 }
