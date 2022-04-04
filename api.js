@@ -367,7 +367,7 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
-    app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
+    app.get('/api/filtersearch/:name', async (req, res, next) => {
 
         let partialToMatchName = new RegExp(req.params.name,'i');
 
