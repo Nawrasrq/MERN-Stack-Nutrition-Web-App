@@ -367,7 +367,7 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
-    app.post('/api/filtersearch', async (req, res, next) => {
+    app.get('/api/filtersearch/:name', async (req, res, next) => {
         /*//initialization
         var error = '';
         const {UserId, search} = req.body;
@@ -392,11 +392,11 @@ exports.setApp = function ( app, client )
         var ret = {results:_ret, error:error};
         res.status(200).json(ret);*/
 
-        const {UserId, search} = req.body; 
+        //const {UserId, search} = req.body; 
 
-        let partialToMatchId = new RegExp(UserId,'i');
-        let partialToMatchName = new RegExp(search,'i');
-        Meal.find({UserId: partialToMatchId}, {Name: partialToMatchName}, function(err, foundMeal) {
+        //let partialToMatchId = new RegExp(UserId,'i');
+        let partialToMatchName = new RegExp(req.params.name,'i');
+        Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal) {
                 res.send(foundMeal)
             } else {
