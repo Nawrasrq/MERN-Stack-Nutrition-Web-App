@@ -368,40 +368,17 @@ exports.setApp = function ( app, client )
     });
 
     app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
-        /*//initialization
-        var error = '';
-        const {UserId, search} = req.body;
-        var _search = search.trim();
-
-        //filtering the results with partial string
-        try {
-            const results = await Meal.find({"Meal": {$regex:_search+'.*', $options:'r'}}).toArray();
-
-            var _ret = [];
-            for(var i = 0; i < results.length; i++)
-            {
-                _ret.push(results[i].Meal);
-            }
-        }
-
-        catch(e) {
-            error = e.toString();
-        }
-
-        //returning results
-        var ret = {results:_ret, error:error};
-        res.status(200).json(ret);*/
-
-        //const {UserId, search} = req.body; 
 
         let partialToMatchName = new RegExp(req.params.name,'i');
+
         Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal != '') {
-                res.send(foundMeal[0][0]);
+                res.send(foundMeal[1]);
             } else {
                 res.send("No meal matching that name was found.");
             }
         });
+
     });
 
     //add goal endpoint
