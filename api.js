@@ -12,6 +12,9 @@ const User = require("./models/user.js");
 //load meal model
 const Meal = require("./models/meal.js");
 
+//load goal model
+const Goal = require("./models/goal.js");
+
 //load secret code 
 const secretCode = require("./models/secretCode.js");
 
@@ -386,6 +389,31 @@ exports.setApp = function ( app, client )
 
         //returning results
         var ret = {results:_ret, error:error};
+        res.status(200).json(ret);
+    });
+
+    //add goal endpoint
+    app.post('/api/addgoal', async (req, res, next) => {
+        //get user input from frontend
+        const { UserId, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
+
+        //create new goal
+        const newGoal = await new Goal({UserId:UserId, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
+        var error = '';
+
+        try {
+            //store new goal in db
+            await newGoal.save();
+        }
+
+        catch(e) {
+            error = e.toString();
+        }
+
+        //set error status
+        var ret = {error: error};
+
+        //send error json data
         res.status(200).json(ret);
     });
 }
