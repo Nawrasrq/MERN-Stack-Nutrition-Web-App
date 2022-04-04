@@ -398,7 +398,7 @@ exports.setApp = function ( app, client )
         Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal != '') {
                 //res.send(foundMeal)
-                res.send(foundMeal.UserId)
+                res.send(foundMeal.extract(UserId))
             } else {
                 res.send("No meal matching that name was found.");
             }
