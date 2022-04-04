@@ -397,7 +397,8 @@ exports.setApp = function ( app, client )
         let partialToMatchName = new RegExp(req.params.name,'i');
         Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal != '') {
-                res.send(JSON.parse(foundMeal.UserId));
+                var x =JSON.parse(JSON.stringify(foundMeal));
+                res.send(x.UserId);
             } else {
                 res.send("No meal matching that name was found.");
             }
