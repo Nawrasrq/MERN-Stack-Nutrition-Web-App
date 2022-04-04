@@ -367,7 +367,7 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
-    app.get('/api/filtersearch', async (req, res, next) => {
+    app.post('/api/filtersearch', async (req, res, next) => {
         /*//initialization
         var error = '';
         const {UserId, search} = req.body;
