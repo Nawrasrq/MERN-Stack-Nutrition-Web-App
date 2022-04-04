@@ -367,8 +367,8 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
-    app.post('/api/filtersearch', async (req, res, next) => {
-        //initialization
+    app.get('/api/filtersearch', async (req, res, next) => {
+        /*//initialization
         var error = '';
         const {UserId, search} = req.body;
         var _search = search.trim();
@@ -390,7 +390,16 @@ exports.setApp = function ( app, client )
 
         //returning results
         var ret = {results:_ret, error:error};
-        res.status(200).json(ret);
+        res.status(200).json(ret);*/
+
+        let partialToMatch = new RegExp(req.params.Name,'i'); 
+        Meal.find({Name: partialToMatch}, function(err, foundMeal){
+            if (foundMeal) {
+                res.send(foundMeal)
+            } else {
+                res.send("No meal matching that name was found.");
+            }
+        });
     });
 
     //add goal endpoint
