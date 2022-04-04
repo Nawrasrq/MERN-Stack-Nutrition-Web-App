@@ -21,11 +21,22 @@ function LoggedInName()
 		window.location.href = '/AddMeal';
 	};
 
+	const goToGoals = event =>
+	{
+		event.preventDefault();
+		window.location.href = '/Goals';
+	}
+
 	return(
 		<div id="loggedInDiv">
-			<span id="userName">Logged In As {firstName} {lastName}</span><br />
-			<button type="button" id="logoutButton" class="buttons" onClick={doLogout}> Log Out </button><br />
+			<span id="userName">Hello {firstName} {lastName}, I'm watching you</span><br /><br />
+			<button type="button" id="logoutButton" class="buttons" onClick={doLogout}> Log Out </button><br /><br />
+			
+			<span>|--</span>
 			<button type="button" id="addMealButton" class="buttons" onClick={goToAddMeal}> Add Meal </button>
+			<span>--|--</span>
+			<button type="button" id="goalsButton" class="buttons" onClick={goToGoals}> Goals </button>
+			<span>--|</span>
 		</div>
 	);
 };

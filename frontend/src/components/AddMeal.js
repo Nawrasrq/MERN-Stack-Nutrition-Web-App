@@ -71,7 +71,7 @@ function AddMeal()
             <input type="number" id="sodium" placeholder="Sodium" ref={(c) => sodium = c} /><br />
             <input type="number" id="cholesterol" placeholder="Cholesterol" ref={(c) => cholesterol = c} /><br />
             <input type="submit" id="addMealButton" class="buttons" value = "Add Meal" onClick={doAddMeal} /><br />
-            <span id="registerResult">{message}</span>
+            <span id="addMealResult">{message}</span>
         </form>
      </div>
   );
