@@ -17,10 +17,15 @@ function AddMeal()
     var cholesterol;
     const [message,setMessage] = useState('');
 
+    var storage = require('../tokenStorage.js');
+
     const doAddMeal = async event => 
     {
         // create object from text boxes and make JSON 
         event.preventDefault();
+
+        var tok = storage.retrieveToken();
+
         var obj = { UserId:userId, 
                     Name:foodName.value, 
                     Calories:calories.value, 
@@ -30,7 +35,8 @@ function AddMeal()
                     Fiber:(fiber.value || 0), 
                     Sugar:(sugar.value || 0), 
                     Sodium:(sodium.value || 0), 
-                    Cholesterol:(cholesterol.value || 0)
+                    Cholesterol:(cholesterol.value || 0),
+                    jwtToken:tok
                 }; 
         var js = JSON.stringify(obj);
         try
@@ -48,6 +54,7 @@ function AddMeal()
             else
             {
                 setMessage('');
+                storage.storeToken(res.jwtToken)
             }
         }
         catch(e)

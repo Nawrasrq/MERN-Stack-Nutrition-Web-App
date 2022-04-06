@@ -21,7 +21,7 @@ _createToken = function ( id, FirstName, LastName, Email, Birthday )
                        '24h'
                       '365d'
       */
-      var ret = {accessToken:accessToken};
+      var ret = {accessToken:accessToken, firstName:FirstName, lastName:LastName, userId:id};
     }
     catch(e)
     {
@@ -49,12 +49,12 @@ exports.isExpired = function( token )
 
 exports.refresh = function( token )
 {
-  var ud = jwt.decode(token,{complete:true});
-  var id = ud.payload.id;
-  var FirstName = ud.payload.FirstName;
-  var LastName = ud.payload.LastName;
-  var Email = ud.payload.Email;
-  var Birthday = ud.payload.Birthday;
+  let ud = jwt.decode(token,{complete:true});
+  let id = ud.payload.id;
+  let FirstName = ud.payload.FirstName;
+  let LastName = ud.payload.LastName;
+  let Email = ud.payload.Email;
+  let Birthday = ud.payload.Birthday;
 
   return _createToken( id, FirstName, LastName, Email, Birthday );
 }

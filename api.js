@@ -121,10 +121,11 @@ exports.setApp = function ( app, client )
             LastName = results[0].LastName;
             Email = results[0].Email;
             Birthday = results[0].Birthday;
-            Verified = results[0].Verified;            
+            Verified = results[0].Verified; 
             
             //if user hasnt been verified through email set the error and resend the email
-            if(Verified == false){
+            if(Verified === false)
+            {
                 error = "Account not verified, resending verification email";
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
                 
@@ -153,13 +154,14 @@ exports.setApp = function ( app, client )
             }
             else{
                 try{
-                    //const token = require("./createJWT.js");
-                    //ret = token.createToken( id, fn, ln, Email, Birthday );
-
+                    var token = require("./createJWT.js");
+                    ret = token.createToken( id, FirstName, LastName, Email, Birthday );
+                    
                     //user found, sending back data
-                    ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
+                    //ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
                 }
-                catch(e){
+                catch(e)
+                {
                     //failed to send back data
                     ret = {error:e.message};
                 }
@@ -312,8 +314,24 @@ exports.setApp = function ( app, client )
 
     //add meal endpoint
     app.post('/api/addmeal', async (req, res, next) => {
+        let token = require('./createJWT.js');
+
         //get user input from frontend
-        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
+        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken } = req.body;
+
+        try
+        {
+            if( token.isExpired(jwtToken))
+            {
+                var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                res.status(200).json(r);
+                return;
+            }
+        }
+        catch(e)
+        {
+            console.log(e.message);
+        }
 
         //create new meal
         const newMeal = await new Meal({UserId:UserId, Name:Name, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
@@ -328,8 +346,18 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
+        var refreshedToken = null;
+        try
+        {
+          refreshedToken = token.refresh(jwtToken);
+        }
+        catch(e)
+        {
+          console.log(e.message);
+        }
+        
         //set error status
-        var ret = {error: error};
+        var ret = { error:error, jwtToken:refreshedToken };
 
         //send error json data
         res.status(200).json(ret);
