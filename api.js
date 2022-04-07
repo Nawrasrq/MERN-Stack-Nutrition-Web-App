@@ -327,6 +327,8 @@ exports.setApp = function ( app, client )
                 res.status(200).json(r);
                 return;
             }
+
+            refreshedToken = (token.refresh(jwtToken)).accessToken;
         }
         catch(e)
         {
@@ -344,16 +346,6 @@ exports.setApp = function ( app, client )
 
         catch(e) {
             error = e.toString();
-        }
-
-        var refreshedToken = null;
-        try
-        {
-          refreshedToken = token.refresh(jwtToken);
-        }
-        catch(e)
-        {
-          console.log(e.message);
         }
         
         //set error status

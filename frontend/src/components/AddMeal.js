@@ -46,6 +46,8 @@ function AddMeal()
             const response = await fetch(bp.buildPath('api/addmeal'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
+            storage.storeToken(res.jwtToken);
+
             // I'll make the error messages nicer later - Declan
             if( res.error )
             {
@@ -54,7 +56,6 @@ function AddMeal()
             else
             {
                 setMessage('');
-                storage.storeToken(res.jwtToken)
             }
         }
         catch(e)

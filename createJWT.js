@@ -49,12 +49,12 @@ exports.isExpired = function( token )
 
 exports.refresh = function( token )
 {
-  let ud = jwt.decode(token,{complete:true});
-  let id = ud.payload.id;
-  let FirstName = ud.payload.FirstName;
-  let LastName = ud.payload.LastName;
-  let Email = ud.payload.Email;
-  let Birthday = ud.payload.Birthday;
+  var ud = jwt.decode(token,{complete:true});
+  var id = ud.payload.id;
+  var FirstName = ud.payload.FirstName;
+  var LastName = ud.payload.LastName;
+  var Email = ud.payload.Email;
+  var Birthday = ud.payload.Birthday;
 
   return _createToken( id, FirstName, LastName, Email, Birthday );
 }
