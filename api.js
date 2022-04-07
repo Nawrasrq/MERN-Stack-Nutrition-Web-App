@@ -396,11 +396,9 @@ exports.setApp = function ( app, client )
             res.send(idMeal);
         });*/
 
-        Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
+        Meal.find({Name: partialToMatchName}, {UserId: id}, function(err, foundMeal) {
             if (foundMeal != '') {
-                foundMeal.find({UserId: id}, function(err, finalMeal) {
-                    res.send(finalMeal);
-                });
+                    res.send(foundMeal);
             } else {
                 res.send("No meal matching that name was found.");
             }
