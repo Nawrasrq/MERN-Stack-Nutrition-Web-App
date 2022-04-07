@@ -387,9 +387,15 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
-    app.get('/api/filtersearch/:name', async (req, res, next) => {
+    app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
 
         let partialToMatchName = new RegExp(req.params.name,'i');
+
+        Meal.find({UserId: req.params.UserId}, function(err, userMeal) {
+            if(foundMeal != '') {
+                res.send(userMeal);
+            }
+        });
 
         Meal.find({Name: partialToMatchName}, function(err, foundMeal) {
             if (foundMeal != '') {
