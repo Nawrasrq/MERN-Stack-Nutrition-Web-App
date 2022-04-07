@@ -4,6 +4,8 @@ const app_name = 'nutrition-app-27'
 
 function Login()
 {
+    var storage = require('../tokenStorage.js');
+
     var loginName;
     var loginPassword;
     const [message,setMessage] = useState('');
@@ -19,13 +21,20 @@ function Login()
             const response = await fetch(bp.buildPath('api/login'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
-            if( res.UserId <= 0 )
+            if( res.userId <= 0 )
             {
                 setMessage(res.error);
             }
             else
             {
-                var user = {firstName:res.FirstName, lastName:res.LastName, id:res.UserId}
+                storage.storeToken(res.accessToken);
+
+                let userId = res.userId;
+                let fn = res.firstName;
+                let ln = res.lastName;
+
+                var user = {firstName:fn, lastName:ln, id:userId}
+
                 localStorage.setItem('user_data', JSON.stringify(user));
                 setMessage('');
                 window.location.href = '/Main';

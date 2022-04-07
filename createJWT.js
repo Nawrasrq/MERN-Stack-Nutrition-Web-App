@@ -21,7 +21,7 @@ _createToken = function ( id, FirstName, LastName, Email, Birthday )
                        '24h'
                       '365d'
       */
-      var ret = {accessToken:accessToken};
+      var ret = {accessToken:accessToken, firstName:FirstName, lastName:LastName, userId:id};
     }
     catch(e)
     {

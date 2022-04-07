@@ -17,10 +17,15 @@ function AddMeal()
     var cholesterol;
     const [message,setMessage] = useState('');
 
+    var storage = require('../tokenStorage.js');
+
     const doAddMeal = async event => 
     {
         // create object from text boxes and make JSON 
         event.preventDefault();
+
+        var tok = storage.retrieveToken();
+
         var obj = { UserId:userId, 
                     Name:foodName.value, 
                     Calories:calories.value, 
@@ -30,7 +35,8 @@ function AddMeal()
                     Fiber:(fiber.value || 0), 
                     Sugar:(sugar.value || 0), 
                     Sodium:(sodium.value || 0), 
-                    Cholesterol:(cholesterol.value || 0)
+                    Cholesterol:(cholesterol.value || 0),
+                    jwtToken:tok
                 }; 
         var js = JSON.stringify(obj);
         try
@@ -40,6 +46,8 @@ function AddMeal()
             const response = await fetch(bp.buildPath('api/addmeal'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
+            storage.storeToken(res.jwtToken);
+
             // I'll make the error messages nicer later - Declan
             if( res.error )
             {
