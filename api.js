@@ -390,12 +390,7 @@ exports.setApp = function ( app, client )
     app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
 
         let partialToMatchName = new RegExp(req.params.name,'i');
-        let id = req.params.UserId;
-
-        /*Meal.find({UserId: id}, function(err, idMeal) {
-            res.send(idMeal);
-        });*/
-
+        
         Meal.find({Name: partialToMatchName, UserId: req.params.UserId}, function(err, foundMeal) {
             if (foundMeal != '') {
                     res.send(foundMeal);
