@@ -21,12 +21,6 @@ function LoggedInName()
 		window.location.href = '/AddMeal';
 	};
 
-	const goToGoals = event =>
-	{
-		event.preventDefault();
-		window.location.href = '/Goals';
-	}
-
 	return(
 		<div id="loggedInDiv">
 			<span id="userName">Hello {firstName} {lastName}, I'm watching you</span><br /><br />
@@ -34,9 +28,6 @@ function LoggedInName()
 			
 			<span>|--</span>
 			<button type="button" id="addMealButton" class="buttons" onClick={goToAddMeal}> Add Meal </button>
-			<span>--|--</span>
-			<button type="button" id="goalsButton" class="buttons" onClick={goToGoals}> Goals </button>
-			<span>--|</span>
 		</div>
 	);
 };
