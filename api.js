@@ -396,15 +396,13 @@ exports.setApp = function ( app, client )
             res.send(idMeal);
         });*/
 
-        /*Meal.find({Name: partialToMatchName}, {UserId: id}, function(err, foundMeal) {
+        Meal.find({Name: partialToMatchName, UserId: req.params.UserId}, function(err, foundMeal) {
             if (foundMeal != '') {
                     res.send(foundMeal);
             } else {
                 res.send("No meal matching that name was found.");
             }
-        });*/
-
-        res.send(Meal.filter((foundMeal) => foundMeal.Name === req.params.name && foundMeal.UserId === req.params.UserId));
+        });
 
     });
 
