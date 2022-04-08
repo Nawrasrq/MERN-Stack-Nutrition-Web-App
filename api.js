@@ -17,7 +17,6 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
-const meal = require('./models/meal.js');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -28,18 +27,19 @@ const transporter = nodemailer.createTransport({
 
 exports.setApp = function ( app, client )
 {
-    //var token = require('./createJWT.js');
-
     app.post('/api/register', async (req, res, next) =>{
         //get registration data from frontend
-        const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; //, jwtToken  
+        const { FirstName, LastName, Login, Password, Email, Birthday, jwtToken} = req.body; //  
+        
+        var token = require('./createJWT.js');
         
         //generate random code
         const crypto = require('crypto');
         const randomCode = crypto.randomBytes(8).toString('hex');
 
         var error = '';
-        /*try{
+
+        try{
           if( token.isExpired(jwtToken)){
             var r = {error:'The JWT is no longer valid', jwtToken: ''};
             res.status(200).json(r);
@@ -49,7 +49,7 @@ exports.setApp = function ( app, client )
         catch(e){
           console.log(e.message);
         }
-        */
+        
     
         //create new user and verification code
         const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
@@ -85,22 +85,22 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
-        //var refreshedToken = null;
-        /*
+        var refreshedToken = null;
         try{
             refreshedToken = token.refresh(jwtToken);
         }
         catch(e){
             console.log(e.message);
-        }*/
-        var ret = { error: error }; //, jwtToken: refreshedToken  
+        }
+        var ret = { error: error, jwtToken: refreshedToken };  
         res.status(200).json(ret);
     });
 
     app.post('/api/login', async (req, res, next) => {
 
         const { Login, Password } = req.body;
-        error = '';
+        var token = require('./createJWT.js');
+        var error = '';
 
         const results = await User.find({Login:Login, Password:Password});
         
@@ -150,14 +150,14 @@ exports.setApp = function ( app, client )
             }
             else{
                 try{
-                    //const token = require("./createJWT.js");
-                    //ret = token.createToken( id, fn, ln, Email, Birthday );
+                    //send back data with token
+                    const token = require("./createJWT.js");
+                    ret = token.createToken( id, FirstName, LastName);
 
-                    //user found, sending back data
-                    ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
+                    //sending back data without token
+                    //ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
                 }
                 catch(e){
-                    //failed to send back data
                     ret = {error:e.message};
                 }
             }
@@ -310,12 +310,23 @@ exports.setApp = function ( app, client )
     //add meal endpoint
     app.post('/api/addmeal', async (req, res, next) => {
         //get user input from frontend
-        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
+        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken } = req.body;
+        
+        try{
+            if( token.isExpired(jwtToken)){
+                var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                res.status(200).json(r);
+                return;
+            }
+        }
+        catch(e){
+            console.log(e.message);
+        }
 
         //create new meal
         const newMeal = await new Meal({UserId:UserId, Name:Name, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
         var error = '';
-
+ 
         try {
             //store new meal in db
             await newMeal.save();
@@ -325,10 +336,16 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
-        //set error status
-        var ret = {error: error};
+        var refreshedToken = null;
+        try{
+            refreshedToken = token.refresh(jwtToken);
+        }
+        catch(e){
+            console.log(e.message);
+        }
 
         //send error json data
+        var ret = { error: error, jwtToken: refreshedToken };  
         res.status(200).json(ret);
     });
     
@@ -338,36 +355,45 @@ exports.setApp = function ( app, client )
                 res.send(meal);
             });
         }
-
         catch(e) {
             error = e.toString();
         }
     });
 
     app.get('/api/searchmeal/:id', async (req, res, next) => {
-       let meal;
+        let meal;
 
-       try {
-           meal = await Meal.findById(req.params.id);
+        try {
+            meal = await Meal.findById(req.params.id);
 
-           if(meal == null) {
-               return res.status(404).json(ret);
-           }
-       }
+            if(meal == null) {
+                return res.status(404).json(ret);
+            }
+        }
+        catch(e) {
+            error = e.toString();
+        }
 
-       catch(e) {
-           error = e.toString();
-       }
-
-       res.meal = meal;
-       res.send(res.meal.Name);
+        res.meal = meal;
+        res.send(res.meal.Name);
     });
 
     app.post('/api/filtersearch', async (req, res, next) => {
         //initialization
         var error = '';
-        const {UserId, search} = req.body;
+        const {UserId, search, jwtToken} = req.body;
         var _search = search.trim();
+        
+        try{
+            if( token.isExpired(jwtToken)){
+                var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                res.status(200).json(r);
+                return;
+            }
+        }
+        catch(e){
+            console.log(e.message);
+        }
 
         //filtering the results with partial string
         try {
@@ -379,13 +405,20 @@ exports.setApp = function ( app, client )
                 _ret.push(results[i].Meal);
             }
         }
-
         catch(e) {
             error = e.toString();
         }
 
+        var refreshedToken = null;
+        try{
+            refreshedToken = token.refresh(jwtToken);
+        }
+        catch(e){
+            console.log(e.message);
+        }
+
         //returning results
-        var ret = {results:_ret, error:error};
+        var ret = {results:_ret, error:error, jwtToken: refreshedToken };
         res.status(200).json(ret);
     });
 }
