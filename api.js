@@ -40,8 +40,7 @@ exports.setApp = function ( app, client )
         const randomCode = crypto.randomBytes(8).toString('hex');
 
         var error = '';
-        var newToken = null;
-    
+        
         //create new user and verification code
         const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
         const newCode = await new secretCode({Email:Email, Code: randomCode});
@@ -55,9 +54,6 @@ exports.setApp = function ( app, client )
             await newCode.save();
             
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
-            
-            //create a new token for the registered account
-            newToken = token.createToken( findUser[0].UserId, FirstName, LastName);
             
             //send verification email with url containing newUser:userId and newCode:randomCode
             const mailData = {
@@ -79,7 +75,7 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
-        var ret = { error: error, jwtToken: newToken };  
+        var ret = { error: error };  
         res.status(200).json(ret);
     });
 
@@ -87,7 +83,8 @@ exports.setApp = function ( app, client )
 
         const { Login, Password, jwtToken } = req.body;
         var token = require('./createJWT.js');
-        
+        var newToken = null;
+
         var id = -1;
         var FirstName = '';
         var LastName = '';
@@ -141,21 +138,11 @@ exports.setApp = function ( app, client )
             }
             //user is verified
             else{
-                //check token
-                try{
-                    if( token.isExpired(jwtToken)){
-                        var r = {error:'The JWT is no longer valid', jwtToken: ''};
-                        res.status(200).json(r);
-                        return;
-                    }
-                    refreshedToken = token.refresh(jwtToken);
-                    
-                }
-                catch(e){
-                    console.log(e.message);
-                }
+                //create a new token for the registered account
+                newToken = token.createToken( findUser[0].UserId, FirstName, LastName);
+                
                 //all good, send back ret with user's data
-                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
+                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, jwtToken: newToken, error:error };
             }
 
         }
@@ -312,17 +299,17 @@ exports.setApp = function ( app, client )
         const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken } = req.body;
         var refreshedToken = null;
         
+        //check token
         try{
             if( token.isExpired(jwtToken)){
                 var r = {error:'The JWT is no longer valid', jwtToken: ''};
                 res.status(200).json(r);
                 return;
             }
-
-            refreshedToken = (token.refresh(jwtToken)).accessToken;
+            refreshedToken = token.refresh(jwtToken);
+            
         }
-        catch(e)
-        {
+        catch(e){
             console.log(e.message);
         }
 
