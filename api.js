@@ -32,27 +32,15 @@ exports.setApp = function ( app, client )
 {
     app.post('/api/register', async (req, res, next) =>{
         //get registration data from frontend
-        const { FirstName, LastName, Login, Password, Email, Birthday, jwtToken} = req.body; //  
-        
-        var token = require('./createJWT.js');
+        const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; 
+        const token = require("./createJWT.js");
         
         //generate random code
         const crypto = require('crypto');
         const randomCode = crypto.randomBytes(8).toString('hex');
 
         var error = '';
-
-        try{
-          if( token.isExpired(jwtToken)){
-            var r = {error:'The JWT is no longer valid', jwtToken: ''};
-            res.status(200).json(r);
-            return;
-          }
-        }
-        catch(e){
-          console.log(e.message);
-        }
-        
+        var newToken = null;
     
         //create new user and verification code
         const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
@@ -66,9 +54,12 @@ exports.setApp = function ( app, client )
             //save new verification code
             await newCode.save();
             
-            //send verification email with url containing newUser:userId and newCode:randomCode
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
             
+            //create a new token for the registered account
+            newToken = token.createToken( findUser[0].UserId, FirstName, LastName);
+            
+            //send verification email with url containing newUser:userId and newCode:randomCode
             const mailData = {
                 from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // list of receivers
@@ -88,24 +79,14 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
-        var refreshedToken = null;
-        try{
-            refreshedToken = token.refresh(jwtToken);
-        }
-        catch(e){
-            console.log(e.message);
-        }
-        var ret = { error: error, jwtToken: refreshedToken };  
+        var ret = { error: error, jwtToken: newToken };  
         res.status(200).json(ret);
     });
 
     app.post('/api/login', async (req, res, next) => {
 
-        const { Login, Password } = req.body;
+        const { Login, Password, jwtToken } = req.body;
         var token = require('./createJWT.js');
-        var error = '';
-
-        const results = await User.find({Login:Login, Password:Password});
         
         var id = -1;
         var FirstName = '';
@@ -113,6 +94,11 @@ exports.setApp = function ( app, client )
         var Email = '';
         var Birthday = '';
         var Verified = false;
+        var error = '';
+
+        var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error};
+        
+        const results = await User.find({Login:Login, Password:Password});
 
         //if user found
         if(results.length > 0 ){
@@ -123,11 +109,12 @@ exports.setApp = function ( app, client )
             Birthday = results[0].Birthday;
             Verified = results[0].Verified; 
             
+            ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
+
             //if user hasnt been verified through email set the error and resend the email
             if(Verified === false)
             {
                 error = "Account not verified, resending verification email";
-                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
                 
                 //generate random code
                 const crypto = require('crypto');
@@ -152,23 +139,29 @@ exports.setApp = function ( app, client )
                       console.log(info);
                 });
             }
+            //user is verified
             else{
+                //check token
                 try{
-                    //send back data with token
-                    const token = require("./createJWT.js");
-                    ret = token.createToken( id, FirstName, LastName);
-
-                    //sending back data without token
-                    //ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
+                    if( token.isExpired(jwtToken)){
+                        var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                        res.status(200).json(r);
+                        return;
+                    }
+                    refreshedToken = token.refresh(jwtToken);
+                    
                 }
                 catch(e){
-                    ret = {error:e.message};
+                    console.log(e.message);
                 }
+                //all good, send back ret with user's data
+                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
             }
 
         }
         else{
-            var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
+            //login not found
+            ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
         }
 
         //send json to frontend
@@ -353,6 +346,7 @@ exports.setApp = function ( app, client )
     
     //delete meal
     app.delete('/api/deletemeal/:id', async (req, res, next) => {
+        
         try {
             Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
                 res.send(meal);
