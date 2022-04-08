@@ -5,6 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Added this because it's more comofrtable to look at the site in 'dark mode' 
+  during development*/
+  background-color: black; 
+  color: white;
 }
 
 code {

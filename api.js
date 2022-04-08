@@ -12,6 +12,9 @@ const User = require("./models/user.js");
 //load meal model
 const Meal = require("./models/meal.js");
 
+//load goal model
+const Goal = require("./models/goal.js");
+
 //load secret code 
 const secretCode = require("./models/secretCode.js");
 
@@ -118,10 +121,11 @@ exports.setApp = function ( app, client )
             LastName = results[0].LastName;
             Email = results[0].Email;
             Birthday = results[0].Birthday;
-            Verified = results[0].Verified;            
+            Verified = results[0].Verified; 
             
             //if user hasnt been verified through email set the error and resend the email
-            if(Verified == false){
+            if(Verified === false)
+            {
                 error = "Account not verified, resending verification email";
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
                 
@@ -309,8 +313,11 @@ exports.setApp = function ( app, client )
 
     //add meal endpoint
     app.post('/api/addmeal', async (req, res, next) => {
+        let token = require('./createJWT.js');
+
         //get user input from frontend
         const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken } = req.body;
+        var refreshedToken = null;
         
         try{
             if( token.isExpired(jwtToken)){
@@ -318,8 +325,11 @@ exports.setApp = function ( app, client )
                 res.status(200).json(r);
                 return;
             }
+
+            refreshedToken = (token.refresh(jwtToken)).accessToken;
         }
-        catch(e){
+        catch(e)
+        {
             console.log(e.message);
         }
 
@@ -336,19 +346,12 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
-        var refreshedToken = null;
-        try{
-            refreshedToken = token.refresh(jwtToken);
-        }
-        catch(e){
-            console.log(e.message);
-        }
-
         //send error json data
         var ret = { error: error, jwtToken: refreshedToken };  
         res.status(200).json(ret);
     });
     
+    //delete meal
     app.delete('/api/deletemeal/:id', async (req, res, next) => {
         try {
             Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
@@ -378,47 +381,54 @@ exports.setApp = function ( app, client )
         res.send(res.meal.Name);
     });
 
-    app.post('/api/filtersearch', async (req, res, next) => {
-        //initialization
-        var error = '';
-        const {UserId, search, jwtToken} = req.body;
-        var _search = search.trim();
+    app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
+
+        let partialToMatchName = new RegExp(req.params.name,'i');
         
-        try{
-            if( token.isExpired(jwtToken)){
-                var r = {error:'The JWT is no longer valid', jwtToken: ''};
-                res.status(200).json(r);
-                return;
+        Meal.find({Name: partialToMatchName, UserId: req.params.UserId}, function(err, foundMeal) {
+            if (foundMeal != '') {
+                    res.send(foundMeal);
+            } else {
+                res.send("No meal matching that name was found.");
             }
-        }
-        catch(e){
-            console.log(e.message);
-        }
+        });
 
-        //filtering the results with partial string
+    });
+
+    //add goal endpoint
+    app.post('/api/addgoal', async (req, res, next) => {
+        //get user input from frontend
+        const { UserId, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
+
+        //create new goal
+        const newGoal = await new Goal({UserId:UserId, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
+        var error = '';
+
         try {
-            const results = await Meal.find({"Meal": {$regex:_search+'.*', $options:'r'}}).toArray();
-
-            var _ret = [];
-            for(var i = 0; i < results.length; i++)
-            {
-                _ret.push(results[i].Meal);
-            }
+            //store new goal in db
+            await newGoal.save();
         }
         catch(e) {
             error = e.toString();
         }
 
-        var refreshedToken = null;
-        try{
-            refreshedToken = token.refresh(jwtToken);
-        }
-        catch(e){
-            console.log(e.message);
+        //set error status
+        var ret = {error: error};
+
+        //send error json data
+        res.status(200).json(ret);
+    });
+
+    //delete goal
+    app.delete('/api/deletegoal/:id', async (req, res, next) => {
+        try {
+            Goal.findByIdAndRemove({_id: req.params.id}).then(function(goal){
+                res.send(goal);
+            });
         }
 
-        //returning results
-        var ret = {results:_ret, error:error, jwtToken: refreshedToken };
-        res.status(200).json(ret);
+        catch(e) {
+            error = e.toString();
+        }
     });
 }

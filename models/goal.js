@@ -6,10 +6,6 @@ const GoalSchema = new Schema({
   UserId: {
     type: Number
   },
-  Name: {
-    type: String,
-    required: true
-  },
   Weight: {
     type: Number
   },
@@ -39,4 +35,4 @@ const GoalSchema = new Schema({
   },
 });
 
-module.exports = Goal = mongoose.model('Meal', GoalSchema);
+module.exports = Goal = mongoose.model('Goal', GoalSchema);
