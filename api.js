@@ -33,7 +33,6 @@ exports.setApp = function ( app, client )
     app.post('/api/register', async (req, res, next) =>{
         //get registration data from frontend
         const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; 
-        const token = require("./createJWT.js");
         
         //generate random code
         const crypto = require('crypto');
