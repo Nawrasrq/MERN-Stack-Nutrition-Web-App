@@ -33,12 +33,12 @@ function Login()
 
                 storage.storeToken(res.jwtToken);
 
-                let userId = res.userId;
-                let fn = res.firstName;
-                let ln = res.lastName;
+                let userId = res.UserId;
+                let fn = res.FirstName;
+                let ln = res.LastName;
 
-                var user = {firstName:fn, lastName:ln, id:userId}
-
+                var user = {firstName:fn, lastName:ln, id:userId};
+                
                 localStorage.setItem('user_data', JSON.stringify(user));
                 setMessage('');
                 window.location.href = '/Main';
