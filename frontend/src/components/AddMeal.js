@@ -57,6 +57,14 @@ function AddMeal()
                 setMessage(res.error);
                 return;
             }
+            // Token was expired
+            else if (res.jwtToken.length === 0)
+            {
+                alert("Your session has expired, please log in again.");
+                localStorage.removeItem("user_data")
+		        window.location.href = '/';
+                return;
+            }
             
             storage.storeToken(res.jwtToken);
 

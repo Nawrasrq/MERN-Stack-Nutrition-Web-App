@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-const app_name = 'nutrition-app-27'
-
 function Login()
 {
     var storage = require('../tokenStorage.js');
