@@ -21,11 +21,12 @@ _createToken = function ( id, FirstName, LastName)
                        '24h'
                       '365d'
       */
-      var ret = {accessToken:accessToken, firstName:FirstName, lastName:LastName, userId:id};
+      var ret = accessToken;
     }
     catch(e)
     {
-      var ret = {error:e.message};
+      console.log(e.message);
+      var ret = null;
     }
     return ret;
 }
@@ -54,5 +55,5 @@ exports.refresh = function( token )
   var FirstName = ud.payload.FirstName;
   var LastName = ud.payload.LastName;
 
-  return _createToken( id, FirstName, LastName, Email, Birthday );
+  return _createToken( id, FirstName, LastName );
 }

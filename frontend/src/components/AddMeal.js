@@ -51,6 +51,12 @@ function AddMeal()
             var bp = require('./Path.js');
             const response = await fetch(bp.buildPath('api/addmeal'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
+
+            if (res.jwtToken === null)
+            {
+                setMessage(res.error);
+                return;
+            }
             
             storage.storeToken(res.jwtToken);
 

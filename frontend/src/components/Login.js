@@ -27,7 +27,13 @@ function Login()
             }
             else
             {
-                storage.storeToken(res.accessToken);
+                if (res.jwtToken === null)
+                {
+                    setMessage(res.error);
+                    return;
+                }
+
+                storage.storeToken(res.jwtToken);
 
                 let userId = res.userId;
                 let fn = res.firstName;

@@ -138,7 +138,13 @@ exports.setApp = function ( app, client )
             //user is verified
             else{
                 //create a new token for the registered account
-                newToken = token.createToken( findUser[0].UserId, FirstName, LastName);
+                newToken = token.createToken( id, FirstName, LastName);
+
+                // Unsucessful in creating token
+                if (newToken === null)
+                {
+                    error = "Failed to start user session.";
+                }
                 
                 //all good, send back ret with user's data
                 ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, jwtToken: newToken, error:error };
@@ -297,6 +303,7 @@ exports.setApp = function ( app, client )
         //get user input from frontend
         const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken } = req.body;
         var refreshedToken = null;
+        var error = '';
         
         //check token
         try{
@@ -307,6 +314,13 @@ exports.setApp = function ( app, client )
             }
             refreshedToken = token.refresh(jwtToken);
             
+            // Failed to create new token when refreshing
+            if (refreshedToken === null)
+            {
+                error = "Failed to renew your current session";
+                var ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+            }
         }
         catch(e){
             console.log(e.message);
@@ -314,7 +328,6 @@ exports.setApp = function ( app, client )
 
         //create new meal
         const newMeal = await new Meal({UserId:UserId, Name:Name, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
-        var error = '';
  
         try {
             //store new meal in db
@@ -326,7 +339,7 @@ exports.setApp = function ( app, client )
         }
 
         //send error json data
-        var ret = { error: error, jwtToken: refreshedToken };  
+        var ret = { error: error, jwtToken:refreshedToken };  
         res.status(200).json(ret);
     });
     
