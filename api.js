@@ -389,6 +389,7 @@ exports.setApp = function ( app, client )
     });
 
     //add goal endpoint
+    // TODO: Add Auth Token to this endpoint for fronted <3
     app.post('/api/addgoal', async (req, res, next) => {
         //get user input from frontend
         const { UserId, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;

@@ -10,6 +10,7 @@ import ResetPasswordRequestPage from './pages/ResetPasswordRequestPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import AddMealPage from './pages/AddMealPage';
 import GoalsPage from './pages/GoalsPage.js';
+import EditGoalsPage from './pages/EditGoalsPage.js';
 
 function App() {
   return (
@@ -41,6 +42,9 @@ function App() {
         </Route>
         <Route path="/Goals" exact>
           <GoalsPage />
+        </Route>
+        <Route path="/Goals/EditGoals" exact>
+          <EditGoalsPage />
         </Route>
         <Route path="/MacroCalculator" exact>
           MacroCalculator

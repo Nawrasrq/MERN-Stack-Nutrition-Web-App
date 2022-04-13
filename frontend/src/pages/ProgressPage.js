@@ -8,11 +8,12 @@ function ProgressPage()
 	{
 		window.location.href = '/Goals';
 	}
-
+    
     return(
         <div>
             <ProgressPageTitle />
             <NavigationBar />
+            < br />
 			<button type="button" id="goalsButton" class="buttons" onClick={goToGoals}> Goals </button>
         </div>
     );
