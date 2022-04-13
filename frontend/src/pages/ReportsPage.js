@@ -1,13 +1,13 @@
 import React from 'react';
-import ReportsPageTitle from '../components/ReportsPageTitle';
 import NavigationBar from '../components/NavigationBar';
+import Logout from '../components/Logout';
 
 function ReportsPage()
 {
     return(
         <div>
-            <ReportsPageTitle />
             <NavigationBar />
+            <Logout />
         </div>
     );
 };

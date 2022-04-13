@@ -1,12 +1,12 @@
 import React from 'react'
-import PageTitle from '../components/PageTitle.js';
+import Logout from '../components/Logout.js';
 import GoalsDisplay from '../components/GoalsDisplay.js';
 
 function GoalsPage() 
 {
   return (
     <div>
-        <PageTitle />
+        <Logout />
         <GoalsDisplay />
     </div>
   )

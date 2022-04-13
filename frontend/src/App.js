@@ -5,11 +5,12 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import ProgressPage from './pages/ProgressPage';
 import ReportsPage from './pages/ReportsPage';
+import AddToDailyConsumptionPage from './pages/AddToDailyConsumptionPage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordRequestPage from './pages/ResetPasswordRequestPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
-import AddMealPage from './pages/AddMealPage';
-import GoalsPage from './pages/GoalsPage.js';
+import CreateMealPage from './pages/CreateMealPage';
+import GoalsPage from './pages/GoalsPage';
 
 function App() {
   return (
@@ -36,8 +37,11 @@ function App() {
         <Route path="/Reports" exact>
           <ReportsPage />
         </Route>
-        <Route path="/AddMeal" exact>
-          <AddMealPage />
+        <Route path="/AddToDailyConsumption" exact>
+          <AddToDailyConsumptionPage />
+        </Route>
+        <Route path="/CreateMeal" exact>
+          <CreateMealPage />
         </Route>
         <Route path="/Goals" exact>
           <GoalsPage />
