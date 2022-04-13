@@ -1,6 +1,6 @@
 import React from 'react';
-import ProgressPageTitle from '../components/ProgressPageTitle';
 import NavigationBar from '../components/NavigationBar';
+import Logout from '../components/Logout';
 
 function ProgressPage()
 {
@@ -11,9 +11,8 @@ function ProgressPage()
     
     return(
         <div>
-            <ProgressPageTitle />
             <NavigationBar />
-            < br />
+            <Logout />
 			<button type="button" id="goalsButton" class="buttons" onClick={goToGoals}> Goals </button>
         </div>
     );
