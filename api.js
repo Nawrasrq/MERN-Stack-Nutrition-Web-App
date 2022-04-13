@@ -374,9 +374,20 @@ exports.setApp = function ( app, client )
         res.send(res.meal.Name);
     });
 
-    app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
+    // ? indicates an optional parameter
+    app.get('/api/filtersearch/:UserId/:name?', async (req, res, next) => {
 
-        let partialToMatchName = new RegExp(req.params.name,'i');
+        // Empty string can not be passed so pick up empty string value in this case
+        if (!req.params.name)
+        {
+            searchName = "";
+        }
+        else 
+        {
+            searchName = req.params.name;
+        }
+
+        let partialToMatchName = new RegExp(searchName,'i');
         
         Meal.find({Name: partialToMatchName, UserId: req.params.UserId}, function(err, foundMeal) {
             if (foundMeal != '') {
