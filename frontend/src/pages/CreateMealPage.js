@@ -4,12 +4,19 @@ import AddMeal from '../components/AddMeal.js';
 
 function CreateMealPage()
 {
-    return(
-      <div>
-        <Logout />
-        <AddMeal />
-      </div>
-    );
+
+	function goBack()
+	{
+		window.location.href = "/AddToDailyConsumption"
+	}
+
+	return(
+	  	<div>
+			<Logout />
+			<button type="button" id="backButton" class="buttons" onClick={goBack}> Back </button>
+			<AddMeal />
+	  	</div>
+	);
 };
 	
 export default CreateMealPage;

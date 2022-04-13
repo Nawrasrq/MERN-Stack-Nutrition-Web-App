@@ -6,14 +6,14 @@ import CreateNewAccount from '../components/CreateNewAccount';
 
 function LoginPage()
 {
-    return(
-      <div>
-        <PageTitle />
-        <Login />
-        <ForgotPassword />
-        <CreateNewAccount />
-      </div>
-    );
+	return(
+	  <div>
+		<PageTitle />
+		<Login />
+		<ForgotPassword />
+		<CreateNewAccount />
+	  </div>
+	);
 };
 	
 export default LoginPage;

@@ -4,12 +4,12 @@ import ResetPasswordRequest from '../components/ResetPasswordRequest';
 
 function ResetPasswordRequestPage()
 {
-    return(
-      <div>
-        <ResetPasswordRequestPageTitle />
-        <ResetPasswordRequest />
-      </div>
-    );
+	return(
+	  <div>
+		<ResetPasswordRequestPageTitle />
+		<ResetPasswordRequest />
+	  </div>
+	);
 };
 
 export default ResetPasswordRequestPage;

@@ -4,12 +4,12 @@ import Logout from '../components/Logout';
 
 function ReportsPage()
 {
-    return(
-        <div>
-            <NavigationBar />
-            <Logout />
-        </div>
-    );
+	return(
+		<div>
+			<NavigationBar />
+			<Logout />
+		</div>
+	);
 };
 
 export default ReportsPage;
