@@ -438,12 +438,12 @@ exports.setApp = function ( app, client )
     });
 
     //edit goal endpoint
-    app.put('/api/editGoal/:UserId', async (req, res, next) => {
+    app.put('/api/editGoal/:id', async (req, res, next) => {
 
         const body = req.body;
-        //let goal;
+        let goal;
 
-        Goal.find({UserId: req.params.UserId}, function(err, foundGoal) { 
+        /*Goal.find({UserId: req.params.UserId}, function(err, foundGoal) { 
             if (!foundGoal) {
                 return res.status(404).json({error: 'no user found'});
             }
@@ -482,12 +482,44 @@ exports.setApp = function ( app, client )
 
             await foundGoal.save();
             return res.status(200).json(foundGoal);
-        });
+        });*/
 
-        /*goal = await Goal.findById(req.params.id);
-        goal.Calories = body.Calories;
+        goal = await Goal.findById(req.params.id);
+
+        if(body.Calories) {
+            goal.Calories = body.Calories;
+        }
+
+        if(body.Protein) {
+            goal.Protein = body.Protein;
+        }
+
+        if(body.Carbs) {
+            goal.Carbs = body.Carbs;
+        }
+
+        if(body.Fat) {
+            goal.Fat = body.Fat;
+        }
+        
+        if(body.Fiber) {
+            goal.Fiber = body.Fiber;
+        }
+
+        if(body.Sugar) {
+            goal.Sugar = body.Sugar;
+        }
+
+        if(body.Sodium) {
+            goal.Sodium = body.Sodium;
+        }
+
+        if(body.Cholesterol) {
+            goal.Cholesterol = body.Cholesterol;
+        }
+
         await goal.save();
-        return res.status(200).json(goal);*/
+        return res.status(200).json(goal);
 
     });
 }
