@@ -441,50 +441,7 @@ exports.setApp = function ( app, client )
     app.put('/api/editGoal/:id', async (req, res, next) => {
 
         const body = req.body;
-        let goal;
-
-        /*Goal.find({UserId: req.params.UserId}, function(err, foundGoal) { 
-            if (!foundGoal) {
-                return res.status(404).json({error: 'no user found'});
-            }
-
-            if(body.Calories) {
-                foundGoal.Calories = body.Calories;
-            }
-
-            if(body.Protein) {
-                foundGoal.Protein = body.Protein;
-            }
-
-            if(body.Carbs) {
-                foundGoal.Carbs = body.Carbs;
-            }
-
-            if(body.Fat) {
-                foundGoal.Fat = body.Fat;
-            }
-            
-            if(body.Fiber) {
-                foundGoal.Fiber = body.Fiber;
-            }
-
-            if(body.Sugar) {
-                foundGoal.Sugar = body.Sugar;
-            }
-
-            if(body.Sodium) {
-                foundGoal.Sodium = body.Sodium;
-            }
-
-            if(body.Cholesterol) {
-                foundGoal.Cholesterol = body.Cholesterol;
-            }
-
-            await foundGoal.save();
-            return res.status(200).json(foundGoal);
-        });*/
-
-        goal = await Goal.findById(req.params.id);
+        let goal = await Goal.findById(req.params.id);
 
         if(body.Calories) {
             goal.Calories = body.Calories;
