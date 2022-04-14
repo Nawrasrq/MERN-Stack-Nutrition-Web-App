@@ -53,7 +53,7 @@ function GoalsDisplay()
     };
   return (
     <div id="addMealDiv">
-        <span id="name">{firstName} {lastName}'s Current Goals</span><br />
+        <span id="name">{firstName}'s Current Goals</span><br />
         <p> 
             Long-term: <br/>
             Weight: {0} <br/>
@@ -68,7 +68,6 @@ function GoalsDisplay()
             Sodium: {0} <br/>
             Cholesterol: {0}
         </p>
-        <span>You're lookin' a little chubby there buddy, might wanna lower that calorie goal</span>
      </div>
   );
 };

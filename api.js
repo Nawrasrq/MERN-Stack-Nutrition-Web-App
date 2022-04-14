@@ -20,7 +20,6 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
-const meal = require('./models/meal.js');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -31,29 +30,16 @@ const transporter = nodemailer.createTransport({
 
 exports.setApp = function ( app, client )
 {
-    //var token = require('./createJWT.js');
-
     app.post('/api/register', async (req, res, next) =>{
         //get registration data from frontend
-        const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; //, jwtToken  
+        const { FirstName, LastName, Login, Password, Email, Birthday} = req.body; 
         
         //generate random code
         const crypto = require('crypto');
         const randomCode = crypto.randomBytes(8).toString('hex');
 
         var error = '';
-        /*try{
-          if( token.isExpired(jwtToken)){
-            var r = {error:'The JWT is no longer valid', jwtToken: ''};
-            res.status(200).json(r);
-            return;
-          }
-        }
-        catch(e){
-          console.log(e.message);
-        }
-        */
-    
+        
         //create new user and verification code
         const newUser = await new User({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
         const newCode = await new secretCode({Email:Email, Code: randomCode});
@@ -66,9 +52,9 @@ exports.setApp = function ( app, client )
             //save new verification code
             await newCode.save();
             
-            //send verification email with url containing newUser:userId and newCode:randomCode
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
             
+            //send verification email with url containing newUser:userId and newCode:randomCode
             const mailData = {
                 from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // list of receivers
@@ -88,31 +74,27 @@ exports.setApp = function ( app, client )
             error = e.toString();
         }
 
-        //var refreshedToken = null;
-        /*
-        try{
-            refreshedToken = token.refresh(jwtToken);
-        }
-        catch(e){
-            console.log(e.message);
-        }*/
-        var ret = { error: error }; //, jwtToken: refreshedToken  
+        var ret = { error: error };  
         res.status(200).json(ret);
     });
 
     app.post('/api/login', async (req, res, next) => {
 
-        const { Login, Password } = req.body;
-        error = '';
+        const { Login, Password, jwtToken } = req.body;
+        var token = require('./createJWT.js');
+        var newToken = null;
 
-        const results = await User.find({Login:Login, Password:Password});
-        
         var id = -1;
         var FirstName = '';
         var LastName = '';
         var Email = '';
         var Birthday = '';
         var Verified = false;
+        var error = '';
+
+        var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error};
+        
+        const results = await User.find({Login:Login, Password:Password});
 
         //if user found
         if(results.length > 0 ){
@@ -123,11 +105,12 @@ exports.setApp = function ( app, client )
             Birthday = results[0].Birthday;
             Verified = results[0].Verified; 
             
+            ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
+
             //if user hasnt been verified through email set the error and resend the email
             if(Verified === false)
             {
                 error = "Account not verified, resending verification email";
-                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
                 
                 //generate random code
                 const crypto = require('crypto');
@@ -152,24 +135,25 @@ exports.setApp = function ( app, client )
                       console.log(info);
                 });
             }
+            //user is verified
             else{
-                try{
-                    var token = require("./createJWT.js");
-                    ret = token.createToken( id, FirstName, LastName, Email, Birthday );
-                    
-                    //user found, sending back data
-                    //ret = { UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified};
-                }
-                catch(e)
+                //create a new token for the registered account
+                newToken = token.createToken( id, FirstName, LastName);
+
+                // Unsucessful in creating token
+                if (newToken === null)
                 {
-                    //failed to send back data
-                    ret = {error:e.message};
+                    error = "Failed to start user session.";
                 }
+                
+                //all good, send back ret with user's data
+                ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, jwtToken: newToken, error:error };
             }
 
         }
         else{
-            var ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
+            //login not found
+            ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:"error: Login/Password incorrect"};
         }
 
         //send json to frontend
@@ -318,27 +302,33 @@ exports.setApp = function ( app, client )
 
         //get user input from frontend
         const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken } = req.body;
-
-        try
-        {
-            if( token.isExpired(jwtToken))
-            {
+        var refreshedToken = null;
+        var error = '';
+        
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
                 var r = {error:'The JWT is no longer valid', jwtToken: ''};
                 res.status(200).json(r);
                 return;
             }
-
-            refreshedToken = (token.refresh(jwtToken)).accessToken;
+            refreshedToken = token.refresh(jwtToken);
+            
+            // Failed to create new token when refreshing
+            if (refreshedToken === null)
+            {
+                error = "Failed to renew your current session";
+                var ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+            }
         }
-        catch(e)
-        {
+        catch(e){
             console.log(e.message);
         }
 
         //create new meal
         const newMeal = await new Meal({UserId:UserId, Name:Name, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
-        var error = '';
-
+ 
         try {
             //store new meal in db
             await newMeal.save();
@@ -347,22 +337,20 @@ exports.setApp = function ( app, client )
         catch(e) {
             error = e.toString();
         }
-        
-        //set error status
-        var ret = { error:error, jwtToken:refreshedToken };
 
         //send error json data
+        var ret = { error: error, jwtToken:refreshedToken };  
         res.status(200).json(ret);
     });
     
     //delete meal
     app.delete('/api/deletemeal/:id', async (req, res, next) => {
+        
         try {
             Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
                 res.send(meal);
             });
         }
-
         catch(e) {
             error = e.toString();
         }
@@ -370,32 +358,41 @@ exports.setApp = function ( app, client )
 
     //search by meal id
     app.get('/api/searchmeal/:id', async (req, res, next) => {
-       let meal;
+        let meal;
 
-       try {
-           meal = await Meal.findById(req.params.id);
+        try {
+            meal = await Meal.findById(req.params.id);
 
-           if(meal == null) {
-               return res.status(404).json(ret);
-           }
-       }
+            if(meal == null) {
+                return res.status(404).json(ret);
+            }
+        }
+        catch(e) {
+            error = e.toString();
+        }
 
-       catch(e) {
-           error = e.toString();
-       }
-
-       res.meal = meal;
-       res.send(res.meal.Name);
+        res.meal = meal;
+        res.send(res.meal.Name);
     });
 
-    //partial string search
-    app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
+    // ? indicates an optional parameter
+    app.get('/api/filtersearch/:UserId/:name?', async (req, res, next) => {
 
-        let partialToMatchName = new RegExp(req.params.name,'i');
+        // Empty string can not be passed so pick up empty string value in this case
+        if (!req.params.name)
+        {
+            searchName = "";
+        }
+        else 
+        {
+            searchName = req.params.name;
+        }
+
+        let partialToMatchName = new RegExp(searchName,'i');
         
         Meal.find({Name: partialToMatchName, UserId: req.params.UserId}, function(err, foundMeal) {
             if (foundMeal != '') {
-                    res.send(foundMeal);
+                res.send(foundMeal);
             } else {
                 res.send("No meal matching that name was found.");
             }
@@ -404,6 +401,7 @@ exports.setApp = function ( app, client )
     });
 
     //add goal endpoint
+    // TODO: Add Auth Token to this endpoint for fronted <3
     app.post('/api/addgoal', async (req, res, next) => {
         //get user input from frontend
         const { UserId, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
@@ -416,7 +414,6 @@ exports.setApp = function ( app, client )
             //store new goal in db
             await newGoal.save();
         }
-
         catch(e) {
             error = e.toString();
         }

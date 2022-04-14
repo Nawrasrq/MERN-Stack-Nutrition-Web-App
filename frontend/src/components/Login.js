@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-const app_name = 'nutrition-app-27'
-
 function Login()
 {
     var storage = require('../tokenStorage.js');
@@ -21,20 +19,26 @@ function Login()
             const response = await fetch(bp.buildPath('api/login'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
-            if( res.userId <= 0 )
+            if( res.UserId <= 0 )
             {
                 setMessage(res.error);
             }
             else
             {
-                storage.storeToken(res.accessToken);
+                if (res.jwtToken === null)
+                {
+                    setMessage(res.error);
+                    return;
+                }
 
-                let userId = res.userId;
-                let fn = res.firstName;
-                let ln = res.lastName;
+                storage.storeToken(res.jwtToken);
 
-                var user = {firstName:fn, lastName:ln, id:userId}
+                let userId = res.UserId;
+                let fn = res.FirstName;
+                let ln = res.LastName;
 
+                var user = {firstName:fn, lastName:ln, id:userId};
+                
                 localStorage.setItem('user_data', JSON.stringify(user));
                 setMessage('');
                 window.location.href = '/Main';
