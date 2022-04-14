@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from 'react';
+import NutritionPopup from './NutritionPopup.js';
 
 function AddToDailyConsumption()
 {
     var searchText;
 
     const [foods, setFoods] = useState([]);
+    const [nutritionPopupState, setNutritionPopupState] = useState(false);
+    const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
 
     function goToCreateMealPage()
 	{
 		window.location.href = '/CreateMeal';
-	};
+	}
+
+    // Sets value to true to display nutrition info of whatever food was selected
+    function showPopup(selectedFood)
+    {
+        setNutritionPopupState(true);
+        setSelectedFoodInfo(selectedFood);
+    }
+
+    // Sets value to false to close nutrtion into popup
+    function hidePopup()
+    {
+        setNutritionPopupState(false);
+        setSelectedFoodInfo({});
+    }
 
     async function doSearchFoods() 
     {
         let searchString;
 
-        if (searchText == undefined || searchText == null)
+        // Default to empty search
+        if (searchText === undefined || searchText === null)
         {
             searchString = "";
         }
@@ -29,7 +47,7 @@ function AddToDailyConsumption()
 
         // If search text is empty don't even pass it to the api
         let routeEnd;
-        if (searchString.length == 0)
+        if (searchString.length === 0)
         {
             routeEnd = userId;
         }
@@ -45,7 +63,7 @@ function AddToDailyConsumption()
             var resText = await response.text();
 
             // No foods found so empty array to display
-            if (resText == "No meal matching that name was found.")
+            if (resText === "No meal matching that name was found.")
             {
                 setFoods([]);
                 return;
@@ -73,15 +91,16 @@ function AddToDailyConsumption()
     return(
         <div>
             <span id="inner-title">Search for meals to add to you list of foods consumed today.</span><br />
-            <input type="text" id="searchText" placeholder="Search Here" onKeyUp={doSearchFoods} ref={(c) => searchText = c} />
-            <br />
+            <input type="text" id="searchText" placeholder="Search Here" onKeyUp={doSearchFoods} ref={(c) => searchText = c} /><br />
             <ul>
                 {foods.map(food => (
                     <li key={food._id}>
                         <span>{food.Name}</span>
+                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showPopup(food)}>View Nutrtion Info</button>
                     </li>
                 ))}
             </ul>
+            <NutritionPopup show={nutritionPopupState} food={selectedFoodInfo} closePopup={hidePopup} />
             <button type="button" id="addMealButton" class="buttons" onClick={goToCreateMealPage}> Create Meal </button>
         </div>
     );
