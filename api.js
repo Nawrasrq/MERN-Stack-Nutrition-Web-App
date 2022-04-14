@@ -438,7 +438,7 @@ exports.setApp = function ( app, client )
     });
 
     //edit goal endpoint
-    app.put('/api/editGoal/:UserId', async (req, res, next) => {
+    app.post('/api/editGoal/:UserId', async (req, res, next) => {
 
         const body = req.body;
 
