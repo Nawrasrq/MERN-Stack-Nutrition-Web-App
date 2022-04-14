@@ -485,6 +485,7 @@ exports.setApp = function ( app, client )
 
         goal = await Goal.findById(req.params.id);
         goal.Calories = body.Calories;
+        return res.status(200).json(goal);
 
     });
 }
