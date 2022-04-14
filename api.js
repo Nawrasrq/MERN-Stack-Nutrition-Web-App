@@ -368,6 +368,7 @@ exports.setApp = function ( app, client )
         }
     });
 
+    //search by meal id
     app.get('/api/searchmeal/:id', async (req, res, next) => {
        let meal;
 
@@ -387,6 +388,7 @@ exports.setApp = function ( app, client )
        res.send(res.meal.Name);
     });
 
+    //partial string search
     app.get('/api/filtersearch/:name/:UserId', async (req, res, next) => {
 
         let partialToMatchName = new RegExp(req.params.name,'i');
@@ -426,16 +428,61 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
 
-    //delete goal
-    app.delete('/api/deletegoal/:id', async (req, res, next) => {
-        try {
-            Goal.findByIdAndRemove({_id: req.params.id}).then(function(goal){
-                res.send(goal);
-            });
-        }
+    //retrieve goals by UserId
+    app.get('/api/retrievegoal/:UserId', async (req, res, next) => {
 
-        catch(e) {
-            error = e.toString();
-        }
+        Goal.find({UserId: req.params.UserId}, function(err, foundGoal) {
+            if (foundGoal != '') {
+                res.send(foundGoal);
+            } else {
+                res.send("No goals found.");
+            }
+        });
+    });
+
+    //edit goal endpoint
+    app.put('/api/editGoal/:UserId', async (req, res, next) => {
+
+        const body = req.body;
+
+        Goal.find({UserId: req.params.UserId}, function(err, foundGoal) { 
+            if (!foundGoal) {
+                return res.status(404).json({error: 'no user found'});
+            }
+
+            if(body.Calories) {
+                foundGoal.Calories = body.Calories;
+            }
+
+            if(body.Protein) {
+                foundGoal.Protein = body.Protein;
+            }
+
+            if(body.Carbs) {
+                foundGoal.Carbs = body.Carbs;
+            }
+
+            if(body.Fat) {
+                foundGoal.Fat = body.Fat;
+            }
+            
+            if(body.Fiber) {
+                foundGoal.Fiber = body.Fiber;
+            }
+
+            if(body.Sugar) {
+                foundGoal.Sugar = body.Sugar;
+            }
+
+            if(body.Sodium) {
+                foundGoal.Sodium = body.Sodium;
+            }
+
+            if(body.Cholesterol) {
+                foundGoal.Cholesterol = body.Cholesterol;
+            }
+
+            return res.status(200).json(foundGoal);
+        });
     });
 }
