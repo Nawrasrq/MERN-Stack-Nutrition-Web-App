@@ -438,11 +438,12 @@ exports.setApp = function ( app, client )
     });
 
     //edit goal endpoint
-    app.post('/api/editGoal/:UserId', async (req, res, next) => {
+    app.put('/api/editGoal/:id', async (req, res, next) => {
 
         const body = req.body;
+        let goal;
 
-        Goal.find({UserId: req.params.UserId}, function(err, foundGoal) { 
+        /*Goal.find({UserId: req.params.UserId}, function(err, foundGoal) { 
             if (!foundGoal) {
                 return res.status(404).json({error: 'no user found'});
             }
@@ -480,6 +481,10 @@ exports.setApp = function ( app, client )
             }
 
             return res.status(200).json(foundGoal);
-        });
+        });*/
+
+        goal = await Goal.findById(req.params.id);
+        goal.Calories = body.Calories;
+
     });
 }
