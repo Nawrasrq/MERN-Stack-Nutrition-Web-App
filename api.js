@@ -192,7 +192,8 @@ exports.setApp = function ( app, client )
         //set error status
         ret = {error: error};
         
-        window.location.href = "/";
+        alert("Account verified!");
+        res.render("/");
 
         //send error json data
         res.status(200).json(ret);
