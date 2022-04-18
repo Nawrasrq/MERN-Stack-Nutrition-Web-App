@@ -20,6 +20,7 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
+const meal = require('./models/meal.js');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -289,7 +290,7 @@ exports.setApp = function ( app, client )
         ret = {error: error};
         
         //send the user back to the login page
-        //res.status(200).render("/index.html");
+        res.status(200).render("frontend/src/pages/LoginPage.js");
         
         //send error json data
         res.status(200).json(ret);
@@ -345,21 +346,50 @@ exports.setApp = function ( app, client )
     
     //delete meal
     app.delete('/api/deletemeal/:id', async (req, res, next) => {
-        
+        let token = require('./createJWT.js');
+        var refreshedToken = null;
+        let meal;
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                res.status(200).json(r);
+                return;
+            }
+            refreshedToken = token.refresh(jwtToken);
+            
+            // Failed to create new token when refreshing
+            if (refreshedToken === null)
+            {
+                error = "Failed to renew your current session";
+                var ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+            }
+        }
+        catch(e){
+            console.log(e.message);
+        }
+
         try {
             Meal.findByIdAndRemove({_id: req.params.id}).then(function(meal){
-                res.send(meal);
+                //res.send(meal);
+                meal = meal
             });
         }
         catch(e) {
             error = e.toString();
         }
+
+        //send error json data
+        var ret = {meal:meal, error: error, jwtToken:refreshedToken};  
+        res.status(200).json(ret);
     });
 
     //search by meal id
     app.get('/api/searchmeal/:id', async (req, res, next) => {
         let meal;
-
+        
         try {
             meal = await Meal.findById(req.params.id);
 
@@ -401,8 +431,10 @@ exports.setApp = function ( app, client )
     });
 
     //add goal endpoint
-    // TODO: Add Auth Token to this endpoint for fronted <3
     app.post('/api/addgoal', async (req, res, next) => {
+        let token = require('./createJWT.js');
+        var refreshedToken = null;
+
         //get user input from frontend
         const { UserId, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol } = req.body;
 
@@ -410,6 +442,27 @@ exports.setApp = function ( app, client )
         const newGoal = await new Goal({UserId:UserId, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
         var error = '';
 
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                res.status(200).json(r);
+                return;
+            }
+            refreshedToken = token.refresh(jwtToken);
+            
+            // Failed to create new token when refreshing
+            if (refreshedToken === null)
+            {
+                error = "Failed to renew your current session";
+                var ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+            }
+        }
+        catch(e){
+            console.log(e.message);
+        }
+        
         try {
             //store new goal in db
             await newGoal.save();
@@ -419,7 +472,7 @@ exports.setApp = function ( app, client )
         }
 
         //set error status
-        var ret = {error: error};
+        var ret = {error: error, jwtToken: refreshedToken};
 
         //send error json data
         res.status(200).json(ret);
@@ -439,9 +492,32 @@ exports.setApp = function ( app, client )
 
     //edit goal endpoint
     app.put('/api/editGoal/:id', async (req, res, next) => {
+        let token = require('./createJWT.js');
+        var refreshedToken = null;
 
         const body = req.body;
         let goal = await Goal.findById(req.params.id);
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                var r = {error:'The JWT is no longer valid', jwtToken: ''};
+                res.status(200).json(r);
+                return;
+            }
+            refreshedToken = token.refresh(jwtToken);
+            
+            // Failed to create new token when refreshing
+            if (refreshedToken === null)
+            {
+                error = "Failed to renew your current session";
+                var ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+            }
+        }
+        catch(e){
+            console.log(e.message);
+        }
 
         if(body.Calories) {
             goal.Calories = body.Calories;
@@ -474,9 +550,12 @@ exports.setApp = function ( app, client )
         if(body.Cholesterol) {
             goal.Cholesterol = body.Cholesterol;
         }
-
+        
         await goal.save();
-        return res.status(200).json(goal);
+        
+        var ret = {goal: goal, jwtToken: refreshedToken}
+        
+        return res.status(200).json(ret);
 
     });
 }
