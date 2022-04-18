@@ -61,7 +61,7 @@ exports.setApp = function ( app, client )
                 to: Email,   // list of receivers
                 subject: 'Verification Email',
                 text: 'Click the url to verify your account',
-                html: `<a href = "nutrition-app-27.herokuapp.com/api/verifyuser/` + findUser[0].UserId + `/` + randomCode `">Verify account!</a>`
+                html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + findUser[0].UserId + "/" + randomCode
             };
 
             transporter.sendMail(mailData, function (err, info) {
@@ -127,7 +127,7 @@ exports.setApp = function ( app, client )
                     to: Email,   // reciever
                     subject: 'Verification Email',
                     text: 'Click the url to verify your account',
-                    html: `<a href = "nutrition-app-27.herokuapp.com/api/verifyuser/` + id + `/` + randomCode `">Verify account!</a>`
+                    html: "nutrition-app-27.herokuapp.com/api/verifyuser/" + findUser[0].UserId + "/" + randomCode
                 };
                 transporter.sendMail(mailData, function (err, info) {
                     if(err)
@@ -195,7 +195,7 @@ exports.setApp = function ( app, client )
         //send error json data
         res.status(200).json(ret);
         res.redirect("/");
-
+        
     });
 
     app.post('/api/passwordresetrequest', async (req, res, next) => {
