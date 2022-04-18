@@ -192,9 +192,8 @@ exports.setApp = function ( app, client )
         //set error status
         ret = {error: error};
         
-        //send the user back to the login page
-        //res.status(200).render("/index.html");
-        
+        window.location.href = "/";
+
         //send error json data
         res.status(200).json(ret);
         
@@ -248,9 +247,6 @@ exports.setApp = function ( app, client )
         //set error status
         ret = {error: error};
         
-        //send the user back to the login page
-        //res.status(200).render("LoginPage.js");
-        
         //send error json data
         res.status(200).json(ret);
 
@@ -288,9 +284,6 @@ exports.setApp = function ( app, client )
 
         //set error status
         ret = {error: error};
-        
-        //send the user back to the login page
-        //res.status(200).render("LoginPage.js");
         
         //send error json data
         res.status(200).json(ret);
