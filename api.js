@@ -191,8 +191,7 @@ exports.setApp = function ( app, client )
 
         //set error status
         ret = {error: error};
-        
-        alert("Account verified!");
+    
         res.render("/");
 
         //send error json data
