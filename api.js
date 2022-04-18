@@ -109,8 +109,7 @@ exports.setApp = function ( app, client )
             ret = {UserId:id, FirstName:FirstName, LastName:LastName, Email:Email, Birthday:Birthday, Verified:Verified, error:error };
 
             //if user hasnt been verified through email set the error and resend the email
-            if(Verified === false)
-            {
+            if(Verified === false){
                 error = "Account not verified, resending verification email";
                 
                 //generate random code
@@ -181,7 +180,8 @@ exports.setApp = function ( app, client )
                 const updateUser = await User.findOneAndUpdate({UserId:UserId}, {Verified:true});
             }
             else{
-                error = "likely expired authorization code";
+                error = "expired authorization code";
+                res.redirect("/");
             }
 
         }
@@ -193,8 +193,7 @@ exports.setApp = function ( app, client )
         ret = {error: error};
 
         //send error json data
-        //res.status(200).json(ret);
-        res.redirect("/");
+        res.status(200).json(ret);
         
     });
 
