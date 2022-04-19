@@ -375,6 +375,52 @@ exports.setApp = function ( app, client )
         res.send(res.meal.Name);
     });
 
+    //edit goal endpoint
+    app.put('/api/editmeal/:id', async (req, res, next) => {
+
+        const body = req.body;
+        let meal = await Meal.findById(req.params.id);
+
+        if(body.Name) {
+            meal.Name = body.Name;
+        }
+
+        if(body.Calories) {
+            meal.Calories = body.Calories;
+        }
+
+        if(body.Protein) {
+            meal.Protein = body.Protein;
+        }
+
+        if(body.Carbs) {
+            meal.Carbs = body.Carbs;
+        }
+
+        if(body.Fat) {
+            meal.Fat = body.Fat;
+        }
+        
+        if(body.Fiber) {
+            meal.Fiber = body.Fiber;
+        }
+
+        if(body.Sugar) {
+            meal.Sugar = body.Sugar;
+        }
+
+        if(body.Sodium) {
+            meal.Sodium = body.Sodium;
+        }
+
+        if(body.Cholesterol) {
+            meal.Cholesterol = body.Cholesterol;
+        }
+
+        await meal.save();
+        return res.status(200).json(meal);
+    });
+
     // ? indicates an optional parameter
     app.get('/api/filtersearch/:UserId/:name?', async (req, res, next) => {
 
