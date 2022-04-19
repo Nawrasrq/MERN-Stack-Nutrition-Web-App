@@ -18,4 +18,4 @@ const TrackedFood = new Schema({
 
 });
 
-module.exports = TrackedFood = mongoose.model('TrackedFood', TrackedFood);
+module.exports = trackedFood = mongoose.model('trackedFood', TrackedFood);
