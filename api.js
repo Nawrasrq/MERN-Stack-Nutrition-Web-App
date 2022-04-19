@@ -557,8 +557,7 @@ exports.setApp = function ( app, client )
         //output: meal, error
         const {UserId, name} = req.params;
 
-        let error = '';
-        let ret = {};
+        var searchName;
 
         // Empty string can not be passed so pick up empty string value in this case
         if (!name){
@@ -569,20 +568,15 @@ exports.setApp = function ( app, client )
         }
 
         let partialToMatchName = new RegExp(searchName,'i');
-        
-        Meal.find({Name: partialToMatchName, UserId: UserId}, function(err, meal) {
-            if (meal != '') {
-                //success
-                error = '';
-                ret = {meal: meal, error: error};
-            } 
-            else {
-                //error = "No meal matching that name was found.";
-                ret = {error: err};
+
+        Meal.find({Name: partialToMatchName, UserId: req.params.UserId}, function(err, foundMeal) {
+            if (foundMeal != '') {
+                res.send(foundMeal);
+            } else {
+                res.send("No meal matching that name was found.");
             }
         });
-
-        res.status(200).json(ret);
+        
     });
 
     //API for goals /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
