@@ -11,7 +11,7 @@ const User = require("./models/user.js");
 //load meal model
 const Meal = require("./models/meal.js");
 //load TrackedFood model
-const TrackedFood = require("./models/trackedFood.js");
+const trackedFood = require("./models/trackedFood.js");
 //load goal model
 const Goal = require("./models/goal.js");
 //load secret code 
@@ -720,8 +720,8 @@ exports.setApp = function ( app, client )
 
         try {
             //track new meal
-            const newConsumedFood = await new consumedFood({UserId:UserId, MealId:MealId, Catagory:Catagory, Date:Date});
-            await newConsumedFood.save();
+            const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Catagory:Catagory, Date:Date});
+            await newtrackedFood.save();
 
             //success
             error = '';
