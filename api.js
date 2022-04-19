@@ -484,50 +484,71 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
 
-    //edit goal endpoint
     app.put('/api/editmeal/:id', async (req, res, next) => {
+        //input: meal._id, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken
+        //output: error, jwtToken
 
-        const body = req.body;
-        let meal = await Meal.findById(req.params.id);
+        let token = require('./createJWT.js');
+        
+        const {Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
+        const {id} = req.params.id;
 
-        if(body.Name) {
-            meal.Name = body.Name;
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
         }
 
-        if(body.Calories) {
-            meal.Calories = body.Calories;
-        }
+        //search for meal
+        const meal = await Meal.findById(req.params.id);
 
-        if(body.Protein) {
-            meal.Protein = body.Protein;
-        }
+        if(meal.length > 0){
+            if(Name) meal.Name = Name;
+            if(Calories) meal.Calories = Calories;
+            if(Protein) meal.Protein = Protein;
+            if(Carbs) meal.Carbs = Carbs;
+            if(Fat) meal.Fat = Fat;
+            if(Fiber) meal.Fiber = Fiber;
+            if(Sugar) meal.Sugar = Sugar;
+            if(Sodium) meal.Sodium = Sodium;
+            if(Cholesterol) meal.Cholesterol = Cholesterol;
 
-        if(body.Carbs) {
-            meal.Carbs = body.Carbs;
-        }
+            await meal.save();
 
-        if(body.Fat) {
-            meal.Fat = body.Fat;
+            //success
+            error = "";
+            ret = {meal: meal, error: error, jwtToken: refreshedToken};
+        }
+        else{
+            error = "meal not found";
+            ret = {error: error, jwtToken: refreshedToken};
         }
         
-        if(body.Fiber) {
-            meal.Fiber = body.Fiber;
-        }
-
-        if(body.Sugar) {
-            meal.Sugar = body.Sugar;
-        }
-
-        if(body.Sodium) {
-            meal.Sodium = body.Sodium;
-        }
-
-        if(body.Cholesterol) {
-            meal.Cholesterol = body.Cholesterol;
-        }
-
-        await meal.save();
-        return res.status(200).json(meal);
+        res.status(200).json(ret);
     });
 
     // ? indicates an optional parameter
