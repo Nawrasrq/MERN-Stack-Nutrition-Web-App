@@ -469,11 +469,11 @@ exports.setApp = function ( app, client )
 
                 //success
                 error = "";
-                ret = {error: error, mealName: mealName}
+                ret = {error: error, mealName: mealName};
             }
             else{
                 error = "meal not found";
-                ret = {error: error}                
+                ret = {error: error};          
             }
         }
         catch(e) {
@@ -708,12 +708,12 @@ exports.setApp = function ( app, client )
         }
         catch(e) {
             error = e.toString();
-            ret = {error: error, jwtToken:refreshedToken}
+            ret = {error: error, jwtToken:refreshedToken};
             res.status(200).json(ret);
             return;
         }
 
         res.status(200).json(ret);
     });
-    
+
 }
