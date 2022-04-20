@@ -526,7 +526,7 @@ exports.setApp = function ( app, client )
         //search for meal
         const meal = await Meal.findById(req.params.id);
 
-        if(meal.length > 0){
+        if(meal){
             if(Name) meal.Name = Name;
             if(Calories) meal.Calories = Calories;
             if(Protein) meal.Protein = Protein;

@@ -2,12 +2,23 @@ import React from 'react';
 import '../css/EditNutritionInfoPopup.css';
 
 export default class EditNutritionInfoPopup extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          message: "Need to Change"
+        };
+    }
+
+    setMessage = msg => {
+        this.setState({ message: msg });
+    }
+    
     render() {
       if (!this.props.show) {
         return null;
       }
-
-      var message = "";
+      
+      var didEditFood = false;
 
       var food = this.props.food;
       var name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol;
@@ -23,10 +34,12 @@ export default class EditNutritionInfoPopup extends React.Component {
       sodium = food.Sodium;
       cholesterol = food.Cholesterol;
 
-      function setMessage(msg)
+      /*function setMessage(msg)
       {
-          message = msg;
-      }
+          console.log(msg);
+          this.setState({ message: msg });
+          console.log("Made it here");
+      }*/
 
       async function doEditNutritionInfo()
       {
@@ -60,11 +73,9 @@ export default class EditNutritionInfoPopup extends React.Component {
             const response = await fetch(bp.buildPath('api/editmeal/' + pathRoute),{method:'PUT', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
 
-            console.log(res);
-
             if (!res.jwtToken)
             {
-                setMessage(res.error);
+                //this.setMessage(res.error);
                 return;
             }
             // Token was expired
@@ -80,11 +91,12 @@ export default class EditNutritionInfoPopup extends React.Component {
             
             if(res.error.length > 0)
             {
-                setMessage(res.error);
+                //this.setMessage(res.error);
             }
             else
             {
-                setMessage('Successfully edited '+ '\"' + res.meal.Name + '\"');
+                //this.setMessage('Successfully edited '+ '\"' + res.meal.Name + '\"');
+                didEditFood = true;
             }
         }
         catch(e)
@@ -107,8 +119,8 @@ export default class EditNutritionInfoPopup extends React.Component {
                 <span>Sodium: </span><input type="number" defaultValue={sodium} ref={(c) => sodium = c} /> <br />
                 <span>Cholesterol: </span><input type="number" defaultValue={cholesterol} ref={(c) => cholesterol = c} /> <br />
                 <button type="button" id="editNutritionInfoButton" class="buttons" onClick={doEditNutritionInfo}> Edit Nutrition Info </button>
-                <button type="button" id="closeEditNutritionInfoPopupButton" class="buttons" onClick={this.props.closePopup}> Close Edit Nutrition Info </button>
-                <span id="editNutritionInfoResult">{message}</span>
+                <button type="button" id="closeEditNutritionInfoPopupButton" class="buttons" onClick={()=>this.props.closePopup(didEditFood)}> Close Edit Nutrition Info </button>
+                <span id="editNutritionInfoResult">{this.state.message}</span>
             </div>
         </div>
       );
