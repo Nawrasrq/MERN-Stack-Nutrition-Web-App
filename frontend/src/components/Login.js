@@ -25,7 +25,7 @@ function Login()
             }
             else
             {
-                if (res.jwtToken === null)
+                if (!res.jwtToken)
                 {
                     setMessage(res.error);
                     return;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import NutritionPopup from './NutritionPopup.js';
+import NutritionInfoPopup from './NutritionInfoPopup.js';
 
 function AddToDailyConsumption()
 {
     var searchText;
 
     const [foods, setFoods] = useState([]);
-    const [nutritionPopupState, setNutritionPopupState] = useState(false);
+    const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
 
     function goToCreateMealPage()
@@ -15,16 +15,16 @@ function AddToDailyConsumption()
 	}
 
     // Sets value to true to display nutrition info of whatever food was selected
-    function showPopup(selectedFood)
+    function showInfoPopup(selectedFood)
     {
-        setNutritionPopupState(true);
+        setNutritionInfoPopupState(true);
         setSelectedFoodInfo(selectedFood);
     }
 
     // Sets value to false to close nutrtion into popup
-    function hidePopup()
+    function hideInfoPopup()
     {
-        setNutritionPopupState(false);
+        setNutritionInfoPopupState(false);
         setSelectedFoodInfo({});
     }
 
@@ -96,11 +96,11 @@ function AddToDailyConsumption()
                 {foods.map(food => (
                     <li key={food._id}>
                         <span>{food.Name}</span>
-                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showPopup(food)}>View Nutrtion Info</button>
+                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}>View Nutrtion Info</button>
                     </li>
                 ))}
             </ul>
-            <NutritionPopup show={nutritionPopupState} food={selectedFoodInfo} closePopup={hidePopup} />
+            <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
             <button type="button" id="addMealButton" class="buttons" onClick={goToCreateMealPage}> Create Meal </button>
         </div>
     );

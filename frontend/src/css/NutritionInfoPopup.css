@@ -1,4 +1,4 @@
-#nutritionPopup
+#nutritionInfoPopup
 {
     position: fixed;
     width: 100%;
@@ -11,7 +11,7 @@
     background-color: rgba(0,0,0, 0.5);
 }
 
-#innerNutritionPopup {
+#innerNutritionInfoPopup {
     position: absolute;
     left: 25%;
     right: 25%;

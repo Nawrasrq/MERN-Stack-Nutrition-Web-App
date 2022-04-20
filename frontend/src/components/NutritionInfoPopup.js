@@ -1,7 +1,7 @@
 import React from 'react';
-import '../css/NutritionPopup.css';
+import '../css/NutritionInfoPopup.css';
 
-export default class NutritionPopup extends React.Component {
+export default class NutritionInfoPopup extends React.Component {
     render() {
       if (!this.props.show) {
         return null;
@@ -21,8 +21,8 @@ export default class NutritionPopup extends React.Component {
       cholesterol = food.Cholesterol;
 
       return (
-        <div id="nutritionPopup">
-            <div id="innerNutritionPopup">
+        <div id="nutritionInfoPopup">
+            <div id="innerNutritionInfoPopup">
                 <span>Calories: {calories}</span><br/>
                 <span>Protein: {protein}</span><br/>
                 <span>Carbohydrates: {carbs}</span><br/>
@@ -31,7 +31,7 @@ export default class NutritionPopup extends React.Component {
                 <span>Sugar: {sugar}</span><br/>
                 <span>Sodium: {sodium}</span><br/>
                 <span>Cholesterol: {cholesterol}</span><br/>
-                <button type="button" id="closeNutritionPopupButton" class="buttons" onClick={this.props.closePopup}> Close Nutrition Info </button>
+                <button type="button" id="closeNutritionInfoPopupButton" class="buttons" onClick={this.props.closePopup}> Close Nutrition Info </button>
             </div>
         </div>
       );
