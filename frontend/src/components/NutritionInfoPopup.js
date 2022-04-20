@@ -8,9 +8,10 @@ export default class NutritionInfoPopup extends React.Component {
       }
 
       var food = this.props.food;
-      var calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol;
+      var name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol;
 
       // Get all the nutritional values from the selected food
+      name = food.Name;
       calories = food.Calories;
       protein = food.Protein;
       carbs = food.Carbs;
@@ -23,6 +24,7 @@ export default class NutritionInfoPopup extends React.Component {
       return (
         <div id="nutritionInfoPopup">
             <div id="innerNutritionInfoPopup">
+                <span>Name: {name}</span><br/>
                 <span>Calories: {calories}</span><br/>
                 <span>Protein: {protein}</span><br/>
                 <span>Carbohydrates: {carbs}</span><br/>

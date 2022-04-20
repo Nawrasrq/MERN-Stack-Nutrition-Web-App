@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
+import EditNutritionInfoPopup from './EditNutritionInfoPopup.js';
 
 function AddToDailyConsumption()
 {
@@ -7,6 +8,7 @@ function AddToDailyConsumption()
 
     const [foods, setFoods] = useState([]);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
+    const [editNutritionInfoPopupState, setEditNutritionInfoPopupState] = useState(false);
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
 
     function goToCreateMealPage()
@@ -21,10 +23,24 @@ function AddToDailyConsumption()
         setSelectedFoodInfo(selectedFood);
     }
 
-    // Sets value to false to close nutrtion into popup
+    // Sets value to true to display nutrition info of whatever food was selected for user to edit
+    function showEditInfoPopup(selectedFood)
+    {
+        setEditNutritionInfoPopupState(true);
+        setSelectedFoodInfo(selectedFood);
+    }
+
+    // Sets value to false to close nutrtion info popup
     function hideInfoPopup()
     {
         setNutritionInfoPopupState(false);
+        setSelectedFoodInfo({});
+    }
+
+    // Sets value to false to close edit info popup
+    function hideEditInfoPopup()
+    {
+        setEditNutritionInfoPopupState(false);
         setSelectedFoodInfo({});
     }
 
@@ -97,10 +113,12 @@ function AddToDailyConsumption()
                     <li key={food._id}>
                         <span>{food.Name}</span>
                         <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}>View Nutrtion Info</button>
+                        <button type="button" id="editNutritionInfoButton" class="buttons" onClick={() => showEditInfoPopup(food)}>Edit Nutrtion Info</button>
                     </li>
                 ))}
             </ul>
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
+            <EditNutritionInfoPopup show={editNutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideEditInfoPopup} />
             <button type="button" id="addMealButton" class="buttons" onClick={goToCreateMealPage}> Create Meal </button>
         </div>
     );
