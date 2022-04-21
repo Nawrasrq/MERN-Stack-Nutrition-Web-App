@@ -526,26 +526,37 @@ exports.setApp = function ( app, client )
         //search for meal
         const meal = await Meal.findById(req.params.id);
 
-        if(meal){
-            if(Name) meal.Name = Name;
-            if(Calories) meal.Calories = Calories;
-            if(Protein) meal.Protein = Protein;
-            if(Carbs) meal.Carbs = Carbs;
-            if(Fat) meal.Fat = Fat;
-            if(Fiber) meal.Fiber = Fiber;
-            if(Sugar) meal.Sugar = Sugar;
-            if(Sodium) meal.Sodium = Sodium;
-            if(Cholesterol) meal.Cholesterol = Cholesterol;
-
-            await meal.save();
-
-            //success
-            error = "";
+        // Check if anything will actually be updated
+        if (meal.Name === Name && meal.Calories === parseFloat(Calories) && meal.Protein === parseFloat(Protein)
+            && meal.Carbs === parseFloat(Carbs) && meal.Fat === parseFloat(Fat) && meal.Fiber === parseFloat(Fiber)
+            && meal.Sugar === parseFloat(Sugar) && meal.Sodium === parseFloat(Sodium) && meal.Cholesterol === parseFloat(Cholesterol))
+        {
+            error = "No fields were edited.";
             ret = {meal: meal, error: error, jwtToken: refreshedToken};
         }
-        else{
-            error = "meal not found";
-            ret = {error: error, jwtToken: refreshedToken};
+        else
+        {
+            if(meal){
+                if(Name) meal.Name = Name;
+                if(Calories) meal.Calories = Calories;
+                if(Protein) meal.Protein = Protein;
+                if(Carbs) meal.Carbs = Carbs;
+                if(Fat) meal.Fat = Fat;
+                if(Fiber) meal.Fiber = Fiber;
+                if(Sugar) meal.Sugar = Sugar;
+                if(Sodium) meal.Sodium = Sodium;
+                if(Cholesterol) meal.Cholesterol = Cholesterol;
+
+                await meal.save();
+
+                //success
+                error = "";
+                ret = {meal: meal, error: error, jwtToken: refreshedToken};
+            }
+            else{
+                error = "meal not found";
+                ret = {error: error, jwtToken: refreshedToken};
+            }
         }
         
         res.status(200).json(ret);

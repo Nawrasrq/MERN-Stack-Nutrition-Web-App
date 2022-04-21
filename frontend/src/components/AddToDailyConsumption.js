@@ -38,14 +38,16 @@ function AddToDailyConsumption()
     }
 
     // Sets value to false to close edit info popup
-    function hideEditInfoPopup(didEditFood)
+    function hideEditInfoPopup(didEditFood, setDidEditFood, setMessage)
     {
         // If any food's info was edited, need to refresh the list
         if (didEditFood)
         {
             doSearchFoods();
+            setDidEditFood(false);
         }
 
+        setMessage("");
         setEditNutritionInfoPopupState(false);
         setSelectedFoodInfo({});
     }

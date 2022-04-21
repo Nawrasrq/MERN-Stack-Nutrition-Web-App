@@ -1,28 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/EditNutritionInfoPopup.css';
 
-export default class EditNutritionInfoPopup extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          message: "Need to Change"
-        };
-    }
+function EditNutritionInfoPopup(props)
+{   
+    const [message,setMessage] = useState('');
+    const [didEditFood, setDidEditFood] = useState(false);
 
-    setMessage = msg => {
-        this.setState({ message: msg });
-    }
-    
-    render() {
-      if (!this.props.show) {
+      if (!props.show) {
         return null;
       }
-      
-      var didEditFood = false;
-
-      var food = this.props.food;
+    
+      var food = props.food;
       var name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol;
-
+      
       // Get all the nutritional values from the selected food
       name = food.Name;
       calories = food.Calories;
@@ -34,13 +24,12 @@ export default class EditNutritionInfoPopup extends React.Component {
       sodium = food.Sodium;
       cholesterol = food.Cholesterol;
 
-      /*function setMessage(msg)
+      // This function just resets the displayed message whenever the user starts typing again in any of the input text boxes.
+      function clearMessage()
       {
-          console.log(msg);
-          this.setState({ message: msg });
-          console.log("Made it here");
-      }*/
-
+        setMessage("");
+      }
+      
       async function doEditNutritionInfo()
       {
         // Get jwt token from local storage
@@ -75,7 +64,7 @@ export default class EditNutritionInfoPopup extends React.Component {
 
             if (!res.jwtToken)
             {
-                //this.setMessage(res.error);
+                setMessage(res.error);
                 return;
             }
             // Token was expired
@@ -91,12 +80,12 @@ export default class EditNutritionInfoPopup extends React.Component {
             
             if(res.error.length > 0)
             {
-                //this.setMessage(res.error);
+                setMessage(res.error);
             }
             else
             {
-                //this.setMessage('Successfully edited '+ '\"' + res.meal.Name + '\"');
-                didEditFood = true;
+                setMessage('Successfully edited '+ '\"' + res.meal.Name + '\"');
+                setDidEditFood(true);
             }
         }
         catch(e)
@@ -109,20 +98,20 @@ export default class EditNutritionInfoPopup extends React.Component {
       return (
         <div id="editNutritionInfoPopup">
             <div id="innerEditNutritionInfoPopup">
-                <span>Name: </span><input type="text" defaultValue={name} ref={(c) => name = c} /> <br />
-                <span>Calories: </span><input type="number" defaultValue={calories} ref={(c) => calories = c} /> <br />
-                <span>Protein: </span><input type="number" defaultValue={protein} ref={(c) => protein = c} /> <br />
-                <span>Carbohydrates: </span><input type="number" defaultValue={carbs} ref={(c) => carbs = c} /> <br />
-                <span>Fat: </span><input type="number" defaultValue={fat} ref={(c) => fat = c} /> <br />
-                <span>Fiber: </span><input type="number" defaultValue={fiber} ref={(c) => fiber = c} /> <br />
-                <span>Sugar: </span><input type="number" defaultValue={sugar} ref={(c) => sugar = c} /> <br />
-                <span>Sodium: </span><input type="number" defaultValue={sodium} ref={(c) => sodium = c} /> <br />
-                <span>Cholesterol: </span><input type="number" defaultValue={cholesterol} ref={(c) => cholesterol = c} /> <br />
+                <span>Name: </span><input type="text" defaultValue={name} onInput={clearMessage} ref={(c) => name = c} /> <br />
+                <span>Calories: </span><input type="number" defaultValue={calories} onInput={clearMessage} ref={(c) => calories = c} /> <br />
+                <span>Protein: </span><input type="number" defaultValue={protein} onInput={clearMessage} ref={(c) => protein = c} /> <br />
+                <span>Carbohydrates: </span><input type="number" defaultValue={carbs} onInput={clearMessage} ref={(c) => carbs = c} /> <br />
+                <span>Fat: </span><input type="number" defaultValue={fat} onInput={clearMessage} ref={(c) => fat = c} /> <br />
+                <span>Fiber: </span><input type="number" defaultValue={fiber} onInput={clearMessage} ref={(c) => fiber = c} /> <br />
+                <span>Sugar: </span><input type="number" defaultValue={sugar} onInput={clearMessage} ref={(c) => sugar = c} /> <br />
+                <span>Sodium: </span><input type="number" defaultValue={sodium} onInput={clearMessage} ref={(c) => sodium = c} /> <br />
+                <span>Cholesterol: </span><input type="number" defaultValue={cholesterol} onInput={clearMessage} ref={(c) => cholesterol = c} /> <br />
                 <button type="button" id="editNutritionInfoButton" class="buttons" onClick={doEditNutritionInfo}> Edit Nutrition Info </button>
-                <button type="button" id="closeEditNutritionInfoPopupButton" class="buttons" onClick={()=>this.props.closePopup(didEditFood)}> Close Edit Nutrition Info </button>
-                <span id="editNutritionInfoResult">{this.state.message}</span>
+                <button type="button" id="closeEditNutritionInfoPopupButton" class="buttons" onClick={()=>props.closePopup(didEditFood, setDidEditFood, setMessage)}> Close Edit Nutrition Info </button> <br />
+                <span id="editNutritionInfoResult">{message}</span>
             </div>
         </div>
       );
-    }
   }
+  export default EditNutritionInfoPopup;

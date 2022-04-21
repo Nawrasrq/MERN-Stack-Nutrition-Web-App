@@ -68,15 +68,15 @@ function GoalsDisplay()
   return (
     <div id="addMealDiv">
         <span> Edit Goals</span><br />
-        <input type="number" id="weight" placeholder="Weight" onKeyUp={clearMessage} ref={(c) => weight = c} /> <br />
-        <input type="number" id="calories" placeholder="Calories" onKeyUp={clearMessage} ref={(c) => calories = c} /> <br />
-        <input type="number" id="protein" placeholder="Protein" onKeyUp={clearMessage} ref={(c) => protein = c} /> <br />
-        <input type="number" id="carbs" placeholder="Carbs" onKeyUp={clearMessage} ref={(c) => carbs = c} /> <br />
-        <input type="number" id="fat" placeholder="Fat" onKeyUp={clearMessage} ref={(c) => fat = c} /> <br />
-        <input type="number" id="fiber" placeholder="Fiber" onKeyUp={clearMessage} ref={(c) => fiber = c} /> <br />
-        <input type="number" id="sugar" placeholder="Sugar" onKeyUp={clearMessage} ref={(c) => sugar = c} /> <br />
-        <input type="number" id="sodium" placeholder="Sodium" onKeyUp={clearMessage} ref={(c) => sodium = c} /> <br />
-        <input type="number" id="cholesterol" placeholder="Cholesterol" onKeyUp={clearMessage} ref={(c) => cholesterol = c} /> <br />
+        <input type="number" id="weight" placeholder="Weight" onInput={clearMessage} ref={(c) => weight = c} /> <br />
+        <input type="number" id="calories" placeholder="Calories" onInput={clearMessage} ref={(c) => calories = c} /> <br />
+        <input type="number" id="protein" placeholder="Protein" onInput={clearMessage} ref={(c) => protein = c} /> <br />
+        <input type="number" id="carbs" placeholder="Carbs" onInput={clearMessage} ref={(c) => carbs = c} /> <br />
+        <input type="number" id="fat" placeholder="Fat" onInput={clearMessage} ref={(c) => fat = c} /> <br />
+        <input type="number" id="fiber" placeholder="Fiber" onInput={clearMessage} ref={(c) => fiber = c} /> <br />
+        <input type="number" id="sugar" placeholder="Sugar" onInput={clearMessage} ref={(c) => sugar = c} /> <br />
+        <input type="number" id="sodium" placeholder="Sodium" onInput={clearMessage} ref={(c) => sodium = c} /> <br />
+        <input type="number" id="cholesterol" placeholder="Cholesterol" onInput={clearMessage} ref={(c) => cholesterol = c} /> <br />
         <input type="submit" id="addMealButton" class="buttons" value = "Edit Goals" onClick={doEditGoals} /><br />
         <span id="addMealResult">{message}</span>
      </div>
