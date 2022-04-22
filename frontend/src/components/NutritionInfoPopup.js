@@ -33,7 +33,7 @@ export default class NutritionInfoPopup extends React.Component {
                 <span>Sugar: {sugar}</span><br/>
                 <span>Sodium: {sodium}</span><br/>
                 <span>Cholesterol: {cholesterol}</span><br/>
-                <button type="button" id="closeNutritionInfoPopupButton" class="buttons" onClick={this.props.closePopup}> Close Nutrition Info </button>
+                <button type="button" id="closeNutritionInfoPopupButton" class="buttons" onClick={this.props.closePopup}> Close </button>
             </div>
         </div>
       );

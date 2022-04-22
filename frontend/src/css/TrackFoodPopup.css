@@ -1,4 +1,4 @@
-#editNutritionInfoPopup
+#trackFoodPopup
 {
     position: fixed;
     width: 100%;
@@ -11,7 +11,7 @@
     background-color: rgba(0,0,0, 0.5);
 }
 
-#innerEditNutritionInfoPopup 
+#innerTrackFoodPopup 
 {
     position: absolute;
     left: 25%;
@@ -19,5 +19,5 @@
     top: 25%;
     bottom: 25%;
     margin: auto;
-    background: red;
+    background: green;
 }

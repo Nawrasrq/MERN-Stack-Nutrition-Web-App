@@ -83,21 +83,28 @@ function AddMeal()
             alert(e.toString());
             return;
         }
-    };
+  };
+
+  // Prevents negative values from being typed in
+  const preventInvalid = (e) => {
+    if (e.code === 'Minus') {
+        e.preventDefault();
+    }
+  };
 
   return (
     <div id="addMealDiv">
         <form onSubmit={doAddMeal}>
             <span id="inner-title">Add Meal (required fields indicated by *)</span><br />
             <input type="text" id="foodName" placeholder="Food Name" onInput={clearMessage} ref={(c) => foodName = c} /> *<br />
-            <input type="number" id="calories" placeholder="Calories" onInput={clearMessage} ref={(c) => calories = c} /> *<br />
-            <input type="number" id="protein" placeholder="Protein" onInput={clearMessage} ref={(c) => protein = c} /><br />
-            <input type="number" id="carbs" placeholder="Carbohydrates" onInput={clearMessage} ref={(c) => carbs = c} /><br />
-            <input type="number" id="fat" placeholder="Fat" onInput={clearMessage} ref={(c) => fat = c} /><br />
-            <input type="number" id="fiber" placeholder="Fiber" onInput={clearMessage} ref={(c) => fiber = c} /><br />
-            <input type="number" id="sugar" placeholder="Sugar" onInput={clearMessage} ref={(c) => sugar = c} /><br />
-            <input type="number" id="sodium" placeholder="Sodium" onInput={clearMessage} ref={(c) => sodium = c} /><br />
-            <input type="number" id="cholesterol" placeholder="Cholesterol" onInput={clearMessage} ref={(c) => cholesterol = c} /><br />
+            <input type="number" id="calories" placeholder="Calories" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => calories = c} /> *<br />
+            <input type="number" id="protein" placeholder="Protein" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} /><br />
+            <input type="number" id="carbs" placeholder="Carbohydrates" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} /><br />
+            <input type="number" id="fat" placeholder="Fat" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} /><br />
+            <input type="number" id="fiber" placeholder="Fiber" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} /><br />
+            <input type="number" id="sugar" placeholder="Sugar" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} /><br />
+            <input type="number" id="sodium" placeholder="Sodium" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} /><br />
+            <input type="number" id="cholesterol" placeholder="Cholesterol" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} /><br />
             <input type="submit" id="addMealButton" class="buttons" value = "Add Meal" onClick={doAddMeal} /><br />
             <span id="addMealResult">{message}</span>
         </form>

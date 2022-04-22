@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import TrackFoodPopup from './TrackFoodPopup.js';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 import EditNutritionInfoPopup from './EditNutritionInfoPopup.js';
 import DeleteFoodPopup from './DeleteFoodPopup.js';
@@ -8,6 +9,7 @@ function AddToDailyConsumption()
     var searchText;
 
     const [foods, setFoods] = useState([]);
+    const [trackFoodPopupState, setTrackFoodPopupState] = useState(false);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
     const [editNutritionInfoPopupState, setEditNutritionInfoPopupState] = useState(false);
     const [deleteFoodPopupState, setDeleteFoodPopupState] = useState(false);
@@ -17,6 +19,13 @@ function AddToDailyConsumption()
 	{
 		window.location.href = '/CreateMeal';
 	}
+
+    // Sets value to true to open popup where that food's quantity can be set and then decided to be tracked
+    function showTrackFoodPopup(selectedFood)
+    {
+        setTrackFoodPopupState(true);
+        setSelectedFoodInfo(selectedFood);
+    }
 
     // Sets value to true to display nutrition info of whatever food was selected
     function showInfoPopup(selectedFood)
@@ -37,6 +46,15 @@ function AddToDailyConsumption()
     {
         setDeleteFoodPopupState(true);
         setSelectedFoodInfo(selectedFood);
+    }
+
+    // Sets value to false to close track food popup
+    function hideTrackFoodPopup(setMessage, setTrackQuantity)
+    {
+        setMessage("");
+        setTrackQuantity(1);
+        setTrackFoodPopupState(false);
+        setSelectedFoodInfo({});
     }
 
     // Sets value to false to close nutrtion info popup
@@ -137,12 +155,14 @@ function AddToDailyConsumption()
                 {foods.map(food => (
                     <li key={food._id}>
                         <span>{food.Name}</span>
+                        <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" onClick={() => showTrackFoodPopup(food)}> Add </button>
                         <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}> View </button>
                         <button type="button" id="editNutritionInfoButton" class="buttons" onClick={() => showEditInfoPopup(food)}>Edit </button>
                         <button type="button" id="deleteFoodButton" class="buttons" onClick={() => showDeleteFoodPopup(food)} >Delete </button>
                     </li>
                 ))}
             </ul>
+            <TrackFoodPopup show={trackFoodPopupState} food={selectedFoodInfo} closePopup={hideTrackFoodPopup} />
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
             <EditNutritionInfoPopup show={editNutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideEditInfoPopup} />
             <DeleteFoodPopup show={deleteFoodPopupState} food={selectedFoodInfo} closePopup={hideDeleteFoodPopup} />
