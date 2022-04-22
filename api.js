@@ -400,7 +400,7 @@ exports.setApp = function ( app, client )
         let token = require('./createJWT.js');
         
         const {jwtToken} = req.body;
-        const {id} = req.params.id;
+        const id = req.params.id;
 
         let refreshedToken = null;
         let error = '';
@@ -454,7 +454,7 @@ exports.setApp = function ( app, client )
         //input meal._id
         //output mealName, error
 
-        const {id} = req.params.id;
+        const id = req.params.id;
 
         let error = '';
         let ret = {};

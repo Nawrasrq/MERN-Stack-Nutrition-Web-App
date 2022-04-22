@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 import EditNutritionInfoPopup from './EditNutritionInfoPopup.js';
+import DeleteFoodPopup from './DeleteFoodPopup.js';
 
 function AddToDailyConsumption()
 {
@@ -9,6 +10,7 @@ function AddToDailyConsumption()
     const [foods, setFoods] = useState([]);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
     const [editNutritionInfoPopupState, setEditNutritionInfoPopupState] = useState(false);
+    const [deleteFoodPopupState, setDeleteFoodPopupState] = useState(false);
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
 
     function goToCreateMealPage()
@@ -27,6 +29,13 @@ function AddToDailyConsumption()
     function showEditInfoPopup(selectedFood)
     {
         setEditNutritionInfoPopupState(true);
+        setSelectedFoodInfo(selectedFood);
+    }
+
+    // Sets value to true to confirm if user really wants to delete this food from their list
+    function showDeleteFoodPopup(selectedFood)
+    {
+        setDeleteFoodPopupState(true);
         setSelectedFoodInfo(selectedFood);
     }
 
@@ -49,6 +58,14 @@ function AddToDailyConsumption()
 
         setMessage("");
         setEditNutritionInfoPopupState(false);
+        setSelectedFoodInfo({});
+    }
+
+    function hideDeleteFoodPopup()
+    {
+        doSearchFoods();
+
+        setDeleteFoodPopupState(false);
         setSelectedFoodInfo({});
     }
 
@@ -120,13 +137,15 @@ function AddToDailyConsumption()
                 {foods.map(food => (
                     <li key={food._id}>
                         <span>{food.Name}</span>
-                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}>View Nutrtion Info</button>
-                        <button type="button" id="editNutritionInfoButton" class="buttons" onClick={() => showEditInfoPopup(food)}>Edit Nutrtion Info</button>
+                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}> View </button>
+                        <button type="button" id="editNutritionInfoButton" class="buttons" onClick={() => showEditInfoPopup(food)}>Edit </button>
+                        <button type="button" id="deleteFoodButton" class="buttons" onClick={() => showDeleteFoodPopup(food)} >Delete </button>
                     </li>
                 ))}
             </ul>
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
             <EditNutritionInfoPopup show={editNutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideEditInfoPopup} />
+            <DeleteFoodPopup show={deleteFoodPopupState} food={selectedFoodInfo} closePopup={hideDeleteFoodPopup} />
             <button type="button" id="addMealButton" class="buttons" onClick={goToCreateMealPage}> Create Meal </button>
         </div>
     );
