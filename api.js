@@ -685,13 +685,13 @@ exports.setApp = function ( app, client )
     //API for tracking meals ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //track a meal
     app.post('/api/trackmeal', async (req, res, next) => {
-        //input: UserId, MealId, Category, date, jwtToken
+        //input: UserId, MealId, Category, Quantity, Date, jwtToken
         //output: error, refreshedToken
 
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, MealId, Catagory, Date, jwtToken } = req.body;
+        const { UserId, MealId, Catagory, Quantity, Date, jwtToken } = req.body;
         
         let refreshedToken = null;
         let error = '';
@@ -725,7 +725,7 @@ exports.setApp = function ( app, client )
 
         try {
             //track new meal
-            const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Catagory:Catagory, Date:Date});
+            const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Catagory:Catagory, Quantity:Quantity, Date:Date});
             await newtrackedFood.save();
 
             //success
@@ -737,6 +737,128 @@ exports.setApp = function ( app, client )
             ret = {error: error, jwtToken:refreshedToken};
             res.status(200).json(ret);
             return;
+        }
+
+        res.status(200).json(ret);
+    });
+
+    //retrieve all tracked foods
+    app.post('/api/retrievetracked', async (req, res, next) => {
+        //input: UserId, jwtToken
+        //output: array of all trackedmeals, error, refreshedToken
+
+        let token = require('./createJWT.js');
+
+        //get user input from frontend
+        const { UserId, jwtToken } = req.body;
+        
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+
+        try {
+            //find all tracked meals associated with user
+            const trackedFoods = await trackedFood.find({UserId:UserId});
+
+            if(trackedFoods.length > 0){
+                //success
+                error = '';
+                ret = { trackedFoods: trackedFoods, error: error, jwtToken:refreshedToken };  
+            }
+            else{
+                error = 'No foods found';
+                ret = { error: error, jwtToken:refreshedToken };
+            }
+        }
+        catch(e) {
+            error = e.toString();
+            ret = {error: error, jwtToken:refreshedToken};
+            res.status(200).json(ret);
+            return;
+        }
+
+        res.status(200).json(ret);
+    });
+
+    //delete trackedFood
+    app.delete('/api/deletetracked/:id', async (req, res, next) => {
+        //input trackedmeal._id, jwtToken
+        //output error, refreshedToken
+
+        let token = require('./createJWT.js');
+        
+        const {jwtToken} = req.body;
+        const id = req.params.id;
+
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+        
+        //find and delete tracked meal
+        try {
+            trackedFood.findByIdAndRemove({_id: id}).then(function(food){
+                food = this.food;
+            });
+
+            //success
+            error = "";
+            ret = {error: error, jwtToken:refreshedToken};
+        }
+        catch(e) {
+            error = e.toString();
+            ret = { error:error, jwtToken:refreshedToken };  
         }
 
         res.status(200).json(ret);

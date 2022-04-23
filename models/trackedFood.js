@@ -12,9 +12,13 @@ const TrackedFood = new Schema({
   Catagory: {
     type: Number
   },
+  Quantity: {
+    type: Number
+  },
   Date: {
     type: String
   }
+  
 
 });
 
