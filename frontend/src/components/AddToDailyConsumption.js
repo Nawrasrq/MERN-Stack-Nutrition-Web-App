@@ -4,6 +4,10 @@ import NutritionInfoPopup from './NutritionInfoPopup.js';
 import EditNutritionInfoPopup from './EditNutritionInfoPopup.js';
 import DeleteFoodPopup from './DeleteFoodPopup.js';
 
+// TODO:
+// Extract all the nutrition info from the USDA database searches, right now we just do names
+// Maybe capitalize the names of the foods so they look nicer in search
+
 function AddToDailyConsumption()
 {
     var searchText;
@@ -14,6 +18,16 @@ function AddToDailyConsumption()
     const [editNutritionInfoPopupState, setEditNutritionInfoPopupState] = useState(false);
     const [deleteFoodPopupState, setDeleteFoodPopupState] = useState(false);
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
+
+    const api_key = 'Qu6XqYJAL6VNG2ABuikfQizM7hXNKQjm5TfEOFGi';
+    const [searchState, setSearchState] = useState('my Meals'); // Flips between user and USDA database
+
+    // Flips the text on the button, it ain't pretty but it works
+    function switchDatabase()
+    {
+        if(searchState == 'USDA') {setSearchState('my Meals');}
+        else {setSearchState('USDA');}
+    }
 
     function goToCreateMealPage()
 	{
@@ -117,21 +131,34 @@ function AddToDailyConsumption()
 
         try 
         {
-            var bp = require('./Path.js');
-            const response = await fetch(bp.buildPath("api/filtersearch/" + routeEnd),{method:'GET', headers:{'Content-Type': 'application/json'}});
-            var resText = await response.text();
-
-            // No foods found so empty array to display
-            if (resText === "No meal matching that name was found.")
+            // Basically just switches the database it's using depending on searchState
+            if (searchState == 'my Meals')
             {
-                setFoods([]);
-                return;
-            }
+                var bp = require('./Path.js');
+                const response = await fetch(bp.buildPath("api/filtersearch/" + routeEnd),{method:'GET', headers:{'Content-Type': 'application/json'}});
+                var resText = await response.text();
 
-            var res = JSON.parse(resText);
+                // No foods found so empty array to display
+                if (resText === "No meal matching that name was found.")
+                {
+                    setFoods([]);
+                    return;
+                }
+
+                var res = JSON.parse(resText);
+            }
+            else 
+            {
+                var html = 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + api_key + '&query=' + searchString + '&pageSize=20';
+                const response = await fetch(html, {method:'GET', headers:{'Content-Type': 'application/json'}});
+                var resText = await response.text();
+                var res = JSON.parse(resText);
+                res = res.foods
+            }
 
             // Update array with the new foods found from the search
             setFoods(res);
+            console.log(res);
             return;
         }
         catch(e)
@@ -146,15 +173,15 @@ function AddToDailyConsumption()
         doSearchFoods();
     }, []);
       
-
     return(
         <div>
             <span id="inner-title">Search for meals to add to you list of foods consumed today.</span><br />
+            <button type="button" id="switchSearchState" class="buttons" onClick={() => switchDatabase()}>Search {searchState}:</button> <br />
             <input type="text" id="searchText" placeholder="Search Here" onKeyUp={doSearchFoods} ref={(c) => searchText = c} /><br />
             <ul>
                 {foods.map(food => (
-                    <li key={food._id}>
-                        <span>{food.Name}</span>
+                    <li key={food._id || food.fdcId}>
+                        <span>{food.Name || food.lowercaseDescription}</span>
                         <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" onClick={() => showTrackFoodPopup(food)}> Add </button>
                         <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}> View </button>
                         <button type="button" id="editNutritionInfoButton" class="buttons" onClick={() => showEditInfoPopup(food)}>Edit </button>
