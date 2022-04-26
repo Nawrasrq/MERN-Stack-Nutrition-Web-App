@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
-        "heroku-postbuild": " NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+        "heroku-postbuild": " NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+        "test": "mocha unitTests/apiTest.js --timeout 10000"
     },
     "author": "",
     "license": "ISC",
@@ -23,5 +24,11 @@
         "mongoose-int32": "^0.6.0",
         "nodemailer": "^6.7.3",
         "react-router-dom": "^5.2.0"
+    },
+    "devDependencies": {
+        "chai": "^4.3.6",
+        "chai-http": "^4.3.0",
+        "mocha": "^9.2.2",
+        "nyc": "^15.1.0"
     }
 }

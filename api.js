@@ -1,6 +1,6 @@
+require('dotenv').config();
 require('express');
 require('mongodb');
-require('dotenv').config();
 
 //gmail login
 const GmailLogin = process.env.GMAILLOGIN;
