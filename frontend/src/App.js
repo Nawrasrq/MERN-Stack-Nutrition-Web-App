@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import ProgressPage from './pages/ProgressPage';
@@ -12,8 +14,6 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import CreateMealPage from './pages/CreateMealPage';
 import GoalsPage from './pages/GoalsPage';
 import EditGoalsPage from './pages/EditGoalsPage.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
           <Route path="/MacroCalculator" exact>
             MacroCalculator
           </Route>
-          
+
           <Redirect to="/" />
         </Switch>  
       </Router>

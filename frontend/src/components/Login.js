@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import '../css/LoginPage.css';
 
 function Login()
 {
     var storage = require('../tokenStorage.js');
-
+    
     var loginName;
     var loginPassword;
     const [message,setMessage] = useState('');
@@ -31,13 +32,13 @@ function Login()
                     setMessage(res.error);
                     return;
                 }
-
+                
                 storage.storeToken(res.jwtToken);
-
+                
                 let userId = res.UserId;
                 let fn = res.FirstName;
                 let ln = res.LastName;
-
+                
                 var user = {firstName:fn, lastName:ln, id:userId};
                 
                 localStorage.setItem('user_data', JSON.stringify(user));
@@ -50,18 +51,51 @@ function Login()
             alert(e.toString());
             return;
         }    
+
     };
+    const handleKeypress = e =>
+    {
+        console.log(e.key);
+        if(e.key === 'Enter')
+        {
+            document.getElementById('loginButton').click();
+        }
+    }
+
     
     return(
-      <div id="loginDiv">
-        <form onSubmit={doLogin}>
-        <span id="inner-title">PLEASE LOG IN</span><br />
-        <input type="text" id="loginName" placeholder="Username" ref={(c) => loginName = c} />
-        <input type="password" id="loginPassword" placeholder="Password" ref={(c) => loginPassword = c} />
-        <input type="submit" id="loginButton" class="buttons" value = "Do It" onClick={doLogin} />
-        </form>
-        <span id="loginResult">{message}</span>
-     </div>
-    );
+        <div id="loginDiv" >
+            <Container>
+                <Form>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formEmail">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control type="text" placeholder="Username" ref={(c) => loginName = c} />
+                    </Form.Group>
+
+                    <Form.Group id="leftJustified" controlId="formPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control 
+                            type="password" 
+                            placeholder="Password" 
+                            id="login"
+                            onKeyPress={handleKeypress}
+                            ref={(c) => loginPassword = c} 
+                        />
+                    </Form.Group>
+
+                    <Form.Text style={{color: "white"}} id="loginResult" >{message}</Form.Text><br/>
+
+                    <Button 
+                        id="loginButton"
+                        className="m-3" 
+                        variant="primary" 
+                        onClick={doLogin}
+                    > 
+                        Login 
+                    </Button>
+                </Form>
+            </Container>
+        </div>
+        );
 };
 export default Login;

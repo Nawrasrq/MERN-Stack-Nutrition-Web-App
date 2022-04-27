@@ -3,12 +3,12 @@ import PageTitle from '../components/PageTitle';
 import Login from '../components/Login';
 import ForgotPassword from '../components/ForgotPassword';
 import CreateNewAccount from '../components/CreateNewAccount';
-import { Button } from 'react-bootstrap';
+import '../css/LoginPage.css';
 
 function LoginPage()
 {
 	return(
-	  <div>
+	  <div id="loginPage">
 		<PageTitle />
 		<Login />
 		<ForgotPassword />

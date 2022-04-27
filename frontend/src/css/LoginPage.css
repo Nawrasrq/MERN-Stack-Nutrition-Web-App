@@ -1,0 +1,16 @@
+#loginPage
+{
+    text-align: center;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    min-height: 100vh;
+    margin: 0px auto;
+    padding: 55px 55px 37px 55px;
+}
+
+#leftJustified 
+{
+    text-align: left;
+}

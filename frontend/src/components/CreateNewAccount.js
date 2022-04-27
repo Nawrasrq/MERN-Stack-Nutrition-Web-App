@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
+
 
 // Takes you to register page when "Create New Account" button is clicked on.
 function CreateNewAccount()
@@ -18,7 +20,7 @@ function CreateNewAccount()
 
 	return(
 		<div id="createNewAccountDiv">
-            <button onClick={goToRegisterPage}>Create New Account</button>
+            <Button className="mb-3" onClick={goToRegisterPage}>Create New Account</Button>
 		</div>
 	);
 };

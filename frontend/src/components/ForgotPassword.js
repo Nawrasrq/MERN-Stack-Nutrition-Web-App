@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 // Takes you to password reset page when "Forgot Password?" button is clicked on.
 function ForgotPassword()
@@ -18,7 +19,7 @@ function ForgotPassword()
 
 	return(
 		<div id="forgotPasswordtDiv">
-            <button onClick={goToResetPasswordRequestPage}>Forgot Password?</button>
+            <Button className="mb-3" onClick={goToResetPasswordRequestPage}>Forgot Password?</Button>
 		</div>
 	);
 };
