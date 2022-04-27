@@ -57,7 +57,7 @@ describe('login', () => {
         it('password reset has been sent to email', (done) => {
             chai.request('https://nutrition-app-27.herokuapp.com')
                 .post('/api/passwordresetrequest')
-                .send(({Login: "userto",}))
+                .send(({Login: "user10",}))
                 .end((err, res) => {
                     res.should.have.status(200);
                     done();
@@ -70,8 +70,8 @@ describe('passwordreset', () => {
     describe('/POST passwordreset', () => {
         it('password has been successfully reset/changed', (done) => {
             chai.request('https://nutrition-app-27.herokuapp.com')
-                .post('/api/passwordreset')
-                .send(({NewPassword: "passto2"}))
+                .post('/api/passwordreset/7')
+                .send(({NewPassword: "passto3"}))
                 .end((err, res) => {
                     res.should.have.status(200);
                     done();
@@ -126,6 +126,87 @@ describe('editmeal', () => {
             chai.request('https://nutrition-app-27.herokuapp.com')
                 .put('/api/editmeal/62548b8c6f332376d2ff9e50')
                 .send(({Name: "chicken test", Calories: "500", Protein: "42", Carbs: "80", Fat: "15", Fiber:"5", Sugar: "0", Sodium: "200", Cholesterol: "20"}))
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('filtersearch', () => {
+    describe('/GET filtersearch', () => {
+        it('meals containing given string successfully found', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .get('/api/filtersearch/7/chi')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('retrievegoal', () => {
+    describe('/GET retrievegoal', () => {
+        it('goals successfully retrieved for given user', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .get('/api/retrievegoal/8')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('editgoal', () => {
+    describe('/PUT editgoal', () => {
+        it('goal successfully edited', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .put('/api/editgoal/62583f742262e3508d88f9a5')
+                .send(({Calories: "500", Protein: "42", Carbs: "80", Fat: "15", Fiber:"5", Sugar: "0", Sodium: "200", Cholesterol: "20"}))
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('trackmeal', () => {
+    describe('/POST trackmeal', () => {
+        it('meal successfully tracked', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .post('/api/trackmeal/')
+                .send(({UserId: "7", MealId: "62406f8021c2dab301052420", Category: "2", Quantity: "1", Date: "04/20/22"}))
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('retrievetracked', () => {
+    describe('/POST retrievetracked', () => {
+        it('tracked meal successfully received', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .post('/api/retrievetracked/')
+                .send(({UserId: "7"}))
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('deletetracked', () => {
+    describe('/DELETE deletetracked', () => {
+        it('tracked meal successfully deleted', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .delete('/api/deletemeal/62698bbc081ad916baf4d3d6')
                 .end((err, res) => {
                     res.should.have.status(200);
                     done();
