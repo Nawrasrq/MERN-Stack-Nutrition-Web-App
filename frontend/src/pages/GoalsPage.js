@@ -12,7 +12,7 @@ function GoalsPage()
 
   function goToEditGoals()
   {
-    window.location.href = '/Goals/EditGoals';
+    window.location.href = '/Progress/Goals/EditGoals';
   }
 
   return (

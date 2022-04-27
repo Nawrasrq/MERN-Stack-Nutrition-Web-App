@@ -6,7 +6,7 @@ function MainPage()
 {
     function goToAddConsumedFoodPage()
     {
-        window.location.href = "/AddToDailyConsumption";
+        window.location.href = "/Main/AddToDailyConsumption";
     }
 
     return(

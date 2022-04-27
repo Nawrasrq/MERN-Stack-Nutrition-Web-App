@@ -31,7 +31,7 @@ function AddToDailyConsumption()
 
     function goToCreateMealPage()
 	{
-		window.location.href = '/CreateMeal';
+		window.location.href = '/Main/AddToDailyConsumption/CreateMeal';
 	}
 
     // Sets value to true to open popup where that food's quantity can be set and then decided to be tracked

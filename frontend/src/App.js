@@ -12,50 +12,37 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import CreateMealPage from './pages/CreateMealPage';
 import GoalsPage from './pages/GoalsPage';
 import EditGoalsPage from './pages/EditGoalsPage.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
-    <Router >
-      <Switch>
-        <Route path="/" exact>
-          <LoginPage />
-        </Route>
-        <Route path="/ResetPasswordRequest" exact>
-          <ResetPasswordRequestPage />
-        </Route>
-        <Route path="/api/passwordreset/:id" exact>
-          <ResetPasswordPage />
-        </Route>
-        <Route path="/Register" exact>
-          <RegisterPage />
-        </Route>
-        <Route path="/Main" exact>
-          <MainPage />
-        </Route>
-        <Route path="/Progress" exact>
-          <ProgressPage />
-        </Route>
-        <Route path="/Reports" exact>
-          <ReportsPage />
-        </Route>
-        <Route path="/AddToDailyConsumption" exact>
-          <AddToDailyConsumptionPage />
-        </Route>
-        <Route path="/CreateMeal" exact>
-          <CreateMealPage />
-        </Route>
-        <Route path="/Goals" exact>
-          <GoalsPage />
-        </Route>
-        <Route path="/Goals/EditGoals" exact>
-          <EditGoalsPage />
-        </Route>
-        <Route path="/MacroCalculator" exact>
-          MacroCalculator
-        </Route>
-        <Redirect to="/" />
-      </Switch>  
-    </Router>
+    <div className="App">
+      <Router >
+        <Switch>
+          <Route path="/" component={LoginPage} exact />
+          <Route path="/ResetPasswordRequest" component={ResetPasswordRequestPage} exact />
+          <Route path="/api/passwordreset/:id" component={ResetPasswordPage} exact />
+          <Route path="/Register" component={RegisterPage} />
+
+          <Route path="/Main" component={MainPage} exact />
+          <Route path="/Main/AddToDailyConsumption" component={AddToDailyConsumptionPage} exact />
+          <Route path="/Main/AddToDailyConsumption/CreateMeal" component={CreateMealPage} exact />
+
+          <Route path="/Progress" component={ProgressPage} exact />
+          <Route path="/Progress/Goals" component={GoalsPage} exact />
+          <Route path="/Progress/Goals/EditGoals" component={EditGoalsPage} exact />
+
+          <Route path="/Reports" component={ReportsPage} exact />
+
+          <Route path="/MacroCalculator" exact>
+            MacroCalculator
+          </Route>
+          
+          <Redirect to="/" />
+        </Switch>  
+      </Router>
+    </div>
   );
 }
 	

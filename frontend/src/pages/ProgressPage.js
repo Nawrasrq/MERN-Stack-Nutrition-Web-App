@@ -7,7 +7,7 @@ function ProgressPage()
 {
     function goToGoals()
 	{
-		window.location.href = '/Goals';
+		window.location.href = '/Progress/Goals';
 	}
     
     return(
