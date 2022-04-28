@@ -7,7 +7,7 @@ function CreateMealPage()
 
 	function goBack()
 	{
-		window.location.href = "/AddToDailyConsumption"
+		window.location.href = "/Main/AddToDailyConsumption"
 	}
 
 	return(
