@@ -19,7 +19,7 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
-const { find } = require('./models/user.js');
+const { find, findOneAndUpdate } = require('./models/user.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -730,7 +730,8 @@ exports.setApp = function ( app, client )
         try {
             //if meal already exists then increase quantity
             if(findUser = find({UserId:UserId, MealId:MealId, Category:Category, Date:Date})){
-                findUser[0].Quantity = findUser[0].Quantity + 1; 
+                Quantity = findUser[0].Quantity + 1; 
+                let updatedTracked = findOneAndUpdate({UserId:UserId, MealId:MealId, Category:Category, Quantity:Quantity, Date:Date});
             }
             //create new food to track
             else{
