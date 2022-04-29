@@ -3,6 +3,7 @@ import TrackFoodPopup from './TrackFoodPopup.js';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 import EditNutritionInfoPopup from './EditNutritionInfoPopup.js';
 import DeleteFoodPopup from './DeleteFoodPopup.js';
+import TrackCheckedFoodsPopup from './TrackCheckedFoodsPopup.js';
 
 function YourFood()
 {
@@ -12,11 +13,14 @@ function YourFood()
     const [checkedSet, setCheckedSet] = useState(new Set());
 
     const [foods, setFoods] = useState([]);
+    const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
+
     const [trackFoodPopupState, setTrackFoodPopupState] = useState(false);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
     const [editNutritionInfoPopupState, setEditNutritionInfoPopupState] = useState(false);
     const [deleteFoodPopupState, setDeleteFoodPopupState] = useState(false);
-    const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
+
+    const [trackCheckedFoodsPopupState, setTrackCheckedFoodsPopupState] = useState(false);
 
     // Sets value to true to open popup where that food's quantity can be set and then decided to be tracked
     function showTrackFoodPopup(selectedFood)
@@ -44,6 +48,12 @@ function YourFood()
     {
         setDeleteFoodPopupState(true);
         setSelectedFoodInfo(selectedFood);
+    }
+
+    // Sets value to true to open popup where all of the checked foods can be tracked
+    function showTrackCheckedFoodsPopup()
+    {
+        setTrackCheckedFoodsPopupState(true);
     }
 
     // Sets value to false to close track food popup
@@ -78,12 +88,20 @@ function YourFood()
         setSelectedFoodInfo({});
     }
 
-    function hideDeleteFoodPopup()
+    async function hideDeleteFoodPopup()
     {
-        doSearchFoods();
+        await doSearchFoods();
 
         setDeleteFoodPopupState(false);
         setSelectedFoodInfo({});
+    }
+
+    function hideTrackCheckedFoodsPopup(setMessage, setTrackQuantity, setCategory)
+    {
+        setMessage("");
+        setTrackQuantity(1);
+        setCategory("0");
+        setTrackCheckedFoodsPopupState(false);
     }
 
     function handleCheckboxChange(mealId)
@@ -195,6 +213,10 @@ function YourFood()
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
             <EditNutritionInfoPopup show={editNutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideEditInfoPopup} />
             <DeleteFoodPopup show={deleteFoodPopupState} food={selectedFoodInfo} closePopup={hideDeleteFoodPopup} />
+
+            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} closePopup={hideTrackCheckedFoodsPopup} />
+            <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </button>
+            <button type="button" id="combineCheckedFoodsButton" class="buttons" > Combine Selected Foods </button>
         </div>
     );
 };

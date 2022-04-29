@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TrackFoodPopup from './TrackFoodPopup.js';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
+import TrackCheckedFoodsPopup from './TrackCheckedFoodsPopup.js';
 
 // TODO:
 // Extract all the nutrition info from the USDA database searches, right now we just do names
@@ -20,6 +21,9 @@ function UsdaFood()
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
     const [trackFoodPopupState, setTrackFoodPopupState] = useState(false);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
+
+    const [trackCheckedFoodsPopupState, setTrackCheckedFoodsPopupState] = useState(false);
+
     const api_key = 'Qu6XqYJAL6VNG2ABuikfQizM7hXNKQjm5TfEOFGi';
 
     // Keeps track of all the nutrional values' assigned numbers
@@ -288,6 +292,12 @@ function UsdaFood()
         setSelectedFoodInfo(obtainFoodInfo(selectedFood));
     }
 
+    // Sets value to true to open popup where all of the checked foods can be tracked
+    function showTrackCheckedFoodsPopup()
+    {
+        setTrackCheckedFoodsPopupState(true);
+    }
+
     // Sets value to false to close track food popup
     function hideTrackFoodPopup(setMessage, setTrackQuantity, setCategory)
     {
@@ -305,12 +315,22 @@ function UsdaFood()
         setSelectedFoodInfo({});
     }
 
+    function hideTrackCheckedFoodsPopup(setMessage, setTrackQuantity, setCategory)
+    {
+        setMessage("");
+        setTrackQuantity(1);
+        setCategory("0");
+        setTrackCheckedFoodsPopupState(false);
+    }
+
     function handleCheckboxChange(mealId)
     {
-        if (checkedSet.has(mealId))
-            checkedSet.delete(mealId);
+        let newMealId = "USDA" + mealId;
+
+        if (checkedSet.has(newMealId))
+            checkedSet.delete(newMealId);
         else
-            checkedSet.add(mealId);
+            checkedSet.add(newMealId);
     }
 
     async function doSearchFoods() 
@@ -340,8 +360,9 @@ function UsdaFood()
             let tempSet = new Set();
             for (let i = 0; i < res.length; i++)
             {
-                if (checkedSet.has(res[i].fdcId))
-                    tempSet.add(res[i].fdcId);
+                let foodId = "USDA" + res[i].fdcId;
+                if (checkedSet.has(foodId))
+                    tempSet.add(foodId);
             }
             // Used two loops here to reduce runtime to linear O(m + n) where m is
             // length of returned food array and n is length of items in checked set
@@ -383,7 +404,10 @@ function UsdaFood()
                 ))}
             </ul>
             <TrackFoodPopup show={trackFoodPopupState} food={selectedFoodInfo} closePopup={hideTrackFoodPopup} />
-            <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />    
+            <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} /> 
+
+            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} closePopup={hideTrackCheckedFoodsPopup} />
+            <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </button>
         </div>
     );
 };
