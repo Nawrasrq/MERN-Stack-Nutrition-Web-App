@@ -13,6 +13,7 @@ function TrackFoodPopup(props)
       var food = props.food;
       var inputQty;
       var name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol;
+      var servingLabel, showServing;
       
       // Get all the nutritional values from the selected food
       name = food.Name;
@@ -24,6 +25,18 @@ function TrackFoodPopup(props)
       sugar = food.Sugar;
       sodium = food.Sodium;
       cholesterol = food.Cholesterol;
+
+      // Only given specified serving label from foods in external database
+      if (food.ServingLabel)
+      {
+        servingLabel = "Serving Size: " + food.ServingLabel;
+        showServing = true;
+      }
+      else
+      {
+        servingLabel = "";
+        showServing = false;
+      }
 
       // This function just resets the displayed message whenever the user starts typing again in any of the input text boxes.
       function clearMessage()
@@ -140,6 +153,7 @@ function TrackFoodPopup(props)
                 <span>Sodium: {sodium * quantity}</span><br/>
                 <span>Cholesterol: {cholesterol * quantity}</span><br/>
                 <span>Quantity: </span><input type="number" step="1" min="1" defaultValue="1" onInput={clearMessage} onKeyPress={preventInvalid} onChange={adjustNutritionalValues} ref={(c) => inputQty = c} /><br />
+                <span>{servingLabel}</span>{showServing && <br/>}
                 <button type="button" id="trackFoodButton" class="buttons" onClick={doTrackFood}> Track </button>
                 <button type="button" id="closeTrackFoodPopupButton" class="buttons" onClick={()=>props.closePopup(setMessage, setQuantity)}> Close </button> <br />
                 <span id="trackFoodResult">{message}</span>

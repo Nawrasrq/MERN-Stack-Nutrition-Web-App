@@ -75,7 +75,7 @@ function AddMeal()
             }
             else
             {
-                setMessage("\"" + foodName.value + "\"" + " successfully added to your list of foods.");
+                setMessage("\"" + foodName.value + "\" successfully added to your list of foods.");
             }
         }
         catch(e)

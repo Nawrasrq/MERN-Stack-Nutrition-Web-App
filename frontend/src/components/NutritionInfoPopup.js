@@ -25,7 +25,7 @@ export default class NutritionInfoPopup extends React.Component {
       // Only given specified serving label from foods in external database
       if (food.ServingLabel)
       {
-        servingLabel = "Serving Size: " + food.ServingLabel + "\ ";
+        servingLabel = "Serving Size: " + food.ServingLabel;
         showServing = true;
       }
       else

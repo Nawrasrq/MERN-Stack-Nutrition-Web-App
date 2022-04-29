@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import TrackFoodPopup from './TrackFoodPopup.js';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 
 // TODO:
@@ -14,6 +15,7 @@ function UsdaFood()
 
     const [foods, setFoods] = useState([]);   
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
+    const [trackFoodPopupState, setTrackFoodPopupState] = useState(false);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
     const api_key = 'Qu6XqYJAL6VNG2ABuikfQizM7hXNKQjm5TfEOFGi';
 
@@ -29,7 +31,7 @@ function UsdaFood()
         ['cholesterol', '601']
       ]);
 
-    // 1 food calorie(kCal) == 4.1868 KJ
+    // 1 food calorie(kCal) === 4.1868 KJ
     const kJConversionRate = 4.1868;
 
     const mgToG = .0001;
@@ -43,7 +45,7 @@ function UsdaFood()
 
         for (i = 0; i < nutrients.length; i++)
         {
-            if (nutrients[i].nutrientNumber == nutritionNumber)
+            if (nutrients[i].nutrientNumber === nutritionNumber)
                 return i;
         }
 
@@ -63,9 +65,9 @@ function UsdaFood()
         
         // Retrieve calories if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('calories'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'kJ')
+            if (selectedFood.foodNutrients[index].unitName === 'kJ')
                 calories = selectedFood.foodNutrients[index].value / kJConversionRate;
             else
                 calories = selectedFood.foodNutrients[index].value;
@@ -77,9 +79,9 @@ function UsdaFood()
 
         // Retrieve protein if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('protein'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'MG')
+            if (selectedFood.foodNutrients[index].unitName === 'MG')
                 protein = selectedFood.foodNutrients[index].value * mgToG;
             else
                 protein = selectedFood.foodNutrients[index].value;
@@ -91,9 +93,9 @@ function UsdaFood()
 
         // Retrieve carbs if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('carbs'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'MG')
+            if (selectedFood.foodNutrients[index].unitName === 'MG')
                 carbs = selectedFood.foodNutrients[index].value * mgToG;
             else
                 carbs = selectedFood.foodNutrients[index].value;
@@ -105,9 +107,9 @@ function UsdaFood()
 
         // Retrieve fat if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('fat'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'MG')
+            if (selectedFood.foodNutrients[index].unitName === 'MG')
                 fat = selectedFood.foodNutrients[index].value * mgToG;
             else
                 fat = selectedFood.foodNutrients[index].value;
@@ -119,9 +121,9 @@ function UsdaFood()
 
         // Retrieve fiber if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('fiber'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'MG')
+            if (selectedFood.foodNutrients[index].unitName === 'MG')
                 fiber = selectedFood.foodNutrients[index].value * mgToG;
             else
                 fiber = selectedFood.foodNutrients[index].value;
@@ -133,9 +135,9 @@ function UsdaFood()
 
         // Retrieve sugar if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('sugar'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'MG')
+            if (selectedFood.foodNutrients[index].unitName === 'MG')
                 sugar = selectedFood.foodNutrients[index].value * mgToG;
             else
                 sugar = selectedFood.foodNutrients[index].value;
@@ -147,9 +149,9 @@ function UsdaFood()
 
         // Retrieve sodium if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('sodium'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'G')
+            if (selectedFood.foodNutrients[index].unitName === 'G')
                 sodium = selectedFood.foodNutrients[index].value * gToMg;
             else
                 sodium = selectedFood.foodNutrients[index].value;
@@ -161,9 +163,9 @@ function UsdaFood()
 
         // Retrieve cholesterol if found
         index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('cholesterol'));
-        if (index != -1)
+        if (index !== -1)
         {
-            if (selectedFood.foodNutrients[index].unitName == 'G')
+            if (selectedFood.foodNutrients[index].unitName === 'G')
                 cholesterol = selectedFood.foodNutrients[index].value * gToMg;
             else
                 cholesterol = selectedFood.foodNutrients[index].value;
@@ -269,11 +271,27 @@ function UsdaFood()
         return food;
     }
 
+    // Sets value to true to open popup where that food's quantity can be set and then decided to be tracked
+    function showTrackFoodPopup(selectedFood)
+    {
+        setTrackFoodPopupState(true);
+        setSelectedFoodInfo(obtainFoodInfo(selectedFood));
+    }
+
     // Sets value to true to display nutrition info of whatever food was selected
     function showInfoPopup(selectedFood)
     {
         setNutritionInfoPopupState(true);
         setSelectedFoodInfo(obtainFoodInfo(selectedFood));
+    }
+
+    // Sets value to false to close track food popup
+    function hideTrackFoodPopup(setMessage, setTrackQuantity)
+    {
+        setMessage("");
+        setTrackQuantity(1);
+        setTrackFoodPopupState(false);
+        setSelectedFoodInfo({});
     }
 
     // Sets value to false to close nutrtion info popup
@@ -295,20 +313,6 @@ function UsdaFood()
         else
         {
             searchString = searchText.value;
-        }
-
-        var userData = JSON.parse(localStorage.getItem('user_data'));
-        var userId = userData.id;
-
-        // If search text is empty don't even pass it to the api
-        let routeEnd;
-        if (searchString.length === 0)
-        {
-            routeEnd = userId;
-        }
-        else 
-        {
-            routeEnd = userId + "/" + searchString;
         }
 
         try 
@@ -343,11 +347,12 @@ function UsdaFood()
                 {foods.map(food => (
                     <li key={food.fdcId}>
                         <span>{food.lowercaseDescription}</span>
-                        <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" > Add </button>
+                        <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" onClick={() => showTrackFoodPopup(food)} > Add </button>
                         <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)} > View </button>
                     </li>
                 ))}
             </ul>
+            <TrackFoodPopup show={trackFoodPopupState} food={selectedFoodInfo} closePopup={hideTrackFoodPopup} />
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />    
         </div>
     );
