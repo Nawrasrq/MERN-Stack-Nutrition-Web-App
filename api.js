@@ -691,7 +691,7 @@ exports.setApp = function ( app, client )
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, MealId, Catagory, Quantity, Date, jwtToken } = req.body;
+        const { UserId, MealId, Category, Quantity, Date, jwtToken } = req.body;
         
         let refreshedToken = null;
         let error = '';
@@ -725,7 +725,7 @@ exports.setApp = function ( app, client )
 
         try {
             //track new meal
-            const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Catagory:Catagory, Quantity:Quantity, Date:Date});
+            const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Category:Category, Quantity:Quantity, Date:Date});
             await newtrackedFood.save();
 
             //success

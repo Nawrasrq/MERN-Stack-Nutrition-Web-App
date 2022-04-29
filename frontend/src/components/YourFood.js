@@ -44,10 +44,11 @@ function YourFood()
     }
 
     // Sets value to false to close track food popup
-    function hideTrackFoodPopup(setMessage, setTrackQuantity)
+    function hideTrackFoodPopup(setMessage, setTrackQuantity, setCategory)
     {
         setMessage("");
         setTrackQuantity(1);
+        setCategory("0");
         setTrackFoodPopupState(false);
         setSelectedFoodInfo({});
     }

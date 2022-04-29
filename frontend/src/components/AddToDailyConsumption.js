@@ -4,8 +4,6 @@ import UsdaFood from './UsdaFood.js';
 
 function AddToDailyConsumption()
 {
-    var searchText;
-
     const [displayYourFood, setDisplayYourFood] = useState(true);
     const [toggleString, setToggleString] = useState("Switch to Recommended Foods");
 
