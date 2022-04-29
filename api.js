@@ -692,13 +692,11 @@ exports.setApp = function ( app, client )
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, MealId, Category, Date, jwtToken } = req.body;
+        const { UserId, MealId, Category, Quantity, Date, jwtToken } = req.body;
         
         let refreshedToken = null;
         let error = '';
         let ret = {};
-
-        let Quantity = 1;
 
         //check token
         try{
