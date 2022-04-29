@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import NutritionInfoPopup from './NutritionInfoPopup.js';
 
 // TODO:
 // Extract all the nutrition info from the USDA database searches, right now we just do names
@@ -13,7 +13,275 @@ function UsdaFood()
     var searchText;
 
     const [foods, setFoods] = useState([]);   
+    const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
+    const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
     const api_key = 'Qu6XqYJAL6VNG2ABuikfQizM7hXNKQjm5TfEOFGi';
+
+    // Keeps track of all the nutrional values' assigned numbers
+    const nutritionNumbers = new Map([
+        ['calories', '208'],
+        ['protein', '203'],
+        ['carbs', '205'],
+        ['fat', '204'],
+        ['fiber', '291'],
+        ['sugar', '269'],
+        ['sodium', '307'],
+        ['cholesterol', '601']
+      ]);
+
+    // 1 food calorie(kCal) == 4.1868 KJ
+    const kJConversionRate = 4.1868;
+
+    const mgToG = .0001;
+    const gToMg = 1000;
+
+    // Searches if selected food has the specified nutritional value and returns index in the nutrients array;
+    // returns -1 if the nutrient is not found for this food
+    function findNutrtionalValueIndex(nutrients, nutritionNumber)
+    {
+        let i;
+
+        for (i = 0; i < nutrients.length; i++)
+        {
+            if (nutrients[i].nutrientNumber == nutritionNumber)
+                return i;
+        }
+
+        return -1;
+    }
+
+    // Extracts nutritional data from usda database for popups
+    function obtainFoodInfo(selectedFood)
+    {
+        let name, calories, protein, carbs, fat, fiber, sugar, sodium, cholesterol;
+        let index;
+        
+        if (selectedFood.lowercaseDescription)
+            name = selectedFood.lowercaseDescription;
+        else
+            name = selectedFood.description;
+        
+        // Retrieve calories if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('calories'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'kJ')
+                calories = selectedFood.foodNutrients[index].value / kJConversionRate;
+            else
+                calories = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            calories = 0;
+        }
+
+        // Retrieve protein if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('protein'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'MG')
+                protein = selectedFood.foodNutrients[index].value * mgToG;
+            else
+                protein = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            protein = 0;
+        }
+
+        // Retrieve carbs if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('carbs'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'MG')
+                carbs = selectedFood.foodNutrients[index].value * mgToG;
+            else
+                carbs = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            carbs = 0;
+        }
+
+        // Retrieve fat if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('fat'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'MG')
+                fat = selectedFood.foodNutrients[index].value * mgToG;
+            else
+                fat = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            fat = 0;
+        }
+
+        // Retrieve fiber if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('fiber'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'MG')
+                fiber = selectedFood.foodNutrients[index].value * mgToG;
+            else
+                fiber = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            fiber = 0;
+        }
+
+        // Retrieve sugar if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('sugar'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'MG')
+                sugar = selectedFood.foodNutrients[index].value * mgToG;
+            else
+                sugar = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            sugar = 0;
+        }
+
+        // Retrieve sodium if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('sodium'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'G')
+                sodium = selectedFood.foodNutrients[index].value * gToMg;
+            else
+                sodium = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            sodium = 0;
+        }
+
+        // Retrieve cholesterol if found
+        index = findNutrtionalValueIndex(selectedFood.foodNutrients, nutritionNumbers.get('cholesterol'));
+        if (index != -1)
+        {
+            if (selectedFood.foodNutrients[index].unitName == 'G')
+                cholesterol = selectedFood.foodNutrients[index].value * gToMg;
+            else
+                cholesterol = selectedFood.foodNutrients[index].value;
+        }
+        else
+        {
+            cholesterol = 0;
+        }
+
+
+        let servingLabel;
+        let servingSizeCoversionRate;
+        
+        if (selectedFood.servingSize)
+        {
+            servingLabel = selectedFood.servingSize + selectedFood.servingSizeUnit;
+
+            // Now adjust nutrition info to fit given serving size
+            servingSizeCoversionRate = selectedFood.servingSize / 100;
+
+            calories *= servingSizeCoversionRate;
+            protein *= servingSizeCoversionRate;
+            carbs *= servingSizeCoversionRate;
+            fat *= servingSizeCoversionRate;
+            fiber *= servingSizeCoversionRate;
+            sugar *= servingSizeCoversionRate;
+            sodium *= servingSizeCoversionRate;
+            cholesterol *= servingSizeCoversionRate;
+        }
+        // Custom portion was sepcified so grab that
+        else if (selectedFood.foodMeasures.length > 0)
+        {
+            servingLabel = selectedFood.foodMeasures[0].disseminationText + " (" + selectedFood.foodMeasures[0].gramWeight + "g)";
+
+            // Now adjust nutrition info to fit given serving size
+            servingSizeCoversionRate = selectedFood.foodMeasures[0].gramWeight / 100;
+
+            calories *= servingSizeCoversionRate;
+            protein *= servingSizeCoversionRate;
+            carbs *= servingSizeCoversionRate;
+            fat *= servingSizeCoversionRate;
+            fiber *= servingSizeCoversionRate;
+            sugar *= servingSizeCoversionRate;
+            sodium *= servingSizeCoversionRate;
+            cholesterol *= servingSizeCoversionRate;
+        }
+        // If no serving size or portion is defined then the USDA says the nutrient info should be for 100g/100ml of that food
+        else
+        {
+            servingLabel = "100g";
+        }
+
+
+        // Round nutrition values
+        calories = Math.round(calories);
+        sodium = Math.round(sodium);
+        cholesterol = Math.round(cholesterol);
+        if (carbs < 10)
+            carbs = Math.round(carbs * 10) / 10;
+        else
+            carbs = Math.round(carbs);
+        if (fat < 10)
+            fat = Math.round(fat * 10) / 10;
+        else
+            fat = Math.round(fat);
+        if (fiber < 10)
+            fiber = Math.round(fiber * 10) / 10;
+        else
+            fiber = Math.round(fiber);
+        if (protein < 10)
+            protein = Math.round(protein * 10) / 10;
+        else
+            protein = Math.round(protein);
+        if (sugar < 10)
+            sugar = Math.round(sugar * 10) / 10;
+        else
+            sugar = Math.round(sugar);
+
+
+        let _ud = localStorage.getItem('user_data');
+	    let ud = JSON.parse(_ud);
+        let userId = ud.id;
+
+        let newFoodId = "USDA" + selectedFood.fdcId;
+
+        // Reformat into food json for our database
+        var food = { 
+            Calories:calories,
+            Carbs:carbs,
+            Cholesterol:cholesterol,
+            Fat:fat,
+            Fiber:fiber,
+            Name:name,
+            Protein:protein,
+            Sodium:sodium,
+            Sugar:sugar,
+            UserId:userId,
+            __v:0,
+            _id:newFoodId,
+            ServingLabel:servingLabel
+        };
+        
+        return food;
+    }
+
+    // Sets value to true to display nutrition info of whatever food was selected
+    function showInfoPopup(selectedFood)
+    {
+        setNutritionInfoPopupState(true);
+        setSelectedFoodInfo(obtainFoodInfo(selectedFood));
+    }
+
+    // Sets value to false to close nutrtion info popup
+    function hideInfoPopup()
+    {
+        setNutritionInfoPopupState(false);
+        setSelectedFoodInfo({});
+    }
 
     async function doSearchFoods() 
     {
@@ -76,10 +344,11 @@ function UsdaFood()
                     <li key={food.fdcId}>
                         <span>{food.lowercaseDescription}</span>
                         <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" > Add </button>
-                        <button type="button" id="viewNutritionInfoButton" class="buttons" > View </button>
+                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)} > View </button>
                     </li>
                 ))}
-            </ul>    
+            </ul>
+            <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />    
         </div>
     );
 };
