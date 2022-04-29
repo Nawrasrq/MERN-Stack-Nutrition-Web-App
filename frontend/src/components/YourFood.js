@@ -8,6 +8,9 @@ function YourFood()
 {
     var searchText;
 
+    // This will dynamically keep track of which food's checkboxes have been selected
+    const [checkedSet, setCheckedSet] = useState(new Set());
+
     const [foods, setFoods] = useState([]);
     const [trackFoodPopupState, setTrackFoodPopupState] = useState(false);
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
@@ -83,6 +86,14 @@ function YourFood()
         setSelectedFoodInfo({});
     }
 
+    function handleCheckboxChange(mealId)
+    {
+        if (checkedSet.has(mealId))
+            checkedSet.delete(mealId);
+        else
+            checkedSet.add(mealId);
+    }
+
     async function doSearchFoods() 
     {
         let searchString;
@@ -120,11 +131,33 @@ function YourFood()
             // No foods found so empty array to display
             if (resText === "No meal matching that name was found.")
             {
+                // If no foods were found and set of cheked foods was not
+                // empty then clear the set
+                if (checkedSet.size > 0)
+                    checkedSet.clear();
+
                 setFoods([]);
                 return;
             }
 
             var res = JSON.parse(resText);
+
+            // Remove any foods that were previously checked but are not
+            // displayed anymore after the new search
+            let tempSet = new Set();
+            for (let i = 0; i < res.length; i++)
+            {
+                if (checkedSet.has(res[i]._id))
+                    tempSet.add(res[i]._id);
+            }
+            // Used two loops here to reduce runtime to linear O(m + n) where m is
+            // length of returned food array and n is length of items in checked set
+            // More code complexity but faster than O(mn) search every time
+            checkedSet.clear();
+            tempSet.forEach(mealId => {
+                if (mealId)
+                    checkedSet.add(mealId);
+            });
 
             // Update array with the new foods found from the search
             setFoods(res);
@@ -149,6 +182,7 @@ function YourFood()
             <ul>
                 {foods.map(food => (
                     <li key={food._id}>
+                        <input type="checkbox" id="selectFood" class="checkboxes" onChange={() => handleCheckboxChange(food._id)}></input>
                         <span>{food.Name}</span>
                         <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" onClick={() => showTrackFoodPopup(food)}> Add </button>
                         <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}> View </button>

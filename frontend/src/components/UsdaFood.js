@@ -13,6 +13,9 @@ function UsdaFood()
 {
     var searchText;
 
+    // This will dynamically keep track of which food's checkboxes have been selected
+    const [checkedSet, setCheckedSet] = useState(new Set());
+
     const [foods, setFoods] = useState([]);   
     const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
     const [trackFoodPopupState, setTrackFoodPopupState] = useState(false);
@@ -302,6 +305,14 @@ function UsdaFood()
         setSelectedFoodInfo({});
     }
 
+    function handleCheckboxChange(mealId)
+    {
+        if (checkedSet.has(mealId))
+            checkedSet.delete(mealId);
+        else
+            checkedSet.add(mealId);
+    }
+
     async function doSearchFoods() 
     {
         let searchString;
@@ -323,6 +334,23 @@ function UsdaFood()
             var resText = await response.text();
             var res = JSON.parse(resText);
             res = res.foods
+
+            // Remove any foods that were previously checked but are not
+            // displayed anymore after the new search
+            let tempSet = new Set();
+            for (let i = 0; i < res.length; i++)
+            {
+                if (checkedSet.has(res[i].fdcId))
+                    tempSet.add(res[i].fdcId);
+            }
+            // Used two loops here to reduce runtime to linear O(m + n) where m is
+            // length of returned food array and n is length of items in checked set
+            // More code complexity but faster than O(mn) search every time
+            checkedSet.clear();
+            tempSet.forEach(mealId => {
+                if (mealId)
+                    checkedSet.add(mealId);
+            });
 
             // Update array with the new foods found from the search
             setFoods(res);
@@ -347,6 +375,7 @@ function UsdaFood()
             <ul>
                 {foods.map(food => (
                     <li key={food.fdcId}>
+                        <input type="checkbox" id="selectFood" class="checkboxes" onChange={() => handleCheckboxChange(food.fdcId)}></input>
                         <span>{food.lowercaseDescription}</span>
                         <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" onClick={() => showTrackFoodPopup(food)} > Add </button>
                         <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)} > View </button>
