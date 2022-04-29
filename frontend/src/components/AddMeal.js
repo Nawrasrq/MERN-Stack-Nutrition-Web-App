@@ -98,13 +98,13 @@ function AddMeal()
             <span id="inner-title">Add Meal (required fields indicated by *)</span><br />
             <input type="text" id="foodName" placeholder="Food Name" onInput={clearMessage} ref={(c) => foodName = c} /> *<br />
             <input type="number" id="calories" placeholder="Calories" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => calories = c} /> *<br />
-            <input type="number" id="protein" placeholder="Protein" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} /><br />
-            <input type="number" id="carbs" placeholder="Carbohydrates" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} /><br />
-            <input type="number" id="fat" placeholder="Fat" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} /><br />
-            <input type="number" id="fiber" placeholder="Fiber" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} /><br />
-            <input type="number" id="sugar" placeholder="Sugar" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} /><br />
-            <input type="number" id="sodium" placeholder="Sodium" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} /><br />
-            <input type="number" id="cholesterol" placeholder="Cholesterol" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} /><br />
+            <input type="number" id="protein" placeholder="Protein (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} /><br />
+            <input type="number" id="carbs" placeholder="Carbohydrates (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} /><br />
+            <input type="number" id="fat" placeholder="Fat (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} /><br />
+            <input type="number" id="fiber" placeholder="Fiber (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} /><br />
+            <input type="number" id="sugar" placeholder="Sugar (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} /><br />
+            <input type="number" id="sodium" placeholder="Sodium (mg)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} /><br />
+            <input type="number" id="cholesterol" placeholder="Cholesterol (mg)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} /><br />
             <input type="submit" id="addMealButton" class="buttons" value = "Add Meal" onClick={doAddMeal} /><br />
             <span id="addMealResult">{message}</span>
         </form>
