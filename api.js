@@ -19,6 +19,7 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
+const { find } = require('./models/user.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -685,17 +686,19 @@ exports.setApp = function ( app, client )
     //API for tracking meals ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //track a meal
     app.post('/api/trackmeal', async (req, res, next) => {
-        //input: UserId, MealId, Category, Quantity, Date, jwtToken
+        //input: UserId, MealId, Category, Date, jwtToken
         //output: error, refreshedToken
 
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, MealId, Category, Quantity, Date, jwtToken } = req.body;
+        const { UserId, MealId, Category, Date, jwtToken } = req.body;
         
         let refreshedToken = null;
         let error = '';
         let ret = {};
+
+        let Quantity = 1;
 
         //check token
         try{
@@ -722,12 +725,18 @@ exports.setApp = function ( app, client )
             res.status(200).json(ret); 
             return;
         }
-
+        
+        //track new meal
         try {
-            //track new meal
-            const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Category:Category, Quantity:Quantity, Date:Date});
-            await newtrackedFood.save();
-
+            //if meal already exists then increase quantity
+            if(findUser = find({UserId:UserId, MealId:MealId, Category:Category, Date:Date})){
+                findUser[0].Quantity = findUser[0].Quantity + 1; 
+            }
+            //create new food to track
+            else{
+                const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Category:Category, Quantity:Quantity, Date:Date});
+                await newtrackedFood.save();
+            }
             //success
             error = '';
             ret = { error: error, jwtToken:refreshedToken };  
@@ -744,13 +753,13 @@ exports.setApp = function ( app, client )
 
     //retrieve all tracked foods
     app.post('/api/retrievetracked', async (req, res, next) => {
-        //input: UserId, jwtToken
+        //input: UserId, jwtToken, Date
         //output: array of all trackedmeals, error, refreshedToken
 
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, jwtToken } = req.body;
+        const { UserId, jwtToken, Date } = req.body;
         
         let refreshedToken = null;
         let error = '';
@@ -784,7 +793,7 @@ exports.setApp = function ( app, client )
 
         try {
             //find all tracked meals associated with user
-            const trackedFoods = await trackedFood.find({UserId:UserId});
+            const trackedFoods = await trackedFood.find({UserId:UserId, Date:Date});
 
             if(trackedFoods.length > 0){
                 //success
