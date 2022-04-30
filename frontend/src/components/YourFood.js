@@ -204,7 +204,7 @@ function YourFood()
             return;
         } 
     }
-
+    
     // Initialize list of foods on page
     useEffect(() => {
         doSearchFoods();
