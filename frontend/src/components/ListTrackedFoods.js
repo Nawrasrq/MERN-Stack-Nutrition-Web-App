@@ -8,8 +8,9 @@ function ListTrackedFoods(props)
             <ul>
                 {props.foods.map(food => (
                     <li key={food._id}>
-                        <span>{food.MealId}</span>
-                        <span> Quantity:{food.Quantity}</span><br/>
+                        <span>{food.Name}</span>
+                        <span> | Qty: {food.Quantity}</span>
+                        <span> | Calories: {food.Calories}</span><br/>
                     </li>
                 ))}
             </ul>
