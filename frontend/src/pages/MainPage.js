@@ -14,11 +14,11 @@ function MainPage()
     // Number of milliseconds in a day
     const msInDay = 86400000;
 
-    function decrementDay()
+    async function decrementDay()
     {     
         let newDate = new Date(selectedDate.valueOf() - msInDay);
         setSelectedDate(newDate);
-        doRetrieveTrackedFoods();
+        doRetrieveTrackedFoods(newDate);
     }
     
     function incrementDay()
@@ -28,16 +28,15 @@ function MainPage()
         // Don't let user quick double click past disabled restriction
         if(newDate > (new Date()))
         {
-            newDate = new Date(selectedDate);
-            setSelectedDate(newDate);
+            doRetrieveTrackedFoods(selectedDate);
             return;
         }
 
         setSelectedDate(newDate);
-        doRetrieveTrackedFoods();
+        doRetrieveTrackedFoods(newDate);
     }
 
-    async function doRetrieveTrackedFoods()
+    async function doRetrieveTrackedFoods(newDate)
     {
         // clear message since new message is ab to be displayed
         setMessage("");
@@ -50,7 +49,7 @@ function MainPage()
         let storage = require('../tokenStorage.js');
         let tok = storage.retrieveToken();
 
-        let date = selectedDate.toLocaleDateString();
+        let date = newDate.toLocaleDateString();
 
         var obj = {
             UserId:userId,
@@ -88,10 +87,10 @@ function MainPage()
                 setFoods([]);
                 return;
             }
-            else
-            {
-                setFoods(res.trackedFoods);
-            }
+
+            // Remove
+            setFoods(res.trackedFoods);
+
             let trackedFoods = res.trackedFoods;
         }
         catch(e)
@@ -103,7 +102,7 @@ function MainPage()
 
     // Initialize list of trackedfoods on page when page first renders
     useEffect(() => {
-        doRetrieveTrackedFoods();
+        doRetrieveTrackedFoods(selectedDate);
     }, []);
 
     return(
