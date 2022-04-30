@@ -1,58 +1,31 @@
 import React from 'react';
+import { Button, Container, NavDropdown, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
 
 function NavigationBar()
 {
-    function goToMainPage()
-    {
-        try
-        {                
-            window.location.href = "/Main";
-        }
-        catch(e)
-        {
-            console.log(e.toString());
-            return;
-        }
-    }
-
-    function goToProgressPage()
-    {
-        try
-        {                
-            window.location.href = "/Progress";
-        }
-        catch(e)
-        {
-            console.log(e.toString());
-            return;
-        }
-    }
-
-    function goToReportsPage()
-    {
-        try
-        {                
-            window.location.href = "/Reports";
-        }
-        catch(e)
-        {
-            console.log(e.toString());
-            return;
-        }
-    }
-
     return(
         <div>
-            <br />
-            <span> --- </span>
-            <button type="button" id="todayPageButton" class="buttons" onClick={goToMainPage}> Today </button>
-            <span> --- </span>
-            <button type="button" id="progressPageButton" class="buttons" onClick={goToProgressPage}> Progress </button>
-            <span> --- </span>
-            <button type="button" id="reportsPageButton" class="buttons" onClick={goToReportsPage}> Reports </button>
-            <span> --- </span>
-            <br/>
-            <br/>
+            <Navbar bg="dark" variant='dark' expand="lg">
+                <Container>
+                    <Navbar.Brand href="/Main">
+                        <img
+                        src="https://cdn.discordapp.com/attachments/945831755162746964/969412662985379881/mascotBGRemoved.png"
+                        width="30"
+                        height="30"
+                        className="d-inline-block align-top"
+                        />{' '}
+                        Nutso Nutrition
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Link href="/Main">Home</Nav.Link>
+                            <Nav.Link href="/Progress">Progress</Nav.Link>
+                            <Nav.Link href="/Reports">Reports</Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
         </div>
     );
 };

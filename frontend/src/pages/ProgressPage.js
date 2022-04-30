@@ -1,21 +1,17 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar';
 import Logout from '../components/Logout';
 import ProgressDisplay from '../components/ProgressDisplay';
 
 function ProgressPage()
-{
-    function goToGoals()
-	{
-		window.location.href = '/Progress/Goals';
-	}
-    
+{   
     return(
         <div>
             <NavigationBar />
             <Logout />
             <ProgressDisplay />
-			<button type="button" id="goalsButton" class="buttons" onClick={goToGoals}> Goals </button>
+			<Button variant="primary" href="/Progress/Goals"> Goals </Button>
         </div>
     );
 };

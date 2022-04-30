@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
+import '../css/Logout.css';
 
 function Logout()
 {
@@ -9,8 +11,8 @@ function Logout()
 	};    
 
 	return(
-		<div id="logoutDiv">
-			<button type="button" id="logoutButton" class="buttons" onClick={doLogout}> Log Out </button>
+		<div id="logout">
+			<Button variant='outline-danger' className="m-0" onClick={doLogout}> Log Out </Button>
 		</div>
 	);
 };

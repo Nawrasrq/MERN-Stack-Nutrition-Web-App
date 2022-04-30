@@ -3,7 +3,7 @@ import React from 'react';
 function PageTitle()
 {
    return(
-     <h1  id="title">Nutrition App</h1>
+     <h1  id="title">Nutso Nutrition</h1>
    );
 };
 

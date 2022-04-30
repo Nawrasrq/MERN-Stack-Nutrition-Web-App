@@ -1,19 +1,15 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar';
 import Logout from '../components/Logout';
 
 function MainPage()
 {
-    function goToAddConsumedFoodPage()
-    {
-        window.location.href = "/Main/AddToDailyConsumption";
-    }
-
     return(
-        <div>
+        <div >
             <NavigationBar />
             <Logout />
-            <button type="button" id="addConsumedFoodButton" class="buttons" onClick={goToAddConsumedFoodPage}> Add To Your Daily Consumption </button>
+            <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Add To Your Daily Consumption </Button>
         </div>
     );
 };
