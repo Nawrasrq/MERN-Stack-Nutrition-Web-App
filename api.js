@@ -19,7 +19,6 @@ const secretCode = require("./models/secretCode.js");
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
-const { find, findOneAndUpdate } = require('./models/user.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -686,13 +685,13 @@ exports.setApp = function ( app, client )
     //API for tracking meals ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //track a meal
     app.post('/api/trackmeal', async (req, res, next) => {
-        //input: UserId, MealId, Category, Date, jwtToken
+        //input: UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, Category, Quantity, Date, jwtToken
         //output: error, refreshedToken
 
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, MealId, Category, Quantity, Date, jwtToken } = req.body;
+        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, Category, Quantity, Date, jwtToken } = req.body;
         
         let refreshedToken = null;
         let error = '';
@@ -734,7 +733,9 @@ exports.setApp = function ( app, client )
             }
             //create new food to track
             else{
-                const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Category:Category, Quantity:Quantity, Date:Date});
+                const newtrackedFood = await new trackedFood({UserId:UserId, MealId:MealId, Name:Name, Calories:Calories, Protein:Protein, 
+                    Carbs:Carbs, Fat:Fat, Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol, Category:Category, Quantity:Quantity, 
+                    Date:Date});
                 await newtrackedFood.save();
             }
             //success
