@@ -727,9 +727,10 @@ exports.setApp = function ( app, client )
         //track new meal
         try {
             //if meal already exists then increase quantity
-            if(findUser = find({UserId:UserId, MealId:MealId, Category:Category, Date:Date})){
-                Quantity = findUser[0].Quantity + 1; 
-                let updatedTracked = findOneAndUpdate({UserId:UserId, MealId:MealId, Category:Category, Quantity:Quantity, Date:Date});
+            const findUser = await trackedFood.find({UserId:UserId, MealId:MealId, Category:Category, Date:Date});
+            if(findUser.length > 0){
+                const NewQuantity = findUser[0].Quantity + Quantity; 
+                let updatedTracked = await trackedFood.findOneAndUpdate({UserId:UserId, MealId:MealId, Category:Category, Date:Date}, {Quantity:NewQuantity});
             }
             //create new food to track
             else{
