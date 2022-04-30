@@ -9,6 +9,35 @@ const TrackedFood = new Schema({
   MealId: {
     type: String
   },
+  Name: {
+    type: String,
+    required: true
+  },
+  Calories: {
+    type: Number,
+    required: true
+  },
+  Protein: {
+    type: Number
+  },
+  Carbs: {
+    type: Number
+  },
+  Fat: {
+    type: Number
+  },
+  Fiber: {
+    type: Number
+  },
+  Sugar: {
+    type: Number
+  },
+  Sodium: {
+    type: Number
+  },
+  Cholesterol: {
+    type: Number
+  },
   Catagory: {
     type: Number
   },
