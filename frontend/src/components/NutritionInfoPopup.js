@@ -22,6 +22,31 @@ export default class NutritionInfoPopup extends React.Component {
       sodium = food.Sodium;
       cholesterol = food.Cholesterol;
 
+      // Round nutrition values
+      calories = Math.round(calories);
+      sodium = Math.round(sodium);
+      cholesterol = Math.round(cholesterol);
+      if (carbs < 10)
+          carbs = Math.round(carbs * 10) / 10;
+      else
+          carbs = Math.round(carbs);
+      if (fat < 10)
+          fat = Math.round(fat * 10) / 10;
+      else
+          fat = Math.round(fat);
+      if (fiber < 10)
+          fiber = Math.round(fiber * 10) / 10;
+      else
+          fiber = Math.round(fiber);
+      if (protein < 10)
+          protein = Math.round(protein * 10) / 10;
+      else
+          protein = Math.round(protein);
+      if (sugar < 10)
+          sugar = Math.round(sugar * 10) / 10;
+      else
+          sugar = Math.round(sugar);
+
       // Only given specified serving label from foods in external database
       if (food.ServingLabel)
       {

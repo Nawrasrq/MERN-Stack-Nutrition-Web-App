@@ -38,7 +38,7 @@ const TrackedFood = new Schema({
   Cholesterol: {
     type: Number
   },
-  Catagory: {
+  Category: {
     type: Number
   },
   Quantity: {

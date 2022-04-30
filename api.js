@@ -691,7 +691,7 @@ exports.setApp = function ( app, client )
         let token = require('./createJWT.js');
 
         //get user input from frontend
-        const { UserId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, Category, Quantity, Date, jwtToken } = req.body;
+        const { UserId, MealId, Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, Category, Quantity, Date, jwtToken } = req.body;
         
         let refreshedToken = null;
         let error = '';

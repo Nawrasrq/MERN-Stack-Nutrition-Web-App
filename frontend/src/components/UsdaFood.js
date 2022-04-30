@@ -423,7 +423,7 @@ function UsdaFood()
             <TrackFoodPopup show={trackFoodPopupState} food={selectedFoodInfo} closePopup={hideTrackFoodPopup} />
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} /> 
 
-            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} closePopup={hideTrackCheckedFoodsPopup} />
+            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} unconvertedFoods={foods} convertFood={obtainFoodInfo} closePopup={hideTrackCheckedFoodsPopup} />
             <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </button>
 
             <CombineFoodsPopup show={combineFoodsPopupState} foodIds={checkedSet} unconvertedFoods={foods} convertFood={obtainFoodInfo} closePopup={hideCombineFoodsPopup} />
