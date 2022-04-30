@@ -85,13 +85,11 @@ function MainPage()
             {
                 setMessage(res.error);
                 setFoods([]);
-                return;
             }
-
-            // Remove
-            setFoods(res.trackedFoods);
-
-            let trackedFoods = res.trackedFoods;
+            else
+            {
+                setFoods(res.trackedFoods);
+            }
         }
         catch(e)
         {
