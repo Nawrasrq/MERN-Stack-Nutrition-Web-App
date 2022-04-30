@@ -231,7 +231,7 @@ function YourFood()
             <EditNutritionInfoPopup show={editNutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideEditInfoPopup} />
             <DeleteFoodPopup show={deleteFoodPopupState} food={selectedFoodInfo} closePopup={hideDeleteFoodPopup} />
 
-            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} closePopup={hideTrackCheckedFoodsPopup} />
+            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} foods={foods} closePopup={hideTrackCheckedFoodsPopup} />
             <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </button>
 
             <CombineFoodsPopup show={combineFoodsPopupState} foodIds={checkedSet} foods={foods} closePopup={hideCombineFoodsPopup} />
