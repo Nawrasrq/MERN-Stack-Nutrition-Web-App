@@ -112,6 +112,59 @@ function ListTrackedFoods(props)
         }
     }
 
+    async function doUntrackFood(foodId)
+    {
+        // Get jwt token from local storage
+        var storage = require('../tokenStorage.js');
+        var tok = storage.retrieveToken();
+
+        // Clear any existing message
+        props.setMessage('');
+
+        var obj = { 
+            jwtToken:tok
+        }
+        var js = JSON.stringify(obj);
+
+        try
+        {   
+            // Send off package to api and await response 
+            var bp = require('./Path.js');
+            const response = await fetch(bp.buildPath('api/deletetracked/' + foodId),{method:'DELETE', body:js, headers:{'Content-Type': 'application/json'}});
+            var res = JSON.parse(await response.text());
+
+            if (!res.jwtToken)
+            {
+                props.setMessage(res.error);
+                return;
+            }
+            // Token was expired
+            else if (res.jwtToken.length === 0)
+            {
+                alert("Your session has expired, please log in again.");
+                localStorage.removeItem("user_data")
+		        window.location.href = '/';
+                return;
+            }
+
+            storage.storeToken(res.jwtToken);
+            
+            if(res.error.length > 0)
+            {
+                props.setMessage(res.error);
+            }
+            else
+            {
+                await props.retrieveTrackedFoods(props.currentDate);
+            }
+        }
+        catch(e)
+        {
+            console.log(e.toString());
+            return;
+        }
+    }
+
     function handleOpeningInput(id)
     {
         props.setMessage("");
@@ -135,7 +188,8 @@ function ListTrackedFoods(props)
                         {(editFoodId !== food._id) ? <span onClick={() => handleOpeningInput(food._id)}> {food.Quantity} </span> 
                                             : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
                         <span> | Calories: {food.Quantity * food.Calories}</span>
-                        {food.Category !== 0 && <span> | Meal: {mealValues[food.Category]}</span>}<br/>
+                        {food.Category !== 0 && <span> | Meal: {mealValues[food.Category]}</span>}
+                        <Button variant='primary' className='m-3' onClick={() => doUntrackFood(food._id)} > Remove </Button><br/>
                     </li>
                 ))}
             </ul>
