@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar';
-import Logout from '../components/Logout';
 import ListTrackedFoods from '../components/ListTrackedFoods';
 
 function MainPage()
@@ -106,7 +105,6 @@ function MainPage()
     return(
         <div >
             <NavigationBar />
-            <Logout />
             <Button variant='primary' className='m-3' onClick={decrementDay} > Previous </Button>
             <span>{selectedDate.toDateString()}</span>
             <Button variant='primary' className='m-3' disabled={selectedDate.toLocaleDateString() === (new Date()).toLocaleDateString()} onClick={incrementDay} > Next </Button><br/>
