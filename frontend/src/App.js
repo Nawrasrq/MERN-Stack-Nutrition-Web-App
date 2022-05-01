@@ -5,14 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import ProgressPage from './pages/ProgressPage';
-import ReportsPage from './pages/ReportsPage';
+import GoalsPage from './pages/GoalsPage';
+import ProfilePage from './pages/ProfilePage';
 import AddToDailyConsumptionPage from './pages/AddToDailyConsumptionPage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordRequestPage from './pages/ResetPasswordRequestPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import CreateMealPage from './pages/CreateMealPage';
-import GoalsPage from './pages/GoalsPage';
 import EditGoalsPage from './pages/EditGoalsPage.js';
 
 function App() {
@@ -29,11 +28,10 @@ function App() {
           <Route path="/Main/AddToDailyConsumption" component={AddToDailyConsumptionPage} exact />
           <Route path="/Main/AddToDailyConsumption/CreateMeal" component={CreateMealPage} exact />
 
-          <Route path="/Progress" component={ProgressPage} exact />
-          <Route path="/Progress/Goals" component={GoalsPage} exact />
-          <Route path="/Progress/Goals/EditGoals" component={EditGoalsPage} exact />
+          <Route path="/Goals" component={GoalsPage} exact />
+          <Route path="/Goals/EditGoals" component={EditGoalsPage} exact />
 
-          <Route path="/Reports" component={ReportsPage} exact />
+          <Route path="/Profile" component={ProfilePage} exact />
 
           <Route path="/MacroCalculator" exact>
             MacroCalculator

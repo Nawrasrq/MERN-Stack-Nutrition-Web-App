@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 
 function GoalsDisplay() 
 {
@@ -47,10 +48,24 @@ function GoalsDisplay()
 
     return (
         <div id="displayProgressDiv">
-            <span id="name">{firstName}'s Current Goals</span><br />
-            <p> 
-                Current Weight: {weight || 0} <br/>
-            </p>
+            <Container id='loginPage'>
+                <Card  bg='dark' border='success' style={{padding: '20px'}}>
+                    <Card.Body>
+                        Insert Weight Graph Here
+                        <Row className='m-3'>
+                        <Col>
+                            <Card.Text id='leftJustified'>
+                                Current Weight <br/>
+                                {0} lbs
+                            </Card.Text>
+                        </Col>
+                        <Col>
+                            <Button variant='success'>Record Weight</Button>
+                        </Col>
+                        </Row>
+                    </Card.Body>
+                </Card>
+            </Container>
         </div>
     );
 };
