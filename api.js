@@ -16,6 +16,8 @@ const trackedFood = require("./models/trackedFood.js");
 const Goal = require("./models/goal.js");
 //load secret code 
 const secretCode = require("./models/secretCode.js");
+//load weight
+const Weight = require("./models/weight.js"); 
 
 // create reusable transporter object using the default SMTP transport
 const nodemailer = require('nodemailer');
@@ -59,7 +61,7 @@ exports.setApp = function ( app, client )
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
             
             //create goal upon registering 
-            const newGoal = await new Goal({UserId:findUser[0].UserId, Weight:0, Calories:0, Protein:0, Carbs:0, Fat:0, Fiber:0, Sugar:0, Sodium:0, Cholesterol:0});
+            const newGoal = await new Goal({UserId:findUser[0].UserId, Weight:154, Calories:2000, Protein:50, Carbs:300, Fat:78, Fiber:28, Sugar:50, Sodium: 2.3, Cholesterol:.3});
             await newGoal.save();
 
             //send verification email with url containing newUser:userId and newCode:randomCode
@@ -90,6 +92,7 @@ exports.setApp = function ( app, client )
             ret = { error: error };  
         }
 
+        ret = { error: error }; 
         res.status(200).json(ret);
     });
 
@@ -617,7 +620,7 @@ exports.setApp = function ( app, client )
 
     //edit goal endpoint
     app.put('/api/editGoal', async (req, res, next) => {
-        //input: goal._id, Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken
+        //input: userId, Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken
         //output: error, jwtToken
 
         let token = require('./createJWT.js');
@@ -661,7 +664,7 @@ exports.setApp = function ( app, client )
                                                         Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
             //success
             error = "";
-            ret = {error: error, jwtToken: refreshedToken};
+            ret = {goal: updatedGoal, error: error, jwtToken: refreshedToken};
         }
         catch(e){
             error = e.message;
@@ -849,6 +852,244 @@ exports.setApp = function ( app, client )
         try {
             trackedFood.findByIdAndRemove({_id: id}).then(function(food){
                 food = this.food;
+            });
+
+            //success
+            error = "";
+            ret = {error: error, jwtToken:refreshedToken};
+        }
+        catch(e) {
+            error = e.toString();
+            ret = { error:error, jwtToken:refreshedToken };  
+        }
+
+        res.status(200).json(ret);
+    });
+
+    //add weight endpoint
+    app.post('/api/addweight', async (req, res, next) => {
+        //input UserId, newWeight, Date, jwtToken
+        //output error, refreshedToken
+        
+        let token = require('./createJWT.js');
+
+        //get user input from frontend
+        const { UserId, newWeight, Date, jwtToken } = req.body;
+        
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+
+        //create new weight
+        const addWeight = await new Weight({UserId:UserId, Weight:newWeight, Date:Date});
+ 
+        try {
+            //store new weight in db
+            await addWeight.save();
+
+            //success
+            error = '';
+            ret = { error: error, jwtToken:refreshedToken };  
+        }
+        catch(e) {
+            error = e.toString();
+            ret = { error: error, jwtToken:refreshedToken };  
+        }
+
+        res.status(200).json(ret);
+    });
+
+    //edit weight endpoint
+    app.put('/api/editWeight', async (req, res, next) => {
+        //input UserId, newWeight, Date, jwtToken
+        //output: weight, error, jwtToken
+
+        let token = require('./createJWT.js');
+        
+        //get user input from frontend
+        const { UserId, newWeight, Date, jwtToken } = req.body;
+
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+
+        //search for weight
+        try{    
+            const weight = await Weight.find({UserId:UserId});
+            const updatedWeight = await new findOneAndUpdate({UserId:UserId, Date:Date}, {Weight:newWeight});
+
+            //success
+            error = "";
+            ret = {Weight: updatedWeight, error: error, jwtToken: refreshedToken};
+        }
+        catch(e){
+            error = e.message;
+            ret = {error: error, jwtToken: refreshedToken};
+        }
+        
+        res.status(200).json(ret);
+    });
+
+    //retrieve all weights of user
+    app.post('/api/retrievetracked', async (req, res, next) => {
+        //input: UserId, jwtToken
+        //output: array of all weights, error, refreshedToken
+
+        let token = require('./createJWT.js');
+
+        //get user input from frontend
+        const { UserId, jwtToken} = req.body;
+        
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+
+        try {
+            //find all weights associated with user
+            const weight = await Weight.find({UserId:UserId});
+
+            if(weight.length > 0){
+                //success
+                error = '';
+                ret = { Weight: weight, error: error, jwtToken:refreshedToken };  
+            }
+            else{
+                error = 'No weight found';
+                ret = { error: error, jwtToken:refreshedToken };
+            }
+        }
+        catch(e) {
+            error = e.toString();
+            ret = {error: error, jwtToken:refreshedToken};
+            res.status(200).json(ret);
+            return;
+        }
+
+        res.status(200).json(ret);
+    });
+
+    //delete weight
+    app.delete('/api/deleteweight/:id', async (req, res, next) => {
+        //input weight._id, jwtToken
+        //output error, refreshedToken
+
+        let token = require('./createJWT.js');
+        
+        const {jwtToken} = req.body;
+        const id = req.params.id;
+
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+        
+        //find and delete weight
+        try {
+            trackedFood.findByIdAndRemove({_id: id}).then(function(weight){
+                weight = this.weight;
             });
 
             //success

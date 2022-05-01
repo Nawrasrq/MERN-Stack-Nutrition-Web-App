@@ -21,7 +21,7 @@ function Register()
             var res = JSON.parse(await response.text());
 
             var error = res.error;
-            
+
             if (error.length > 0) // If new user was unsuccessful in registering.
             {
                 setMessage(error);

@@ -10,7 +10,7 @@ const GoalSchema = new Schema({
     type: Number
   },
   Calories: {
-      type: Number
+    type: Number
   },
   Protein: {
     type: Number

@@ -1,22 +1,16 @@
-import React from 'react'
-import NavigationBar from '../components/NavigationBar.js';
-import GoalsDisplay from '../components/GoalsDisplay.js';
+import React from 'react';
+import { Button, Container } from 'react-bootstrap';
+import NavigationBar from '../components/NavigationBar';
+import WeightDisplay from '../components/WeightDisplay';
 
-function GoalsPage() 
-{
+function ProgressPage()
+{   
+    return(
+        <div>
+            <NavigationBar />
+            <WeightDisplay />
+        </div>
+    );
+};
 
-  function goToEditGoals()
-  {
-    window.location.href = '/Progress/Goals/EditGoals';
-  }
-
-  return (
-    <div>
-        <NavigationBar />
-        <GoalsDisplay />
-        <button type="button" id="editGoalsButton" class="buttons" onClick={goToEditGoals}> Edit Goals </button>
-    </div>
-  )
-}
-
-export default GoalsPage;
+export default ProgressPage;
