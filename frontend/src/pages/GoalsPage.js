@@ -5,11 +5,6 @@ import GoalsDisplay from '../components/GoalsDisplay.js';
 function GoalsPage() 
 {
 
-  function goBack()
-  {
-    window.location.href = "/Progress"
-  }
-
   function goToEditGoals()
   {
     window.location.href = '/Progress/Goals/EditGoals';
@@ -18,7 +13,6 @@ function GoalsPage()
   return (
     <div>
         <NavigationBar />
-        <button type="button" id="backButton" class="buttons" onClick={goBack}> Back </button>
         <GoalsDisplay />
         <button type="button" id="editGoalsButton" class="buttons" onClick={goToEditGoals}> Edit Goals </button>
     </div>

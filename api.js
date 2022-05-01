@@ -59,7 +59,7 @@ exports.setApp = function ( app, client )
             const findUser = await User.find({FirstName:FirstName, LastName:LastName, Login:Login, Password:Password, Email:Email, Birthday:Birthday, Verified:false});
             
             //create goal upon registering 
-            const newGoal = await new Goal({UserId:findUser[0].UserId, Calories:0, Protein:0, Carbs:0, Fat:0, Fiber:0, Sugar:0, Sodium:0, Cholesterol:0});
+            const newGoal = await new Goal({UserId:findUser[0].UserId, Weight:0, Calories:0, Protein:0, Carbs:0, Fat:0, Fiber:0, Sugar:0, Sodium:0, Cholesterol:0});
             await newGoal.save();
 
             //send verification email with url containing newUser:userId and newCode:randomCode
@@ -617,12 +617,12 @@ exports.setApp = function ( app, client )
 
     //edit goal endpoint
     app.put('/api/editGoal/:id', async (req, res, next) => {
-        //input: goal._id, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken
+        //input: goal._id, Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken
         //output: error, jwtToken
 
         let token = require('./createJWT.js');
         
-        const {Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
+        const {Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
         const {id} = req.params.id;
 
         let refreshedToken = null;
@@ -659,6 +659,7 @@ exports.setApp = function ( app, client )
         const goal = await Goal.findById(req.params.id);
 
         if(goal.length > 0){
+            if(Weight) goal.Weight = Weight;
             if(Calories) goal.Calories = Calories;
             if(Protein) goal.Protein = Protein;
             if(Carbs) goal.Carbs = Carbs;
