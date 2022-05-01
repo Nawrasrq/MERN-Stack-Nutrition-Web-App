@@ -657,11 +657,11 @@ exports.setApp = function ( app, client )
         //search for goal
         try{    
             const goal = await Goal.find({UserId:UserId});
-            const updatedGoal = await new findOneAndUpdate({UserId:UserId}, {Weight:Weight, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat,
+            const updatedGoal = await Goal.findOneAndUpdate({UserId:UserId}, {Weight:Weight, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat,
                                                         Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
             //success
             error = "";
-            ret = {goal: goal, error: error, jwtToken: refreshedToken};
+            ret = {error: error, jwtToken: refreshedToken};
         }
         catch(e){
             error = e.message;

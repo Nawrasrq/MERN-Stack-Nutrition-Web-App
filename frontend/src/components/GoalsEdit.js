@@ -33,27 +33,29 @@ function GoalsDisplay()
 
     const doEditGoals = async event => 
     {
+        
         // create object from text boxes and make JSON 
         event.preventDefault();
         var obj = { 
             UserId:userId, 
-            Weight:weight.value,
-            Calories:calories.value, 
-            Protein:protein.value, 
-            Carbs:carbs.value, 
-            Fat:fat.value, 
-            Fiber:fiber.value, 
-            Sugar:sugar.value, 
-            Sodium:sodium.value, 
-            Cholesterol:cholesterol.value,
+            Weight: parseInt(weight.value),
+            Calories: parseInt(calories.value), 
+            Protein: parseInt(protein.value), 
+            Carbs: parseInt(carbs.value), 
+            Fat: parseInt(fat.value), 
+            Fiber: parseInt(fiber.value), 
+            Sugar: parseInt(sugar.value), 
+            Sodium: parseInt(sodium.value), 
+            Cholesterol: parseInt(cholesterol.value),
             jwtToken:tok
         }
+        console.log(obj);
         var js = JSON.stringify(obj);
         try
         {    
             // Send off package to api and await response 
             var bp = require('./Path.js');
-            const response = await fetch(bp.buildPath('api/editGoal/:id'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(bp.buildPath('api/editGoal/'), {method:'PUT', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
             // I'll make the error messages nicer later - Declan
@@ -79,31 +81,32 @@ function GoalsDisplay()
             <Form className='mt-3'>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formWeight">
                     <Form.Label>Set New Goals!</Form.Label>
-                    <Form.Control type="number" placeholder="Weight (lbs)" onInput={clearMessage} ref={(c) => weight = c} />
+                    <Form.Control type="number" placeholder="Weight Goal (lbs)" onInput={clearMessage} ref={(c) => weight = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formCalories">
-                    <Form.Control type="number" placeholder="Calories" onInput={clearMessage} ref={(c) => calories = c} />
+                    <Form.Label>Daily</Form.Label>
+                    <Form.Control type="number" placeholder="Daily Calorie Goal" onInput={clearMessage} ref={(c) => calories = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formProtein">
-                    <Form.Control type="number" placeholder="Protein" onInput={clearMessage} ref={(c) => protein = c} />
+                    <Form.Control type="number" placeholder="Daily Protein Goal (g)" onInput={clearMessage} ref={(c) => protein = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formCarbs">
-                    <Form.Control type="number" placeholder="Carbs" onInput={clearMessage} ref={(c) => carbs = c} />
+                    <Form.Control type="number" placeholder="Daily Carbs Goal (g)" onInput={clearMessage} ref={(c) => carbs = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formFat">
-                    <Form.Control type="number" placeholder="Fat" onInput={clearMessage} ref={(c) => fat = c} />
+                    <Form.Control type="number" placeholder="Daily Fat Goal (g)" onInput={clearMessage} ref={(c) => fat = (c)} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formFiber">
-                    <Form.Control type="number" placeholder="Fiber" onInput={clearMessage} ref={(c) => fiber = c} />
+                    <Form.Control type="number" placeholder="Daily Fiber Goal (g)" onInput={clearMessage} ref={(c) => fiber = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formSugar">
-                    <Form.Control type="number" placeholder="Sugar" onInput={clearMessage} ref={(c) => sugar = c} />
+                    <Form.Control type="number" placeholder="Daily Sugar Goal (g)" onInput={clearMessage} ref={(c) => sugar = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formSodium">
-                    <Form.Control type="number" placeholder="Sodium" onInput={clearMessage} ref={(c) => sodium = c} />
+                    <Form.Control type="number" placeholder="Daily Sodium Goal (mg)" onInput={clearMessage} ref={(c) => sodium = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formCholesterol">
-                    <Form.Control type="number" placeholder="Cholesterol" onInput={clearMessage} ref={(c) => cholesterol = c} />
+                    <Form.Control type="number" placeholder="Daily Cholesterol Goal" onInput={clearMessage} ref={(c) => cholesterol = c} />
                 </Form.Group>
 
                 <Button 
@@ -113,10 +116,10 @@ function GoalsDisplay()
                     onClick={doEditGoals}
                 > 
                     Set Goals 
-                </Button>
+                </Button><br/>
+                <span id="addMealResult">{message}</span>
             </Form>
         </Container>
-        <span id="addMealResult">{message}</span>
      </div>
   );
 };
