@@ -84,7 +84,7 @@ exports.setApp = function ( app, client )
                   //success
                   error = '';
                   ret = { error: error };  
-                  console.log("ret :" + ret);
+                  console.log("ret :" + ret.error.length);
                 }
             });
         }
