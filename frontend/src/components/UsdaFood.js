@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TrackFoodPopup from './TrackFoodPopup.js';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 import TrackCheckedFoodsPopup from './TrackCheckedFoodsPopup.js';
+import CombineFoodsPopup from './CombineFoodsPopup.js';
 
 // TODO:
 // Extract all the nutrition info from the USDA database searches, right now we just do names
@@ -23,6 +24,7 @@ function UsdaFood()
     const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
 
     const [trackCheckedFoodsPopupState, setTrackCheckedFoodsPopupState] = useState(false);
+    const [combineFoodsPopupState, setCombineFoodsPopupState] = useState(false);
 
     const api_key = 'Qu6XqYJAL6VNG2ABuikfQizM7hXNKQjm5TfEOFGi';
 
@@ -36,7 +38,7 @@ function UsdaFood()
         ['sugar', '269'],
         ['sodium', '307'],
         ['cholesterol', '601']
-      ]);
+    ]);
 
     // 1 food calorie(kCal) === 4.1868 KJ
     const kJConversionRate = 4.1868;
@@ -298,6 +300,12 @@ function UsdaFood()
         setTrackCheckedFoodsPopupState(true);
     }
 
+    // Sets value to true to open popup where all of the checked foods can be combined
+    function showCombineFoodsPopup()
+    {
+        setCombineFoodsPopupState(true);
+    }
+
     // Sets value to false to close track food popup
     function hideTrackFoodPopup(setMessage, setTrackQuantity, setCategory)
     {
@@ -321,6 +329,15 @@ function UsdaFood()
         setTrackQuantity(1);
         setCategory("0");
         setTrackCheckedFoodsPopupState(false);
+    }
+
+    async function hideCombineFoodsPopup(setMessage, setFoodName)
+    {
+        await doSearchFoods();
+
+        setMessage("");
+        setFoodName("");
+        setCombineFoodsPopupState(false);
     }
 
     function handleCheckboxChange(mealId)
@@ -406,8 +423,11 @@ function UsdaFood()
             <TrackFoodPopup show={trackFoodPopupState} food={selectedFoodInfo} closePopup={hideTrackFoodPopup} />
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} /> 
 
-            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} closePopup={hideTrackCheckedFoodsPopup} />
+            <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} unconvertedFoods={foods} convertFood={obtainFoodInfo} closePopup={hideTrackCheckedFoodsPopup} />
             <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </button>
+
+            <CombineFoodsPopup show={combineFoodsPopupState} foodIds={checkedSet} unconvertedFoods={foods} convertFood={obtainFoodInfo} closePopup={hideCombineFoodsPopup} />
+            <button type="button" id="combineFoodsButton" class="buttons" onClick={showCombineFoodsPopup}> Combine Selected Foods </button>
         </div>
     );
 };

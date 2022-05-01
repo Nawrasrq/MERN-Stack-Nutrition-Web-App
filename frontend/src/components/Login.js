@@ -55,7 +55,6 @@ function Login()
     };
     const handleKeypress = e =>
     {
-        console.log(e.key);
         if(e.key === 'Enter')
         {
             document.getElementById('loginButton').click();

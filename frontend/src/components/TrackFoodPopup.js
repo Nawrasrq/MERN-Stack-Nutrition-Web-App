@@ -52,7 +52,7 @@ function TrackFoodPopup(props)
       async function doTrackFood()
       {
         // Can't add empty food to tracked foods
-        if (parseInt(quantity) <= 0)
+        if (parseFloat(quantity) <= 0)
         {
             setMessage("Invalid quantity selected, please try again.")
             return;
@@ -69,6 +69,15 @@ function TrackFoodPopup(props)
         var obj = {
             UserId:userId,
             MealId:food._id,
+            Name:name, 
+            Calories:calories, 
+            Protein:protein, 
+            Carbs:carbs, 
+            Fat:fat, 
+            Fiber:fiber, 
+            Sugar:sugar, 
+            Sodium:sodium, 
+            Cholesterol:cholesterol,
             Category:categoryInt,
             Quantity:quantity,
             Date:date, 
@@ -123,7 +132,7 @@ function TrackFoodPopup(props)
       function adjustNutritionalValues()
       {
           // If nothing is entered, default to 1
-          if (inputQty.value.length == 0)
+          if (inputQty.value.length === 0)
           {
             setQuantity(1);
           }

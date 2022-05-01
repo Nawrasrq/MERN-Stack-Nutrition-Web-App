@@ -25,15 +25,13 @@ function TrackCheckedFoodsPopup(props)
       }
     
       var _ud, ud, userId;
-      var foodIds;
       var inputQty;
 
       var storage = require('../tokenStorage.js');
       
       _ud = localStorage.getItem('user_data');
-	  ud = JSON.parse(_ud);
+	    ud = JSON.parse(_ud);
       userId = ud.id;
-      foodIds = props.foodIds;
 
       // This function just resets the displayed message whenever the user starts typing again in any of the input text boxes.
       function clearMessage()
@@ -43,19 +41,59 @@ function TrackCheckedFoodsPopup(props)
 
       async function trackFoods(categoryInt, date, tok)
       {
-        let foodIdsArray = Array.from(foodIds);
+        let selectedFoods = [];
         let count = 0;
-        
-        for (let i = 0; i < foodIdsArray.length; i++)
-        {
-            var mealId = foodIdsArray[i];
 
-            if (mealId)
+        let foodIds = props.foodIds;
+        let foods;
+        if (props.foods)
+        {
+            foods = props.foods;
+        }
+        else
+        {
+            let unconvertedFoods = props.unconvertedFoods;
+            foods = [];
+
+            // Loop through all the unconverted foods that were selected and convert them into our database's format.
+            for (let i = 0; i < unconvertedFoods.length; i++)
+            {
+                if (foodIds.has("USDA" + unconvertedFoods[i].fdcId))
+                {
+                  foods.push(props.convertFood(unconvertedFoods[i]));
+                }
+            }
+        }
+
+        for (let i = 0; i < foods.length; i++)
+        {
+              // Check to see if food was selected
+              if (foodIds.has(foods[i]._id))
+              {
+                  selectedFoods.push(foods[i]);
+              }
+        }
+        
+
+        for (let i = 0; i < selectedFoods.length; i++)
+        {
+            let food = selectedFoods[i];
+
+            if (food)
             {
                 // create object from text boxes and make JSON 
                 var obj = {
                     UserId:userId,
-                    MealId:mealId,
+                    MealId:food._id,
+                    Name:food.Name, 
+                    Calories:food.Calories, 
+                    Protein:food.Protein, 
+                    Carbs:food.Carbs, 
+                    Fat:food.Fat, 
+                    Fiber:food.Fiber, 
+                    Sugar:food.Sugar, 
+                    Sodium:food.Sodium, 
+                    Cholesterol:food.Cholesterol,
                     Category:categoryInt,
                     Quantity:quantity,
                     Date:date, 
@@ -109,7 +147,7 @@ function TrackCheckedFoodsPopup(props)
       async function doTrackCheckedFoods()
       {
         // Can't add empty foods to tracked foods
-        if (parseInt(quantity) <= 0)
+        if (parseFloat(quantity) <= 0)
         {
             setMessage("Invalid quantity selected, please try again.")
             return;
