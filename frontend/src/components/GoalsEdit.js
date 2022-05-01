@@ -45,14 +45,15 @@ function GoalsDisplay()
             Fiber:fiber.value, 
             Sugar:sugar.value, 
             Sodium:sodium.value, 
-            Cholesterol:cholesterol.value
+            Cholesterol:cholesterol.value,
+            jwtToken:tok
         }
         var js = JSON.stringify(obj);
         try
         {    
             // Send off package to api and await response 
             var bp = require('./Path.js');
-            const response = await fetch(bp.buildPath('api/addgoal'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(bp.buildPath('api/editGoal/:id'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             
             // I'll make the error messages nicer later - Declan
@@ -62,7 +63,7 @@ function GoalsDisplay()
             }
             else
             {
-                setMessage('Successfully edited goals');
+                setMessage('Goals set!');
             }
         }
         catch(e)
