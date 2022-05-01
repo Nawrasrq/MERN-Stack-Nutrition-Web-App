@@ -599,7 +599,7 @@ exports.setApp = function ( app, client )
         //input: UserId, 
         //output: goal, error
 
-        const {UserId} = req.params.UserId;
+        const {UserId} = req.params;
         let error = '';
         let ret = {};
 
@@ -607,15 +607,13 @@ exports.setApp = function ( app, client )
             if (foundGoal != '') {
                 //success
                 error = "";
-                ret = {goal: foundGoal, error: error};
             } 
             else {
-                //error = "No goals found";
-                ret = {error: err};
+                error = "No goals found";
             }
+            ret = {goal: foundGoal[0], error: error};
+            res.status(200).json(ret);
         });
-
-        res.status(200).json(ret);
     });
 
     //edit goal endpoint

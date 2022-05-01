@@ -29,9 +29,9 @@ function App() {
           <Route path="/Main/AddToDailyConsumption/CreateMeal" component={CreateMealPage} exact />
 
           <Route path="/Goals" component={GoalsPage} exact />
-          <Route path="/Goals/EditGoals" component={EditGoalsPage} exact />
 
           <Route path="/Profile" component={ProfilePage} exact />
+          <Route path="/Profile/EditGoals" component={EditGoalsPage} exact />
 
           <Route path="/MacroCalculator" exact>
             MacroCalculator

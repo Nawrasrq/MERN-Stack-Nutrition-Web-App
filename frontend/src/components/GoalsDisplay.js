@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Card, Container, Form, Col, Row, ListGroup } from 'react-bootstrap';
+
 
 function GoalsDisplay() 
 {
@@ -9,6 +11,7 @@ function GoalsDisplay()
     var firstName = ud.firstName;
 	var lastName = ud.lastName;
 
+    var goals;
     var calories;
     var protein;
     var carbs;
@@ -19,23 +22,17 @@ function GoalsDisplay()
     var cholesterol;
     const [message,setMessage] = useState('');
 
-    const doDisplayGoals = async event => 
+    async function getData()
     {
-        // create object from text boxes and make JSON 
-        event.preventDefault();
-        var obj = {
-
-        }
-        var js = JSON.stringify(obj);
         try
-        {    
+        { 
             // Send off package to api and await response 
             var bp = require('./Path.js');
             // THIS WILL CHANGE BECAUSE API ENDPOINT HAS NOT YET BEEN CREATED
-            const response = await fetch(bp.buildPath('api/goals'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(bp.buildPath('api/retrievegoal/' + userId),{method:'GET', headers:{'Content-Type': 'application/json'}});
+
             var res = JSON.parse(await response.text());
-            
-            // I'll make the error messages nicer later - Declan
+
             if( res.error )
             {
                 setMessage(res.error);
@@ -44,6 +41,20 @@ function GoalsDisplay()
             {
                 setMessage('');
             }
+
+            goals = res.goal;
+            console.log(goals);
+            document.getElementById('Weight').innerHTML = goals.Weight;
+
+            document.getElementById('Calories').innerHTML = goals.Calories;
+            document.getElementById('Protein').innerHTML = goals.Protein;
+            document.getElementById('Carbohydrates').innerHTML = goals.Carbs;
+            document.getElementById('Fat').innerHTML = goals.Fat;
+            document.getElementById('Fiber').innerHTML = goals.Fiber;
+            document.getElementById('Sugar').innerHTML = goals.Sugar;
+            document.getElementById('Sodium').innerHTML = goals.Sodium;
+            document.getElementById('Cholesterol').innerHTML = goals.Cholesterol;
+            
         }
         catch(e)
         {
@@ -51,24 +62,59 @@ function GoalsDisplay()
             return;
         }
     };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+
+    var style =
+    {
+        padding: '20px', 
+        display: 'flex', 
+        'textAlign':'center', 
+        'justifyContent':'center', 
+        'alignItems':'center'
+    }
+
   return (
     <div id="addMealDiv">
-        <span id="name">{firstName}'s Current Goals</span><br />
-        <p> 
-            Long-term: <br/>
-            Weight: {0} <br/>
-            <br/>
-            Daily: <br/>
-            Calories: {0} <br/>
-            Protein: {0}g <br/>
-            Carbohydrates: {0}g <br/>
-            Fat: {0}g <br/>
-            Fiber: {0} <br/>
-            Sugar: {0}g <br/>
-            Sodium: {0} <br/>
-            Cholesterol: {0}
-        </p>
-     </div>
+        <Container style={{padding: '20px'}}>
+            <Card  bg='dark' border='success' style={{padding: '20px', display: 'flex'}}>
+                <Card.Title >
+                    {firstName} {lastName}'s Current Goals
+                </Card.Title>
+                <Card.Body style={style}>
+                    <Row>
+                        <Col style={{width: '100vh'}}>
+                            <Card.Header>
+                                Long-Term
+                            </Card.Header>
+                            <ListGroup>
+                                <ListGroup.Item variant='dark'>Weight: <span id='Weight'/></ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        <Col style={{width: '100vh'}}>
+                            <Card.Header>
+                                Daily
+                            </Card.Header>
+                            <ListGroup>
+                                <ListGroup.Item variant='dark'>Calories: <span id='Calories'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Protein: <span id='Protein'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Carbohydrates: <span id='Carbohydrates'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Fat: <span id='Fat'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Fiber: <span id='Fiber'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Sugar: <span id='Sugar'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Sodium: <span id='Sodium'/></ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Cholesterol: <span id='Cholesterol'/></ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                    </Row>
+                </Card.Body>
+                <span>{message}</span>
+            </Card>
+        </Container>
+    </div>
   );
 };
 

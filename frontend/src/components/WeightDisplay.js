@@ -105,12 +105,12 @@ function GoalsDisplay()
     return (
         <div>
             <Container style={style}>
-                <Card  bg='dark' border='success' style={{padding: '20px', display: 'flex', width: 'max(100vh, 1000px)'}}>
+                <Card  bg='dark' border='success' style={{padding: '20px', display: 'flex'}}>
                     <Card.Body style={style}>
                         <Col className='m-3'>
                             <Row >
                                 <Card.Text style={{width: '140px', 'textAlign': 'center'}} id='leftJustified'>
-                                    Current Weight: <span id='displayWeight'/> lbs
+                                    Current Weight: <span id='displayWeight'></span> lbs
                                 </Card.Text>
                                 <Form style={{width: '150px'}}>
                                     <Form.Group id="leftJustified" className="mb-3" controlId="formEmail">
