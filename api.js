@@ -942,6 +942,9 @@ exports.setApp = function ( app, client )
 
         //get user input from frontend
         const { UserId, newWeight, Date, jwtToken } = req.body;
+
+        if (!newWeight || newWeight <= 0)
+            return;
         
         let refreshedToken = null;
         let error = '';
@@ -974,6 +977,11 @@ exports.setApp = function ( app, client )
         }
 
         //create new weight
+        const weight = await Weight.find({UserId:UserId});
+        const updatedWeight = await Weight.findOneAndUpdate({UserId:UserId, Date:Date}, {Weight:newWeight});
+        if (updatedWeight)
+            return;
+
         const addWeight = await new Weight({UserId:UserId, Weight:newWeight, Date:Date});
  
         try {
@@ -992,65 +1000,8 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
 
-    //edit weight endpoint
-    app.put('/api/editWeight', async (req, res, next) => {
-        //input UserId, newWeight, Date, jwtToken
-        //output: weight, error, jwtToken
-
-        let token = require('./createJWT.js');
-        
-        //get user input from frontend
-        const { UserId, newWeight, Date, jwtToken } = req.body;
-
-        let refreshedToken = null;
-        let error = '';
-        let ret = {};
-
-        //check token
-        try{
-            if( token.isExpired(jwtToken)){
-                error = 'The JWT is no longer valid';
-                ret = {error: error, jwtToken: ''};
-                res.status(200).json(ret);
-                return;
-            }
-
-            refreshedToken = token.refresh(jwtToken);
-
-            // Failed to create new token when refreshing
-            if (refreshedToken === null){
-                error = "Failed to renew your current session";
-                ret = { error:error, jwtToken:refreshedToken };  
-                res.status(200).json(ret);
-                return;
-            }
-        }
-        catch(e){
-            error = e.message;
-            ret = { error:error}; 
-            res.status(200).json(ret); 
-            return;
-        }
-
-        //search for weight
-        try{    
-            const weight = await Weight.find({UserId:UserId});
-            const updatedWeight = await new findOneAndUpdate({UserId:UserId, Date:Date}, {Weight:newWeight});
-
-            //success
-            error = "";
-            ret = {Weight: updatedWeight, error: error, jwtToken: refreshedToken};
-        }
-        catch(e){
-            error = e.message;
-            ret = {error: error, jwtToken: refreshedToken};
-        }
-        
-        res.status(200).json(ret);
-    });
-
     //retrieve all weights of user
-    app.post('/api/retrievetracked', async (req, res, next) => {
+    app.post('/api/retrieveWeights', async (req, res, next) => {
         //input: UserId, jwtToken
         //output: array of all weights, error, refreshedToken
 
@@ -1096,11 +1047,11 @@ exports.setApp = function ( app, client )
             if(weight.length > 0){
                 //success
                 error = '';
-                ret = { Weight: weight, error: error, jwtToken:refreshedToken };  
+                ret = { weights: weight, error: error, jwtToken:refreshedToken };  
             }
             else{
                 error = 'No weight found';
-                ret = { error: error, jwtToken:refreshedToken };
+                ret = { weights: [], error: error, jwtToken:refreshedToken };
             }
         }
         catch(e) {

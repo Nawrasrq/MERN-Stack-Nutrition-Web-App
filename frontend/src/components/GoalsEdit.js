@@ -49,7 +49,6 @@ function GoalsDisplay()
             Cholesterol: parseInt(cholesterol.value),
             jwtToken:tok
         }
-        console.log(obj);
         var js = JSON.stringify(obj);
         try
         {    
