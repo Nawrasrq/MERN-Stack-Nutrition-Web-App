@@ -524,7 +524,7 @@ exports.setApp = function ( app, client )
         }
 
         //search for meal
-        const meal = await Meal.findById(req.params.id);
+        const meal = await Meal.findById(id);
 
         // Check if anything will actually be updated
         if (meal.Name === Name && meal.Calories === parseFloat(Calories) && meal.Protein === parseFloat(Protein)
@@ -616,14 +616,13 @@ exports.setApp = function ( app, client )
     });
 
     //edit goal endpoint
-    app.put('/api/editGoal/:id', async (req, res, next) => {
+    app.put('/api/editGoal', async (req, res, next) => {
         //input: goal._id, Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken
         //output: error, jwtToken
 
         let token = require('./createJWT.js');
         
-        const {Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
-        const {id} = req.params.id;
+        const {UserId, Weight, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
 
         let refreshedToken = null;
         let error = '';
@@ -656,27 +655,16 @@ exports.setApp = function ( app, client )
         }
 
         //search for goal
-        const goal = await Goal.findById(req.params.id);
-
-        if(goal.length > 0){
-            if(Weight) goal.Weight = Weight;
-            if(Calories) goal.Calories = Calories;
-            if(Protein) goal.Protein = Protein;
-            if(Carbs) goal.Carbs = Carbs;
-            if(Fat) goal.Fat = Fat;
-            if(Fiber) goal.Fiber = Fiber;
-            if(Sugar) goal.Sugar = Sugar;
-            if(Sodium) goal.Sodium = Sodium;
-            if(Cholesterol) goal.Cholesterol = Cholesterol;
-
-            await goal.save();
-
+        try{    
+            const goal = await Goal.find({UserId:UserId});
+            const updatedGoal = await new findOneAndUpdate({UserId:UserId}, {Weight:Weight, Calories:Calories, Protein:Protein, Carbs:Carbs, Fat:Fat,
+                                                        Fiber:Fiber, Sugar:Sugar, Sodium:Sodium, Cholesterol:Cholesterol});
             //success
             error = "";
             ret = {goal: goal, error: error, jwtToken: refreshedToken};
         }
-        else{
-            error = "goal not found";
+        catch(e){
+            error = e.message;
             ret = {error: error, jwtToken: refreshedToken};
         }
         
