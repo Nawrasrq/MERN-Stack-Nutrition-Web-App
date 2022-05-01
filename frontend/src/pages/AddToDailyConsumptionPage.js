@@ -1,5 +1,5 @@
 import React from 'react';
-import Logout from '../components/Logout.js';
+import NavigationBar from '../components/NavigationBar.js';
 import AddToDailyConsumption from '../components/AddToDailyConsumption.js';
 
 function AddToDailyConsumptionPage()
@@ -12,7 +12,7 @@ function AddToDailyConsumptionPage()
 
     return(
         <div>
-            <Logout />
+            <NavigationBar />
 			<button type="button" id="backButton" class="buttons" onClick={goBack}> Back </button>
             <AddToDailyConsumption />
         </div>

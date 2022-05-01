@@ -1,5 +1,5 @@
 import React from 'react';
-import Logout from '../components/Logout.js';
+import NavigationBar from '../components/NavigationBar.js';
 import AddMeal from '../components/AddMeal.js';
 
 function CreateMealPage()
@@ -12,7 +12,7 @@ function CreateMealPage()
 
 	return(
 	  	<div>
-			<Logout />
+			<NavigationBar />
 			<button type="button" id="backButton" class="buttons" onClick={goBack}> Back </button>
 			<AddMeal />
 	  	</div>
