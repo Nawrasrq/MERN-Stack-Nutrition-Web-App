@@ -84,15 +84,12 @@ exports.setApp = function ( app, client )
                   //success
                   error = '';
                   ret = { error: error };  
-                  
                 }
             });
         }
         catch(e){
             error = e.toString();
             ret = { error: error };  
-
-            console.log("LOOK HERE ret :" + error);
         }
 
         res.status(200).json(ret);
