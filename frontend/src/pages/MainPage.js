@@ -109,8 +109,8 @@ function MainPage()
             <span>{selectedDate.toDateString()}</span>
             <Button variant='primary' className='m-3' disabled={selectedDate.toLocaleDateString() === (new Date()).toLocaleDateString()} onClick={incrementDay} > Next </Button><br/>
 
-            <span>{message}</span>
-            <ListTrackedFoods foods={foods} />
+            <ListTrackedFoods foods={foods} setMessage={setMessage} retrieveTrackedFoods={doRetrieveTrackedFoods} currentDate={selectedDate} />
+            <span>{message}</span><br/>
 
             <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Add To Your Daily Consumption </Button>
         </div>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Button } from 'react-bootstrap';
 
-function useOutsideAlerter(ref, updateQuantity) 
+function useOutsideAlerter(ref, setEditFoodId) 
 {
     useEffect(() => {
       //Alert if clicked on outside of edit quantity text box
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          updateQuantity(ref.current.value);
+            setEditFoodId(-1);
         }
       }
       // Bind the event listener
@@ -20,21 +21,27 @@ function useOutsideAlerter(ref, updateQuantity)
 
 function ListTrackedFoods(props)
 {
-    const [editFoodId, setEditFoodId] = useState(-1);    
+    const [editFoodId, setEditFoodId] = useState(-1);
     const wrapperRef = useRef(null);
 
-    useOutsideAlerter(wrapperRef, doUpdateQuantity);
+    // This will keep track of whatever the user types in the input field
+    var inputQty;
 
-    async function doUpdateQuantity(inputQty)
+    useOutsideAlerter(wrapperRef, setEditFoodId);
+
+    async function doUpdateQuantity(foodId)
     {
-        console.log(editFoodId);
-        // Invalid quanitity so don't do anything
-        if (inputQty <= 0)
-            return;
+        // Closes the input field
+        setEditFoodId(-1);
 
-        let _ud = localStorage.getItem('user_data');
-        let ud = JSON.parse(_ud);
-        let userId = ud.id;
+        let newQty = inputQty.value;
+
+        // Invalid quanitity so don't do anything
+        if (newQty <= 0)
+        {
+            props.setMessage("Please enter a quantity greater than 0.");
+            return;
+        }
 
         // Get jwt token from local storage
         var storage = require('../tokenStorage.js');
@@ -43,53 +50,36 @@ function ListTrackedFoods(props)
         let food = null;
         for (let i = 0; i < props.foods.length; i++)
         {
-            console.log(editFoodId);
-            if (editFoodId === props.foods[i]._id)
+            if (foodId === props.foods[i]._id)
             {
                 food = props.foods[i];
             }
         }
 
-        //setEditFoodId(-1);
-
         // Just in case
         if (food === null)
         {
-            console.log("In here");
             return;
         }
 
         // create object from text boxes and make JSON 
         var obj = {
-            UserId:userId,
-            MealId:food.MealId,
-            Name:food.Name, 
-            Calories:food.Calories, 
-            Protein:food.Protein, 
-            Carbs:food.Carbs, 
-            Fat:food.Fat, 
-            Fiber:food.Fiber, 
-            Sugar:food.Sugar, 
-            Sodium:food.Sodium, 
-            Cholesterol:food.Cholesterol,
-            Category:food.Category,
-            Quantity:inputQty,
-            Date:food.Date, 
+            trackedMealId:food._id,
+            Quantity:newQty, 
             jwtToken:tok
         }
         var js = JSON.stringify(obj);
 
         try
         {   
-            console.log(obj);
             // Send off package to api and await response 
             var bp = require('./Path.js');
-            const response = await fetch(bp.buildPath('api/trackmeal/'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(bp.buildPath('api/editTrackMealQty/'),{method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
 
             if (!res.jwtToken)
             {
-                //setMessage(res.error);
+                props.setMessage(res.error);
                 return;
             }
             // Token was expired
@@ -105,13 +95,11 @@ function ListTrackedFoods(props)
             
             if(res.error.length > 0)
             {
-                //setMessage(res.error);
-                console.log("fail");
+                props.setMessage(res.error);
             }
             else
             {
-                //setMessage('Successfully Added ' + quantity + ' \"' + name + '\"s to your daily list of tracked foods.');
-                console.log("Sucesss");
+                props.retrieveTrackedFoods(props.currentDate);
             }
         }
         catch(e)
@@ -123,8 +111,8 @@ function ListTrackedFoods(props)
 
     function handleOpeningInput(id)
     {
+        props.setMessage("");
         setEditFoodId(id);
-        console.log(editFoodId);
     }
 
     // Prevents negative values from being typed in
@@ -142,7 +130,7 @@ function ListTrackedFoods(props)
                     <li key={food._id}>
                         <span>{food.Name} | Qty: </span>
                         {(editFoodId !== food._id) ? <span onClick={() => handleOpeningInput(food._id)}> {food.Quantity} </span> 
-                                            : <input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={wrapperRef}></input>}
+                                            : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
                         <span> | Calories: {food.Quantity * food.Calories}</span><br/>
                     </li>
                 ))}

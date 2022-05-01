@@ -744,6 +744,73 @@ exports.setApp = function ( app, client )
         res.status(200).json(ret);
     });
 
+    //API for editing tracked meal quanitity ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //track a meal
+    app.post('/api/editTrackMealQty', async (req, res, next) => {
+        //input: trackedMealId, Quantity, jwtToken
+        //output: error, refreshedToken
+
+        let token = require('./createJWT.js');
+
+        //get user input from frontend
+        const { trackedMealId, Quantity, jwtToken } = req.body;
+        
+        let refreshedToken = null;
+        let error = '';
+        let ret = {};
+
+        //check token
+        try{
+            if( token.isExpired(jwtToken)){
+                error = 'The JWT is no longer valid';
+                ret = {error: error, jwtToken: ''};
+                res.status(200).json(ret);
+                return;
+            }
+
+            refreshedToken = token.refresh(jwtToken);
+
+            // Failed to create new token when refreshing
+            if (refreshedToken === null){
+                error = "Failed to renew your current session";
+                ret = { error:error, jwtToken:refreshedToken };  
+                res.status(200).json(ret);
+                return;
+            }
+        }
+        catch(e){
+            error = e.message;
+            ret = { error:error}; 
+            res.status(200).json(ret); 
+            return;
+        }
+        
+        //edit the tracked meal quantity
+        try {
+            //Check to make sure tracked meal already exists then increase quantity
+            const findUser = await trackedFood.find({_id:trackedMealId});
+            if(findUser.length > 0){
+                const NewQuantity = Quantity; 
+                let updatedTracked = await trackedFood.findOneAndUpdate({_id:trackedMealId}, {Quantity:NewQuantity});
+                error='';
+            }
+            //create new food to track
+            else{
+                error='Failed to find food to update quantity.';
+            }
+            //success
+            ret = { error: error, jwtToken:refreshedToken };  
+        }
+        catch(e) {
+            error = e.toString();
+            ret = {error: error, jwtToken:refreshedToken};
+            res.status(200).json(ret);
+            return;
+        }
+
+        res.status(200).json(ret);
+    });
+
     //retrieve all tracked foods
     app.post('/api/retrievetracked', async (req, res, next) => {
         //input: UserId, jwtToken, Date
