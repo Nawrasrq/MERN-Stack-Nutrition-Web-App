@@ -87,7 +87,23 @@ function MainPage()
             }
             else
             {
-                setFoods(res.trackedFoods);
+                var sortedFoods = [];
+
+                // O(5n) algorithm to sort tracked foods by meal where n = number of tracked foods for that day
+                let numMealOptions = 5;
+                for (let mealType = 0; mealType < numMealOptions; mealType++)
+                {
+                    let n = res.trackedFoods.length;
+                    for (let i = 0; i < n; i++)
+                    {
+                        if (res.trackedFoods[i].Category === mealType)
+                        {
+                            sortedFoods.push(res.trackedFoods[i]);
+                        }
+                    }
+                }
+
+                setFoods(sortedFoods);
             }
         }
         catch(e)
