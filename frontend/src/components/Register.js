@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Container, Form } from 'react-bootstrap';
 
 function Register()
 {
@@ -43,19 +44,41 @@ function Register()
     }
     
     return(
-      <div id="registerDiv">
-        <form onSubmit={doRegister}>
-            <span id="inner-title">Sign Up</span><br />
-            <input type="text" id="firstName" placeholder="First Name" ref={(c) => firstName = c} />
-            <input type="text" id="lastName" placeholder="Last Name" ref={(c) => lastName = c} />
-            <input type="text" id="email" placeholder="Email" ref={(c) => email = c} />
-            <input type="text" id="birthday" placeholder="Date of Birth" ref={(c) => birthday = c} />
-            <input type="text" id="username" placeholder="New Username" ref={(c) => username = c} />
-            <input type="password" id="password" placeholder="New Password" ref={(c) => password = c} />
-            <input type="submit" id="registerButton" class="buttons" value = "Create Account" onClick={doRegister} />
-        </form>
-        <span id="registerResult">{message}</span>
-     </div>
+        <div>
+            <Container >
+                <Form className='mt-3'>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formFirstName">
+                        <Form.Label>Sign Up</Form.Label>
+                        <Form.Control type="text" placeholder="First Name" ref={(c) => firstName = c} />
+                    </Form.Group>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formLastName">
+                        <Form.Control type="text" placeholder="Last Name" ref={(c) => lastName = c} />
+                    </Form.Group>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formEmail">
+                        <Form.Control type="text" placeholder="Email" ref={(c) => email = c} />
+                    </Form.Group>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formBirthday">
+                        <Form.Control type="date" placeholder="Date of Birth" ref={(c) => birthday = c} />
+                    </Form.Group>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formUsername">
+                        <Form.Control type="text" placeholder="Username" ref={(c) => username = c} />
+                    </Form.Group>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formLastName">
+                        <Form.Control type="password" placeholder="Password" ref={(c) => password = c} />
+                    </Form.Group>
+
+                    <Button 
+                        id="loginButton"
+                        className="mb-3" 
+                        variant="success" 
+                        onClick={doRegister}
+                    > 
+                        Create Account 
+                    </Button>
+                </Form>
+            </Container>
+            <span id="registerResult">{message}</span>
+        </div>
     );
 };
 export default Register;

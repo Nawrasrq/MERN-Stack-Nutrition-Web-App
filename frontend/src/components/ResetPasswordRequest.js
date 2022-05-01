@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Card, Container, Form } from 'react-bootstrap';
 
 function ResetPasswordRequest()
 {
@@ -43,12 +44,27 @@ function ResetPasswordRequest()
     }
     
     return(
-      <div id="resetPasswordRequestDiv">
-        <form onSubmit={doResetPasswordRequest}>
-            <span id="inner-title">Enter your username and we'll send you a link to reset your password.</span><br />
-            <input type="text" id="username" placeholder="Username" ref={(c) => username = c} />
-            <input type="submit" id="resetPasswordRequestButton" class="buttons" value = "Reset Password" onClick={doResetPasswordRequest} />
-        </form>
+      <div >
+        <Container id='loginPage'>
+            <Card style={{padding: '20px'}} bg='dark'>
+                <Card.Title>Forgot Password?</Card.Title>
+                <Form>
+                    <Form.Group id="leftJustified" className="mb-3" controlId="formUsername">
+                        <Form.Label>Enter your username and we'll send you a link to reset your password</Form.Label>
+                        <Form.Control type="text" placeholder="Username" ref={(c) => username = c} />
+                    </Form.Group>
+
+                    <Button 
+                        id="resetPasswordRequestButton"
+                        className="mb-3" 
+                        variant="success" 
+                        onClick={doResetPasswordRequest}
+                    > 
+                        Reset Password
+                    </Button>
+                </Form>
+            </Card>
+        </Container>
         <span id="resetPasswordRequestResult">{message}</span>
      </div>
     );

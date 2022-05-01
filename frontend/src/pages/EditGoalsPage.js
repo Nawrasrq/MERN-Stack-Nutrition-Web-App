@@ -1,4 +1,5 @@
 import React from 'react'
+import NavigationBar from '../components/NavigationBar.js';
 import PageTitle from '../components/PageTitle.js';
 import GoalsEdit from '../components/GoalsEdit.js';
 
@@ -12,7 +13,7 @@ function GoalsPage()
 
 	return (
 		<div>
-			<PageTitle />
+			<NavigationBar />
 			<button type="button" id="backButton" class="buttons" onClick={goBack}> Back </button>
 			<GoalsEdit />
 		</div>

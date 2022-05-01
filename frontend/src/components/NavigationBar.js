@@ -1,8 +1,14 @@
 import React from 'react';
-import { Button, Container, NavDropdown, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import { Button, Container, Navbar, Nav } from 'react-bootstrap';
 
 function NavigationBar()
 {
+    function doLogout() 
+	{
+		localStorage.removeItem("user_data");
+		window.location.href = '/';
+	};    
+
     return(
         <div>
             <Navbar bg="dark" variant='dark' expand="lg">
@@ -24,6 +30,7 @@ function NavigationBar()
                             <Nav.Link href="/Reports">Reports</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
+                    <Button variant='outline-danger' className="m-0" onClick={doLogout}> Log Out </Button>
                 </Container>
             </Navbar>
         </div>

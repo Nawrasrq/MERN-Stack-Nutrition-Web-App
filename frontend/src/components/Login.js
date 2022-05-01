@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import '../css/LoginPage.css';
 
 function Login()
@@ -65,7 +65,7 @@ function Login()
     return(
         <div id="loginDiv" >
             <Container>
-                <Form>
+                <Form className='mt-3'>
                     <Form.Group id="leftJustified" className="mb-3" controlId="formEmail">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" placeholder="Username" ref={(c) => loginName = c} />
@@ -86,8 +86,8 @@ function Login()
 
                     <Button 
                         id="loginButton"
-                        className="m-3" 
-                        variant="primary" 
+                        className="mb-2" 
+                        variant="success" 
                         onClick={doLogin}
                     > 
                         Login 

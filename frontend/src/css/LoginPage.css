@@ -4,10 +4,10 @@
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 600px;
+    width: 700px;
     min-height: 100vh;
     margin: 0px auto;
-    padding: 55px 55px 37px 55px;
+    padding: 20px 55px 37px 55px;
 }
 
 #leftJustified 
