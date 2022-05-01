@@ -92,6 +92,7 @@ exports.setApp = function ( app, client )
             ret = { error: error };  
         }
 
+        ret = { error: error }; 
         res.status(200).json(ret);
     });
 

@@ -21,10 +21,6 @@ function Register()
             var res = JSON.parse(await response.text());
 
             var error = res.error;
-            console.log("res look here :" + res);
-            console.log("res.error look here :" + res.error);
-            console.log("error look here :" + error);
-            console.log("length look here :" + error.length);
 
             if (error.length > 0) // If new user was unsuccessful in registering.
             {
