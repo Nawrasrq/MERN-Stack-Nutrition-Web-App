@@ -1024,15 +1024,15 @@ exports.setApp = function ( app, client )
 
         try {
             //find all weights associated with user
-            const trackedFoods = await trackedFood.find({UserId:UserId});
+            const weight = await Weight.find({UserId:UserId});
 
-            if(trackedFoods.length > 0){
+            if(weight.length > 0){
                 //success
                 error = '';
-                ret = { trackedFoods: trackedFoods, error: error, jwtToken:refreshedToken };  
+                ret = { Weight: weight, error: error, jwtToken:refreshedToken };  
             }
             else{
-                error = 'No foods found';
+                error = 'No weight found';
                 ret = { error: error, jwtToken:refreshedToken };
             }
         }
