@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
+import { Button, Card, Col, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import '../css/TrackCheckedFoodsPopup.css';
+
+var center = {
+    width: '40%',
+    height: '20%',
+    top: '40%',
+    left: '50%',
+    padding: '20px',
+    transform: 'translate(-50%, -50%)',
+  }
 
 function TrackCheckedFoodsPopup(props)
 {   
@@ -15,12 +25,12 @@ function TrackCheckedFoodsPopup(props)
       if (props.foodIds.size <= 0)
       {
         return(
-            <div id="trackCheckedFoodsPopup">
-                <div id="innerTrackCheckedFoodsPopup">
-                    <span >No foods selected to track.</span><br/>
-                    <button type="button" id="closeTrackCheckedFoodsPopupButton" class="buttons" onClick={() => props.closePopup(setMessage, setQuantity, setCategory)}> Close </button> <br />
-                </div>
-            </div>
+            <Container id='trackCheckedFoodsPopup'>
+                <Card id="innerTrackCheckedFoodsPopup" bg='dark' style={center}>
+                    <Card.Text className='m-auto'>No foods selected to track.</Card.Text>
+                    <Button className='m-auto' variant='success' type="button" id="closeCombineFoodsPopupButton" class="buttons" onClick={() => props.closePopup(setMessage, setQuantity, setCategory)}> Close </Button> <br />
+                </Card>
+            </Container>
         );
       }
     
@@ -196,22 +206,25 @@ function TrackCheckedFoodsPopup(props)
       };
 
       return (
-        <div id="trackCheckedFoodsPopup">
-            <div id="innerTrackCheckedFoodsPopup">
-                <span>Quantity for all foods selected: </span><input type="number" step="1" min="1" defaultValue="1" onInput={clearMessage} onKeyPress={preventInvalid} onChange={adjustNutritionalValues} ref={(c) => inputQty = c} /><br />
-                <span>Choose meal (Optional):</span>
-                <select id="categoryDropdown" onInput={clearMessage} onChange={(e) => setCategory(e.target.value)}>
+        <Container id="trackCheckedFoodsPopup">
+            <Card id="innerTrackCheckedFoodsPopup" className='m-auto' bg='dark' style={center}>
+                <Card.Text className='m-auto'>Quantity for all foods selected: </Card.Text>
+                <Form.Control size='sm' className='m-auto' style={{width: '20%'}} type="number" step="1" min="1" defaultValue="1" onInput={clearMessage} onKeyPress={preventInvalid} onChange={adjustNutritionalValues} ref={(c) => inputQty = c} />
+                <Card.Text className='m-auto'>Choose Meal (Optional):</Card.Text>
+                <select className='m-auto' style={{width: '30%'}} id="categoryDropdown" onInput={clearMessage} onChange={(e) => setCategory(e.target.value)}>
                   <option value="0"></option>
                   <option value="1">Breakfast</option>
                   <option value="2">Lunch</option>
                   <option value="3">Dinner</option>
                   <option value="4">Snack</option>
                 </select><br/>
-                <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={doTrackCheckedFoods}> Track </button>
-                <button type="button" id="closeTrackCheckedFoodsPopupButton" class="buttons" onClick={()=>props.closePopup(setMessage, setQuantity, setCategory)}> Close </button> <br />
+                <Col>
+                    <Button variant='success' className='m-2' type="button" id="trackCheckedFoodsButton" class="buttons" onClick={doTrackCheckedFoods}> Track </Button>
+                    <Button variant='success' type="button" id="closeTrackCheckedFoodsPopupButton" class="buttons" onClick={()=>props.closePopup(setMessage, setQuantity, setCategory)}> Close </Button>
+                </Col>
                 <span id="trackCheckedFoodsResult">{message}</span>
-            </div>
-        </div>
+            </Card>
+        </Container>
       );
   }
   export default TrackCheckedFoodsPopup;

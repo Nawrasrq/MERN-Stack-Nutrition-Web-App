@@ -144,7 +144,7 @@ function MainPage()
 
             {show && <DailyCharts foods={foods} />}
 
-            <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Add To Your Daily Consumption </Button>
+            <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Track Food </Button>
         </div>
     );
 };

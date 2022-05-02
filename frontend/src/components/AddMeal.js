@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Container, Form } from 'react-bootstrap';
 
 function AddMeal() 
 {
@@ -94,21 +95,50 @@ function AddMeal()
 
   return (
     <div id="addMealDiv">
-        <form onSubmit={doAddMeal}>
-            <span id="inner-title">Add Meal (required fields indicated by *)</span><br />
-            <input type="text" id="foodName" placeholder="Food Name" onInput={clearMessage} ref={(c) => foodName = c} /> *<br />
-            <input type="number" id="calories" placeholder="Calories" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => calories = c} /> *<br />
-            <input type="number" id="protein" placeholder="Protein (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} /><br />
-            <input type="number" id="carbs" placeholder="Carbohydrates (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} /><br />
-            <input type="number" id="fat" placeholder="Fat (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} /><br />
-            <input type="number" id="fiber" placeholder="Fiber (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} /><br />
-            <input type="number" id="sugar" placeholder="Sugar (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} /><br />
-            <input type="number" id="sodium" placeholder="Sodium (mg)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} /><br />
-            <input type="number" id="cholesterol" placeholder="Cholesterol (mg)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} /><br />
-            <input type="submit" id="addMealButton" class="buttons" value = "Add Meal" onClick={doAddMeal} /><br />
-            <span id="addMealResult">{message}</span>
-        </form>
+        <Container id="loginPage">
+            <Form className='mt-3'>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formWeight">
+                    <Form.Label>Add a New Food (Required fields indicated by *)</Form.Label>
+                    <Form.Control type="text" id="foodName" placeholder="Food Name *" onInput={clearMessage} ref={(c) => foodName = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formCalories">
+                    <Form.Control type="number" id="calories" placeholder="Calories *" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => calories = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formProtein">
+                    <Form.Control type="number" id="protein" placeholder="Protein (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formCarbs">
+                    <Form.Control type="number" id="carbs" placeholder="Carbohydrates (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formFat">
+                    <Form.Control type="number" id="fat" placeholder="Fat (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formFiber">
+                    <Form.Control type="number" id="fiber" placeholder="Fiber (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formSugar">
+                    <Form.Control type="number" id="sugar" placeholder="Sugar (g)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formSodium">
+                    <Form.Control type="number" id="sodium" placeholder="Sodium (mg)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified" className="mb-3" controlId="formCholesterol">
+                    <Form.Control type="number" id="cholesterol" placeholder="Cholesterol (mg)" min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} />
+                </Form.Group>
+
+                <Button 
+                    id="addMealButton"
+                    className="mb-3" 
+                    variant="success" 
+                    onClick={doAddMeal}
+                > 
+                    Create Food 
+                </Button><br/>
+                <span id="addMealResult">{message}</span>
+            </Form>
+        </Container>
      </div>
+     
   );
 };
 

@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
+import { Button, Card, Col, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import '../css/CombineFoodsPopup.css';
+
+var center = {
+    width: '40%',
+    height: '20%',
+    top: '40%',
+    left: '50%',
+    padding: '20px',
+    transform: 'translate(-50%, -50%)',
+}
 
 function CombineFoodsPopup(props)
 {   
@@ -14,12 +24,12 @@ function CombineFoodsPopup(props)
       if (props.foodIds.size <= 0)
       {
         return(
-            <div id="combineFoodsPopup">
-                <div id="innerCombineFoodsPopup">
-                    <span >No foods selected to combine.</span><br/>
-                    <button type="button" id="closeCombineFoodsPopupButton" class="buttons" onClick={() => props.closePopup(setMessage, setNewFoodName)}> Close </button> <br />
-                </div>
-            </div>
+            <Container id='combineFoodsPopup'>
+                <Card id="innerCombineFoodsPopup" bg='dark' style={center}>
+                    <Card.Text className='m-auto'>No foods selected to combine.</Card.Text>
+                    <Button className='m-auto' variant='success' type="button" id="closeCombineFoodsPopupButton" class="buttons" onClick={() => props.closePopup(setMessage, setNewFoodName)}> Close </Button> <br />
+                </Card>
+            </Container>
         );
       }
     
@@ -188,14 +198,18 @@ function CombineFoodsPopup(props)
       }
 
       return (
-        <div id="combineFoodsPopup">
-            <div id="innerCombineFoodsPopup">
-                <input type="text" id="combinedFoodName" placeholder="New Food's Name" onInput={handleNameChange} ref={(c) => foodName = c} /><br />
-                <span>Would you like to create the food "{newFoodName}"?</span><br/>
-                <button type="button" id="combineFoodsButton" class="buttons" onClick={doCombineFoods}> Yes </button>
-                <button type="button" id="closeCombineFoodsPopupButton" class="buttons" onClick={()=>props.closePopup(setMessage, setNewFoodName)}> No </button> <br />
-                <span id="combineFoodsResult">{message}</span>
-            </div>
+        <div >
+            <Container id='combineFoodsPopup'>
+            <Card id="innerCombineFoodsPopup" className='m-auto' bg='dark' style={center}>
+                <Form.Control className='m-auto' style={{width: '75%'}} type="text" id="combinedFoodName" placeholder="New Food's Name" onInput={handleNameChange} ref={(c) => foodName = c} />
+                <Card.Text className='mt-2'>Would you like to create the food "{newFoodName}"?</Card.Text>
+                <Col>
+                <Button variant='success' className='mx-2' type="button" id="combineFoodsButton" class="buttons" onClick={doCombineFoods}> Yes </Button>
+                <Button variant='success' type="button" id="closeCombineFoodsPopupButton" class="buttons" onClick={()=>props.closePopup(setMessage, setNewFoodName)}> No </Button> 
+                </Col>
+                <Card.Text id="combineFoodsResult">{message}</Card.Text>
+            </Card>
+            </Container>
         </div>
       );
   }

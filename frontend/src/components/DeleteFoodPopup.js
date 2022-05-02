@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Card, Col, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import '../css/DeleteFoodPopup.css';
 
 function DeleteFoodPopup(props)
@@ -66,13 +67,26 @@ function DeleteFoodPopup(props)
         }
       }
 
+      var center = {
+        width: '40%',
+        height: '15%',
+        top: '30%',
+        left: '50%',
+        padding: '20px',
+        transform: 'translate(-50%, -50%)',
+      }
+
       return (
-        <div id="deleteFoodPopup">
-            <div id="innerDeleteFoodPopup">
-                <span>Are you sure you want to remove "</span><span>{name}</span><span>"?</span><br />
-                <button type="button" id="yesDeleteButton" class="buttons" onClick={doDeleteFood}>Yes</button>
-                <button type="button" id="noDeleteButton" class="buttons" onClick={props.closePopup}>No</button><br />
-            </div>
+        <div >
+            <Container id='deleteFoodPopup'>
+            <Card id="innerDeleteFoodPopup" className='m-auto' bg='dark' style={center}>
+                <Card.Text>Are you sure you want to remove "{name}"?</Card.Text>
+                <Col>
+                    <Button variant='success' className = 'mx-2' type="button" id="yesDeleteButton" class="buttons" onClick={doDeleteFood}>Yes</Button>
+                    <Button variant='success' type="button" id="noDeleteButton" class="buttons" onClick={props.closePopup}>No</Button>
+                </Col>
+            </Card>
+            </Container>
         </div>
       );
   }

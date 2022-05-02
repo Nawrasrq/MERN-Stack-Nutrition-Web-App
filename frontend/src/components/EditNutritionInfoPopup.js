@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Card, Col, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import '../css/EditNutritionInfoPopup.css';
 
 function EditNutritionInfoPopup(props)
@@ -102,23 +103,73 @@ function EditNutritionInfoPopup(props)
         }
       };
 
+      var center = {
+        width: '40%',
+        height: '50%',
+        top: '70%',
+        left: '50%',
+        padding: '20px',
+        transform: 'translate(-50%, -50%)',
+      }
+
       return (
-        <div id="editNutritionInfoPopup">
-            <div id="innerEditNutritionInfoPopup">
-                <span>Name: </span><input type="text" defaultValue={name} onInput={clearMessage} ref={(c) => name = c} /> <br />
-                <span>Calories: </span><input type="number" defaultValue={calories} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => calories = c} /> <br />
-                <span>Protein: </span><input type="number" defaultValue={protein} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} /> <br />
-                <span>Carbohydrates: </span><input type="number" defaultValue={carbs} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} /> <br />
-                <span>Fat: </span><input type="number" defaultValue={fat} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} /> <br />
-                <span>Fiber: </span><input type="number" defaultValue={fiber} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} /> <br />
-                <span>Sugar: </span><input type="number" defaultValue={sugar} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} /> <br />
-                <span>Sodium: </span><input type="number" defaultValue={sodium} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} /> <br />
-                <span>Cholesterol: </span><input type="number" defaultValue={cholesterol} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} /> <br />
-                <button type="button" id="editNutritionInfoButton" class="buttons" onClick={doEditNutritionInfo}> Edit Nutrition Info </button>
-                <button type="button" id="closeEditNutritionInfoPopupButton" class="buttons" onClick={()=>props.closePopup(didEditFood, setDidEditFood, setMessage)}> Close Edit Nutrition Info </button> <br />
+        <Container id='editNutritionInfoPopup'>
+            <Card id="innerEditNutritionInfoPopup" className='m-auto' bg='dark' style={center}>
+              <Form>
+                <Form.Group style={{width: '80%'}} className='m-auto mb-2' id="leftJustified"  controlId="formEmail">
+                    <Form.Label className='m-auto'>Name: </Form.Label>
+                    <Form.Control className='m-auto' type="text" defaultValue={name} onInput={clearMessage} ref={(c) => name = c} />
+                </Form.Group>
+              </Form>
+              <Row>
+              <Col>
+                <Form>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Calories: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={calories} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => calories = c} />
+                  </Form.Group>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Protein: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={protein} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => protein = c} />
+                  </Form.Group>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Carbohydrates: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={carbs} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => carbs = c} />
+                  </Form.Group>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Fat: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={fat} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fat = c} />
+                  </Form.Group>
+                </Form>
+              </Col>
+              <Col>
+                <Form>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Fiber: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={fiber} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => fiber = c} />
+                  </Form.Group>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Sugar: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={sugar} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sugar = c} />
+                  </Form.Group>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Sodium: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={sodium} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => sodium = c} />
+                  </Form.Group>
+                  <Form.Group style={{width: '60%'}} className='m-auto mb-2' id="leftJustified" controlId="formEmail">
+                      <Form.Label className='m-auto'>Cholesterol: </Form.Label>
+                      <Form.Control className='m-auto' type="number" defaultValue={cholesterol} min="0" onKeyPress={preventInvalid} onInput={clearMessage} ref={(c) => cholesterol = c} />
+                  </Form.Group>
+                </Form>
+              </Col>
+              </Row>
+                <Col>
+                  <Button className='m-2' variant='success' type="button" id="editNutritionInfoButton" class="buttons" onClick={doEditNutritionInfo}> Edit Nutrition Info </Button>
+                  <Button variant='success' type="button" id="closeEditNutritionInfoPopupButton" class="buttons" onClick={()=>props.closePopup(didEditFood, setDidEditFood, setMessage)}> Close Edit Nutrition Info </Button> <br />
+                </Col>
                 <span id="editNutritionInfoResult">{message}</span>
-            </div>
-        </div>
+            </Card>
+        </Container>
       );
   }
   export default EditNutritionInfoPopup;

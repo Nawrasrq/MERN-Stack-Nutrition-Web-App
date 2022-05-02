@@ -47,7 +47,7 @@ function AddToDailyConsumption()
                     {!displayYourFood && <UsdaFood />}
                 </Card.Body>
 
-                <Button className='mx-auto' variant='success' id="addMealButton" onClick={goToCreateMealPage}> Create Meal </Button>
+                <Button className='mx-auto' variant='success' id="addMealButton" onClick={goToCreateMealPage}> Create Food </Button>
                 </Card>
             </Container>
         </div>
