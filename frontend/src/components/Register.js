@@ -32,8 +32,7 @@ function Register()
                 // (LATER) Try adding popup window that tells user they successfully registered
                 // and that they need to check email for verification to log in.
 
-                alert("Check Email to Verify before Logging In");
-                window.location.href = "/";
+                setMessage("Check Email to Verify before Logging In");
                 return;
             }
         }
