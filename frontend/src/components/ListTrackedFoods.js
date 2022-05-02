@@ -189,7 +189,7 @@ function ListTrackedFoods(props)
                                             : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
                         <span> | Calories: {food.Quantity * food.Calories}</span>
                         {food.Category !== 0 && <span> | Meal: {mealValues[food.Category]}</span>}
-                        <Button variant='primary' className='m-3' onClick={() => doUntrackFood(food._id)} > Remove </Button><br/>
+                        <Button variant='primary' className='m-3' onClick={() => doUntrackFood(food._id)} > Untrack </Button><br/>
                     </li>
                 ))}
             </ul>

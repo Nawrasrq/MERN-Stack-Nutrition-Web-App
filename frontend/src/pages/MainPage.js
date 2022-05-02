@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar';
 import ListTrackedFoods from '../components/ListTrackedFoods';
+import DailyNutritionalInfo from '../components/DailyNutritionalInfo.js';
 
 function MainPage()
 {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [message, setMessage] = useState('');
+    const [selectedDate, setSelectedDate] = new useState(new Date());
+    const [message, setMessage] = new useState('');
     const [foods, setFoods] = new useState([]);
 
+    // Used to make sure that child components get up to date info
+    const [show, setShow] = new useState(false);
 
     // Number of milliseconds in a day
     const msInDay = 86400000;
@@ -19,7 +22,8 @@ function MainPage()
         setSelectedDate(newDate);
         doRetrieveTrackedFoods(newDate);
     }
-    
+    console.log("here");
+
     function incrementDay()
     {
         let newDate = new Date(selectedDate.valueOf() + msInDay);
@@ -37,6 +41,8 @@ function MainPage()
 
     async function doRetrieveTrackedFoods(newDate)
     {
+        //setShow(false);
+
         // clear message since new message is ab to be displayed
         setMessage("");
 
@@ -84,6 +90,7 @@ function MainPage()
             {
                 setMessage(res.error);
                 setFoods([]);
+                setShow(false);
             }
             else
             {
@@ -104,6 +111,8 @@ function MainPage()
                 }
 
                 setFoods(sortedFoods);
+                setShow(false);
+                setShow(true);
             }
         }
         catch(e)
@@ -125,8 +134,10 @@ function MainPage()
             <span>{selectedDate.toDateString()}</span>
             <Button variant='primary' className='m-3' disabled={selectedDate.toLocaleDateString() === (new Date()).toLocaleDateString()} onClick={incrementDay} > Next </Button><br/>
 
-            <ListTrackedFoods foods={foods} setMessage={setMessage} retrieveTrackedFoods={doRetrieveTrackedFoods} currentDate={selectedDate} />
-            <span>{message}</span><br/>
+            {show && <ListTrackedFoods foods={foods} setMessage={setMessage} retrieveTrackedFoods={doRetrieveTrackedFoods} currentDate={selectedDate} />}
+            <span>{message}</span><br/><br/>
+
+            {show && <DailyNutritionalInfo foods={foods} />}
 
             <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Add To Your Daily Consumption </Button>
         </div>
