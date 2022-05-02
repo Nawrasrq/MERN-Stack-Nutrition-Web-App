@@ -38,7 +38,7 @@ function AddToDailyConsumption()
     return(
         <div>
             <Container className='' style={{padding: '20px', height: '100vh'}}>
-                <Card  bg='dark' border='success' style={{padding: '15px', display: 'flex'}}>
+                <Card  bg='dark' style={{padding: '15px', display: 'flex'}}>
                 <Card.Header>Search for meals to add to your list of foods consumed today</Card.Header>
                 <Button className='mx-auto mt-3' variant='success' id="switchSearchState"  onClick={switchSearchState}>{toggleString}</Button>
                 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Col, Card, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import '../css/TrackFoodPopup.css';
 
 function TrackFoodPopup(props)
@@ -149,32 +150,48 @@ function TrackFoodPopup(props)
         }
       };
 
+      var center = {
+        width: '40%',
+        height: '70%',
+        top: '50%',
+        left: '20%',
+        padding: '20px',
+        transform: 'translate(-50%, -50%)',
+      }
+
       return (
-        <div id="trackFoodPopup">
-            <div id="innerTrackFoodPopup">
-                <span>{name}</span><br/>
-                <span>Calories: {calories * quantity}</span><br/>
-                <span>Protein: {protein * quantity}</span><br/>
-                <span>Carbohydrates: {carbs * quantity}</span><br/>
-                <span>Fat: {fat * quantity}</span><br/>
-                <span>Fiber: {fiber * quantity}</span><br/>
-                <span>Sugar: {sugar * quantity}</span><br/>
-                <span>Sodium: {sodium * quantity}</span><br/>
-                <span>Cholesterol: {cholesterol * quantity}</span><br/>
-                <span>Quantity: </span><input type="number" step="1" min="1" defaultValue="1" onInput={clearMessage} onKeyPress={preventInvalid} onChange={adjustNutritionalValues} ref={(c) => inputQty = c} /><br />
-                <span>{servingLabel}</span>{showServing && <br/>}
-                <span>Choose meal (Optional):</span>
-                <select id="categoryDropdown" onInput={clearMessage} onChange={(e) => setCategory(e.target.value)}>
-                  <option value="0"></option>
-                  <option value="1">Breakfast</option>
-                  <option value="2">Lunch</option>
-                  <option value="3">Dinner</option>
-                  <option value="4">Snack</option>
-                </select><br/>
-                <button type="button" id="trackFoodButton" class="buttons" onClick={doTrackFood}> Track </button>
-                <button type="button" id="closeTrackFoodPopupButton" class="buttons" onClick={()=>props.closePopup(setMessage, setQuantity, setCategory)}> Close </button> <br />
-                <span id="trackFoodResult">{message}</span>
-            </div>
+        <div>
+          <Container id="trackFoodPopup">
+            <Card id='innerTrackFoodPopup' className='m-auto' bg='dark' style={center}>
+            <Card.Text>Quantity: </Card.Text>
+            <Form.Control size='sm' className='mb-3 mx-auto' style={{width: '20%'}} type="number" step="1" min="1" defaultValue="1" onInput={clearMessage} onKeyPress={preventInvalid} onChange={adjustNutritionalValues} ref={(c) => inputQty = c} />
+              <ListGroup className='mx-5' style={{height: '70%', textAlign: 'center'}}>
+                <ListGroup.Item active variant='dark' style={{width: '100%'}}>{name}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Calories: {calories * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Protein: {protein * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Carbohydrates: {carbs * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Fat: {fat * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Fiber: {fiber * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Sugar: {sugar * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Sodium: {sodium * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Cholesterol: {cholesterol * quantity}</ListGroup.Item>
+              </ListGroup>
+              <Card.Text className='m-0'>{servingLabel}</Card.Text>{showServing && <br/>}
+              <Card.Text className='m-1'>Choose meal (Optional):</Card.Text>
+              <select id="categoryDropdown" onInput={clearMessage} onChange={(e) => setCategory(e.target.value)}>
+                <option value="0"></option>
+                <option value="1">Breakfast</option>
+                <option value="2">Lunch</option>
+                <option value="3">Dinner</option>
+                <option value="4">Snack</option>
+              </select><br/>
+              <Col className = 'mt-2'>
+                <Button className='mx-2' variant='success' id="trackFoodButton" onClick={doTrackFood}> Track </Button>
+                <Button variant='success' id="closeTrackFoodPopupButton" onClick={()=>props.closePopup(setMessage, setQuantity, setCategory)}> Close </Button> <br />
+              </Col>
+              <span id="trackFoodResult">{message}</span>
+            </Card>
+          </Container>
         </div>
       );
   }

@@ -80,7 +80,7 @@ function GoalsDisplay()
   return (
     <div id="addMealDiv">
         <Container style={{padding: '20px'}}>
-            <Card  bg='dark' border='success' style={{padding: '20px', display: 'flex'}}>
+            <Card  bg='dark' style={{padding: '20px', display: 'flex'}}>
                 <Card.Title >
                     {firstName} {lastName}'s Current Goals
                 </Card.Title>

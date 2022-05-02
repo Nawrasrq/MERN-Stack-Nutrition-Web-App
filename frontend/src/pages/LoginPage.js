@@ -22,7 +22,7 @@ function LoginPage()
 			</Container>
 		</Navbar>
 		<Container id='loginPage'>
-			<Card bg='dark' border='success' style={{padding: '20px'}}>
+			<Card bg='dark' style={{padding: '20px'}}>
 				<Nav variant='tabs' defaultActiveKey="/">
 					<Nav.Item>
 						<Nav.Link href="/">Login</Nav.Link>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Card, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import '../css/NutritionInfoPopup.css';
 
 export default class NutritionInfoPopup extends React.Component {
@@ -59,21 +60,34 @@ export default class NutritionInfoPopup extends React.Component {
         showServing = false;
       }
 
+      var center = {
+        width: '40%',
+        height: '50%',
+        top: '50%',
+        left: '20%',
+        padding: '20px',
+        transform: 'translate(-50%, -50%)',
+      }
+
       return (
-        <div id="nutritionInfoPopup">
-            <div id="innerNutritionInfoPopup">
-                <span>Name: {name}</span><br/>
-                <span>{servingLabel}</span>{showServing && <br/>}
-                <span>Calories: {calories}</span><br/>
-                <span>Protein: {protein}g</span><br/>
-                <span>Carbohydrates: {carbs}g</span><br/>
-                <span>Fat: {fat}g</span><br/>
-                <span>Fiber: {fiber}g</span><br/>
-                <span>Sugar: {sugar}g</span><br/>
-                <span>Sodium: {sodium}mg</span><br/>
-                <span>Cholesterol: {cholesterol}mg</span><br/>
-                <button type="button" id="closeNutritionInfoPopupButton" class="buttons" onClick={this.props.closePopup}> Close </button>
-            </div>
+        <div >
+            <Container id='nutritionInfoPopup'>
+                <Card id='innerNutritionInfoPopup' className='m-auto' bg='dark' style={center}>
+                    <ListGroup style={{height: '95%', overflowY: 'scroll'}}>
+                        <ListGroup.Item active variant='dark' style={{width: '95%'}} className='m-auto'>{name}</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} hidden={!showServing} className='m-auto'>{servingLabel}</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Calories: {calories}</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Protein: {protein}g</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Carbohydrates: {carbs}g</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Fat: {fat}g</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Fiber: {fiber}g</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Sugar: {sugar}g</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Sodium: {sodium}mg</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Cholesterol: {cholesterol}mg</ListGroup.Item>
+                    </ListGroup>
+                    <Button className='m-auto' variant='success' id="closeNutritionInfoPopupButton" onClick={this.props.closePopup}> Close </Button>
+                </Card>
+            </Container>
         </div>
       );
     }

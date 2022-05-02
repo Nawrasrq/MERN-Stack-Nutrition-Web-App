@@ -105,7 +105,7 @@ function GoalsDisplay()
     return (
         <div>
             <Container style={style}>
-                <Card  bg='dark' border='success' style={{padding: '20px', display: 'flex'}}>
+                <Card  bg='dark' style={{padding: '20px', display: 'flex'}}>
                     <Card.Body style={style}>
                         <Col className='m-3'>
                             <Row >
