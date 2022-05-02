@@ -78,13 +78,13 @@ function DailyNutritionalInfo(props)
         <div>
             <span>Daily Nutrtitional Intake:</span><br/>
             <span>  Calories: {totalNutrtionInfo.TotalCalories}</span><br/>
-            <span>  Protein: {totalNutrtionInfo.TotalProtein}</span><br/>
-            <span>  Carbohydrates: {totalNutrtionInfo.TotalCarbs}</span><br/>
-            <span>  Fat: {totalNutrtionInfo.TotalFat}</span><br/>
-            <span>  Fiber: {totalNutrtionInfo.TotalFiber}</span><br/>
-            <span>  Sugar: {totalNutrtionInfo.TotalSugar}</span><br/>
-            <span>  Sodium: {totalNutrtionInfo.TotalSodium}</span><br/>
-            <span>  Cholesterol: {totalNutrtionInfo.TotalCholesterol}</span><br/>
+            <span>  Protein: {totalNutrtionInfo.TotalProtein}g</span><br/>
+            <span>  Carbohydrates: {totalNutrtionInfo.TotalCarbs}g</span><br/>
+            <span>  Fat: {totalNutrtionInfo.TotalFat}g</span><br/>
+            <span>  Fiber: {totalNutrtionInfo.TotalFiber}g</span><br/>
+            <span>  Sugar: {totalNutrtionInfo.TotalSugar}g</span><br/>
+            <span>  Sodium: {totalNutrtionInfo.TotalSodium}mg</span><br/>
+            <span>  Cholesterol: {totalNutrtionInfo.TotalCholesterol}mg</span><br/>
         </div>
     );
 };
