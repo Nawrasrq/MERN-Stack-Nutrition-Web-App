@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, ProgressBar } from 'react-bootstrap';
+import { Container, Row, Col, Progress, ProgressBar } from 'react-bootstrap';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import 'chart.js/auto';
@@ -60,10 +60,11 @@ function GoalsDisplay(props)
                 text: 'Macro Breakdown',
                 color:'white',
                 font: {
-                    size:30
+                    size:30,
+                    weight:'normal'
                 },
                 padding:{
-                    top:30,
+                    top:0,
                     bottom:30
                 },
                 responsive:true,
@@ -71,7 +72,7 @@ function GoalsDisplay(props)
                     animateScale: true,
                 }
             },
-            Legend: {
+            legend: {
                 fontColor:"white"
             },
             tooltip: {
@@ -199,16 +200,19 @@ function GoalsDisplay(props)
     }
 
   return (
-    <div>
-        <Container style={{padding: '20px'}}>
-            <Row>
-                <Col style={{width: '100vh'}}>
+    <div> 
+        <Row>
+            <Col style={{width: '100vh'}}>
+                <Container style={{height:'70vh', width:'70vh', marginBottom:'5%'}} >
                     <Doughnut data={data} options={options} plugins={[ChartDataLabels]} />
-                </Col>
-                <Col style={{width: '100vh'}}>
-                    <h1>Progress toward Daily Goals</h1>
+                </Container>
+            </Col>
+            <Col style={{width: '100vh'}}>
+                <Container style={{height:'80%', width:'100%', marginBottom:'5%'}}>
+                    <span style={{fontSize:'30px'}}>Progress toward Daily Goals</span>
                     {goals !== null && totalNutrtionInfo !== null &&
-                        <div>
+                        <div style={{position:'relative', top:'50%', transform:'translateY(-50%)'}}>
+                        <Col>
                             <span>Calories</span><ProgressBar now={Math.round(totalNutrtionInfo.TotalCalories / goals.Calories * 100)} label={`${totalNutrtionInfo.TotalCalories} / ${goals.Calories} kcal (${Math.round(totalNutrtionInfo.TotalCalories / goals.Calories * 100)}%)`} />
                             <span>Protein</span><ProgressBar now={Math.round(totalNutrtionInfo.TotalProtein / goals.Protein * 100)} label={`${totalNutrtionInfo.TotalProtein} / ${goals.Protein} g (${Math.round(totalNutrtionInfo.TotalProtein / goals.Protein * 100)}%)`} />
                             <span>Carbs</span><ProgressBar now={Math.round(totalNutrtionInfo.TotalCarbs / goals.Carbs * 100)} label={`${totalNutrtionInfo.TotalCarbs} / ${goals.Carbs} g (${Math.round(totalNutrtionInfo.TotalCarbs / goals.Carbs * 100)}%)`} />
@@ -217,11 +221,12 @@ function GoalsDisplay(props)
                             <span>Sugar</span><ProgressBar now={Math.round(totalNutrtionInfo.TotalSugar / goals.Sugar * 100)} label={`${totalNutrtionInfo.TotalSugar} / ${goals.Sugar} g (${Math.round(totalNutrtionInfo.TotalSugar / goals.Sugar * 100)}%)`} />
                             <span>Sodium</span><ProgressBar now={Math.round(totalNutrtionInfo.TotalSodium / goals.Sodium * 100)} label={`${totalNutrtionInfo.TotalSodium} / ${goals.Sodium} mg (${Math.round(totalNutrtionInfo.TotalSodium / goals.Sodium * 100)}%)`} />
                             <span>Cholesterol</span><ProgressBar now={Math.round(totalNutrtionInfo.TotalCholesterol / goals.Cholesterol * 100)} label={`${totalNutrtionInfo.TotalCholesterol} / ${goals.Cholesterol} mg (${Math.round(totalNutrtionInfo.TotalCholesterol / goals.Cholesterol * 100)}%)`} />
+                        </Col>
                         </div>
                     }
-                </Col>
-            </Row>
-        </Container>
+                </Container>
+            </Col>
+        </Row> 
     </div>
   );
 };

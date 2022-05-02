@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, ListGroup } from 'react-bootstrap';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 
 function useOutsideAlerter(ref, setEditFoodId) 
@@ -197,23 +198,68 @@ function ListTrackedFoods(props)
         }
     };
 
+    var style =
+    {
+        padding: '10px', 
+        display: 'flex', 
+        'textAlign':'center', 
+        'justifyContent':'center', 
+        'alignItems':'center',
+        width: '100%'
+    }
+
     // Simply just displays all the foods retrieved in a nice list format
     return(
         <div>
-            <ul>
-                {props.foods.map(food => (
-                    <li key={food._id}>
-                        <span>{food.Name = food.Name.split(" ").map((w) => { return w[0].toUpperCase() + w.substring(1); }).join(" ")} | Qty: </span>
-                        {(editFoodId !== food._id) ? <span onClick={() => handleOpeningInput(food._id)}> {food.Quantity} </span> 
-                                            : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
-                        <span> | Calories: {food.Quantity * food.Calories}</span>
-                        <span> | Meal: {mealValues[food.Category]}</span>
-                        <Button variant='success' className='m-3' onClick={() => showInfoPopup(food)} > View </Button>
-                        <Button variant='success' className='m-3' onClick={() => doUntrackFood(food._id)} > Untrack </Button><br/>
-                    </li>
-                ))}
-            </ul>
-            <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
+            <Row>
+                <Card style={{backgroundColor: '#35394a', padding: '10px', width:"100%", display: 'flex'}}>
+                <Card.Body style={style}>
+                    <ListGroup className = 'mb-3' style={{height: '75vh', width:'100%', 'overflow-y': 'scroll'}}>
+                        <ListGroup horizontal >
+                            <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#848FA5'}} >
+                                <span>Decription</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#848FA5'}} >
+                                <span>Amount</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#848FA5'}} >
+                                <span>Calories</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#848FA5'}} >
+                                <span>Meal</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item style={{width: '100%', padding:'1px', backgroundColor:'#848FA5'}} >
+                                <span></span>
+                            </ListGroup.Item>
+                        </ListGroup>
+                        {props.foods.map(food => (
+                            <ListGroup horizontal style = {{width:'100%', borderStyle:'solid', borderColor:'#35394a'}} key={food._id}>
+                                <ListGroup.Item style={{width: '100%', textAlign: 'left', display:'flex', alignItems:'center', color:'black'}} variant='success'>
+                                    <span>{food.Name = food.Name.split(" ").map((w) => { return w[0].toUpperCase() + w.substring(1); }).join(" ")}</span>
+                                </ListGroup.Item>
+                                <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', color:'black'}} variant='success'>
+                                    {(editFoodId !== food._id) ? <span style={{cursor:'pointer'}} onClick={() => handleOpeningInput(food._id)}> {food.Quantity} </span> 
+                                                        : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
+                                </ListGroup.Item>
+                                <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', color:'black'}} variant='success'>
+                                    <span>{food.Quantity * food.Calories}</span>
+                                </ListGroup.Item>
+                                <ListGroup.Item style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center', color:'black'}} variant='success'>
+                                    <span>{mealValues[food.Category]}</span>
+                                </ListGroup.Item>
+                                <ListGroup.Item style={{width: '100%', padding:'1px'}} variant='dark'>
+                                    <Button variant='success' className='m-3' onClick={() => showInfoPopup(food)} > View </Button>
+                                    <Button variant='success' className='m-3' onClick={() => doUntrackFood(food._id)} > Untrack </Button><br/>
+                                </ListGroup.Item>
+                            </ListGroup>
+                        ))}
+                    </ListGroup>
+                </Card.Body>
+                </Card>
+            </Row>
+            <Row>
+                <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
+            </Row>
         </div>
     );
 };

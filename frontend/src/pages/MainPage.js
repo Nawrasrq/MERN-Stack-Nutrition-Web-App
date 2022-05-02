@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar';
 import ListTrackedFoods from '../components/ListTrackedFoods';
-import DailyNutritionalInfo from '../components/DailyNutritionalInfo.js';
 import DailyCharts from '../components/DailyCharts.js';
 
 function MainPage()
@@ -138,13 +137,11 @@ function MainPage()
             <Button variant='primary' className='m-3' disabled={selectedDate.toLocaleDateString() === (new Date()).toLocaleDateString()} onClick={incrementDay} > Next </Button><br/>
 
             {show && <ListTrackedFoods foods={foods} setMessage={setMessage} retrieveTrackedFoods={doRetrieveTrackedFoods} currentDate={selectedDate} />}
-            <span>{message}</span><br/><br/>
-
-            {show && <DailyNutritionalInfo foods={foods} />}
+            <span>{message}{message.length > 0 && <br/>}</span>
+            <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Add To Your Daily Consumption </Button><br/><br/><br/>
 
             {show && <DailyCharts foods={foods} />}
 
-            <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Track Food </Button>
         </div>
     );
 };
