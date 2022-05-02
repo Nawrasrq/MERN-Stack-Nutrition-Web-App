@@ -5,15 +5,9 @@ import AddToDailyConsumption from '../components/AddToDailyConsumption.js';
 function AddToDailyConsumptionPage()
 {
 
-    function goBack()
-	{
-		window.location.href = "/Main"
-	}
-
     return(
         <div>
             <NavigationBar />
-			<button type="button" id="backButton" class="buttons" onClick={goBack}> Back </button>
             <AddToDailyConsumption />
         </div>
     );

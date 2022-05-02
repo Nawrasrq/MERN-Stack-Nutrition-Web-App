@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Card, Container, Form, ListGroup, Row } from 'react-bootstrap';
 import TrackFoodPopup from './TrackFoodPopup.js';
 import NutritionInfoPopup from './NutritionInfoPopup.js';
 import EditNutritionInfoPopup from './EditNutritionInfoPopup.js';
@@ -195,6 +196,15 @@ function YourFood()
             });
 
             // Update array with the new foods found from the search
+            let num;
+            for (num in res) // Declan is a js wizard because this worked first try
+            {
+                let word = res[num].Name;
+                word = word.split(" ").map((word) => { 
+                    return word[0].toUpperCase() + word.substring(1); 
+                }).join(" ");
+                res[num].Name = word;
+            }
             setFoods(res);
             return;
         }
@@ -212,30 +222,36 @@ function YourFood()
       
     return(
         <div>
-            <input type="text" id="searchText" placeholder="Search Here" onKeyUp={doSearchFoods} ref={(c) => searchText = c} /><br />
+            <Form >
+                <Form.Control className='mx-auto' style={{width: 'min(800px, 50vw)'}} type="text" id="searchText" placeholder="Search Here" onKeyUp={doSearchFoods} ref={(c) => searchText = c} />
+            </Form>
 
-            <ul>
+            <ListGroup className = 'mb-3' style={{height: '50vh', 'overflow-y': 'scroll'}}>
                 {foods.map(food => (
-                    <li key={food._id}>
-                        <input type="checkbox" id="selectFood" class="checkboxes" onChange={() => handleCheckboxChange(food._id)}></input>
-                        <span>{food.Name}</span>
-                        <button type="button" id="addFoodToDailyConsumptionButton" class="buttons" onClick={() => showTrackFoodPopup(food)}> Add </button>
-                        <button type="button" id="viewNutritionInfoButton" class="buttons" onClick={() => showInfoPopup(food)}> View </button>
-                        <button type="button" id="editNutritionInfoButton" class="buttons" onClick={() => showEditInfoPopup(food)}>Edit </button>
-                        <button type="button" id="deleteFoodButton" class="buttons" onClick={() => showDeleteFoodPopup(food)} >Delete </button>
-                    </li>
+                    <ListGroup horizontal>
+                        <ListGroup.Item style={{width: '100%', textAlign: 'left'}} key={food._id} variant='success'>
+                            <input type="checkbox" id="selectFood" onChange={() => handleCheckboxChange(food._id)}></input>
+                            <span> {food.Name}</span>
+                        </ListGroup.Item>
+                        <ListGroup.Item style={{width: '45%'}} variant='dark'>
+                            <Button size='sm' className='mx-1' variant='success' id="addFoodToDailyConsumptionButton" onClick={() => showTrackFoodPopup(food)} > Add </Button>
+                            <Button size='sm' className='mr-1' variant='success' id="viewNutritionInfoButton" onClick={() => showInfoPopup(food)} > View </Button>
+                            <Button size='sm' className='m-1' variant='success'  id="editNutritionInfoButton" onClick={() => showEditInfoPopup(food)}>Edit </Button>
+                            <Button size='sm' className='mr-1' variant='success' id="deleteFoodButton" onClick={() => showDeleteFoodPopup(food)} >Delete </Button>
+                        </ListGroup.Item>
+                    </ListGroup>
                 ))}
-            </ul>
+            </ListGroup>
             <TrackFoodPopup show={trackFoodPopupState} food={selectedFoodInfo} closePopup={hideTrackFoodPopup} />
             <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
             <EditNutritionInfoPopup show={editNutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideEditInfoPopup} />
             <DeleteFoodPopup show={deleteFoodPopupState} food={selectedFoodInfo} closePopup={hideDeleteFoodPopup} />
 
             <TrackCheckedFoodsPopup show={trackCheckedFoodsPopupState} foodIds={checkedSet} foods={foods} closePopup={hideTrackCheckedFoodsPopup} />
-            <button type="button" id="trackCheckedFoodsButton" class="buttons" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </button>
+            <Button className='mx-3' variant='success' id="trackCheckedFoodsButton" onClick={showTrackCheckedFoodsPopup}> Track Selected Foods </Button>
 
             <CombineFoodsPopup show={combineFoodsPopupState} foodIds={checkedSet} foods={foods} closePopup={hideCombineFoodsPopup} />
-            <button type="button" id="combineFoodsButton" class="buttons" onClick={showCombineFoodsPopup}> Combine Selected Foods </button>
+            <Button className='mx-auto' variant='success' id="combineFoodsButton" onClick={showCombineFoodsPopup}> Combine Selected Foods </Button>
         </div>
     );
 };
