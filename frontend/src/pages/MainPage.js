@@ -22,7 +22,6 @@ function MainPage()
         setSelectedDate(newDate);
         doRetrieveTrackedFoods(newDate);
     }
-    console.log("here");
 
     function incrementDay()
     {
@@ -41,8 +40,6 @@ function MainPage()
 
     async function doRetrieveTrackedFoods(newDate)
     {
-        //setShow(false);
-
         // clear message since new message is ab to be displayed
         setMessage("");
 
@@ -98,9 +95,9 @@ function MainPage()
 
                 // O(5n) algorithm to sort tracked foods by meal where n = number of tracked foods for that day
                 let numMealOptions = 5;
-                for (let mealType = 0; mealType < numMealOptions; mealType++)
+                let n = res.trackedFoods.length;
+                for (let mealType = 1; mealType < numMealOptions; mealType++)
                 {
-                    let n = res.trackedFoods.length;
                     for (let i = 0; i < n; i++)
                     {
                         if (res.trackedFoods[i].Category === mealType)
@@ -108,6 +105,11 @@ function MainPage()
                             sortedFoods.push(res.trackedFoods[i]);
                         }
                     }
+                }
+                for (let i = 0; i < n; i++)
+                {
+                    if (res.trackedFoods[i].Category === 0)
+                        sortedFoods.push(res.trackedFoods[i]);
                 }
 
                 setFoods(sortedFoods);
