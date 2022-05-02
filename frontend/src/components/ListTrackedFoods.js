@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from 'react-bootstrap';
+import NutritionInfoPopup from './NutritionInfoPopup.js';
 
 function useOutsideAlerter(ref, setEditFoodId) 
 {
@@ -22,6 +23,9 @@ function useOutsideAlerter(ref, setEditFoodId)
 function ListTrackedFoods(props)
 {
     const [editFoodId, setEditFoodId] = useState(-1);
+    const [selectedFoodInfo, setSelectedFoodInfo] = useState({});
+    const [nutritionInfoPopupState, setNutritionInfoPopupState] = useState(false);
+
     const wrapperRef = useRef(null);
 
     // Array that defines what each meal's corresponding int value is
@@ -165,6 +169,21 @@ function ListTrackedFoods(props)
         }
     }
 
+    // Sets value to true to display nutrition info of whatever food was selected
+    function showInfoPopup(selectedFood)
+    {
+        props.setMessage('');
+        setNutritionInfoPopupState(true);
+        setSelectedFoodInfo(selectedFood);
+    }
+
+    // Sets value to false to close nutrtion info popup
+    function hideInfoPopup()
+    {
+        setNutritionInfoPopupState(false);
+        setSelectedFoodInfo({});
+    }
+
     function handleOpeningInput(id)
     {
         props.setMessage("");
@@ -189,10 +208,12 @@ function ListTrackedFoods(props)
                                             : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
                         <span> | Calories: {food.Quantity * food.Calories}</span>
                         <span> | Meal: {mealValues[food.Category]}</span>
-                        <Button variant='primary' className='m-3' onClick={() => doUntrackFood(food._id)} > Untrack </Button><br/>
+                        <Button variant='success' className='m-3' onClick={() => showInfoPopup(food)} > View </Button>
+                        <Button variant='success' className='m-3' onClick={() => doUntrackFood(food._id)} > Untrack </Button><br/>
                     </li>
                 ))}
             </ul>
+            <NutritionInfoPopup show={nutritionInfoPopupState} food={selectedFoodInfo} closePopup={hideInfoPopup} />
         </div>
     );
 };

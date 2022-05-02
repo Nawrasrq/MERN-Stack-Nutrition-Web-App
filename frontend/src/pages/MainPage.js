@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar';
 import ListTrackedFoods from '../components/ListTrackedFoods';
 import DailyNutritionalInfo from '../components/DailyNutritionalInfo.js';
+import DailyCharts from '../components/DailyCharts.js';
 
 function MainPage()
 {
@@ -140,6 +141,8 @@ function MainPage()
             <span>{message}</span><br/><br/>
 
             {show && <DailyNutritionalInfo foods={foods} />}
+
+            {show && <DailyCharts foods={foods} />}
 
             <Button variant='primary' className='m-3' href="/Main/AddToDailyConsumption" > Add To Your Daily Consumption </Button>
         </div>
