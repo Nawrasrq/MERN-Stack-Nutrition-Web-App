@@ -77,7 +77,7 @@ function DailyNutritionalInfo(props)
     return(
         <div>
             <span>Daily Nutrtitional Intake:</span><br/>
-            <span>Calories: {totalNutrtionInfo.TotalCalories}</span><br/>
+            <span>  Calories: {totalNutrtionInfo.TotalCalories}</span><br/>
             <span>  Protein: {totalNutrtionInfo.TotalProtein}</span><br/>
             <span>  Carbohydrates: {totalNutrtionInfo.TotalCarbs}</span><br/>
             <span>  Fat: {totalNutrtionInfo.TotalFat}</span><br/>

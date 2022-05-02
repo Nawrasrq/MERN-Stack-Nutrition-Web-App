@@ -25,7 +25,7 @@ function ListTrackedFoods(props)
     const wrapperRef = useRef(null);
 
     // Array that defines what each meal's corresponding int value is
-    const mealValues = ["None", "Breakfast", "Lunch", "Dinner", "Snack"];
+    const mealValues = ["Other", "Breakfast", "Lunch", "Dinner", "Snack"];
 
     // This will keep track of whatever the user types in the input field
     var inputQty;
@@ -184,11 +184,11 @@ function ListTrackedFoods(props)
             <ul>
                 {props.foods.map(food => (
                     <li key={food._id}>
-                        <span>{food.Name} | Qty: </span>
+                        <span>{food.Name = food.Name.split(" ").map((w) => { return w[0].toUpperCase() + w.substring(1); }).join(" ")} | Qty: </span>
                         {(editFoodId !== food._id) ? <span onClick={() => handleOpeningInput(food._id)}> {food.Quantity} </span> 
                                             : <div ref={wrapperRef}><input type="number" placeholder={food.Quantity} defaultValue={food.Quantity} min="0" onKeyPress={preventInvalid} ref={(c) => inputQty = c} ></input><Button variant='primary' className='m-3' onClick={() => doUpdateQuantity(food._id)} > Save </Button></div>}
                         <span> | Calories: {food.Quantity * food.Calories}</span>
-                        {food.Category !== 0 && <span> | Meal: {mealValues[food.Category]}</span>}
+                        <span> | Meal: {mealValues[food.Category]}</span>
                         <Button variant='primary' className='m-3' onClick={() => doUntrackFood(food._id)} > Untrack </Button><br/>
                     </li>
                 ))}
