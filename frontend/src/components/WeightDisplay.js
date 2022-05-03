@@ -12,6 +12,7 @@ function GoalsDisplay()
 
     var inputWeight;
     var displayWeight;
+    var weightDate;
     var weights;
     var storage = require('../tokenStorage.js');
     var tok = storage.retrieveToken();
@@ -41,7 +42,10 @@ function GoalsDisplay()
             }
             weights = res.weights;
             displayWeight = weights[weights.length - 1].Weight;
+            weightDate = weights[weights.length - 1].Date;
             document.getElementById('displayWeight').innerHTML = displayWeight;
+            document.getElementById('weightDate').innerHTML = weightDate;
+            
             
         }
         catch(e)
@@ -109,18 +113,18 @@ function GoalsDisplay()
                     <Card.Body style={style}>
                         <Col className='m-3'>
                             <Row >
-                                <Card.Text style={{width: '140px', 'textAlign': 'center'}} id='leftJustified'>
-                                    Current Weight: <span id='displayWeight'></span> lbs
+                                <Col>
+                                <Card.Text style={{width: '180px', 'textAlign': 'center'}} id='leftJustified'>
+                                    Last Recorded: <span id='weightDate'></span><br/>
+                                    Weight: <span id='displayWeight'></span> lbs
                                 </Card.Text>
+                                </Col>
                                 <Form style={{width: '150px'}}>
                                     <Form.Group id="leftJustified" className="mb-3" controlId="formEmail">
                                         <Form.Control type="text" placeholder="Weight" ref={(c) => inputWeight = c} />
                                     </Form.Group>
                                 </Form>
                                 <Button style={{width: '150px', height: '40px'}} variant='success' onClick={doRecordWeight}>Record Weight</Button>
-                            </Row>
-                            <Row className = 'm-3'>
-                                Insert Weight Graph Here
                             </Row>
                         </Col>
                     </Card.Body>

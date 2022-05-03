@@ -26,7 +26,7 @@ function NavigationBar()
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             <Nav.Link href="/Main">Home</Nav.Link>
-                            <Nav.Link href="/Goals">Goals</Nav.Link>
+                            <Nav.Link href="/Goals">Weight</Nav.Link>
                             <Nav.Link href="/Profile">Profile</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
