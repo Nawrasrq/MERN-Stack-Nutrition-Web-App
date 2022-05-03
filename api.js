@@ -487,6 +487,7 @@ exports.setApp = function ( app, client )
         
         const {Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
         const id = req.params.id;
+        alert(id);
 
         let refreshedToken = null;
         let error = '';
@@ -538,7 +539,6 @@ exports.setApp = function ( app, client )
             error = "";
             ret = {meal: meal, error: error, jwtToken: refreshedToken};
         }
-        
         else{
             error = "meal not found";
             ret = {error: error, jwtToken: refreshedToken};
