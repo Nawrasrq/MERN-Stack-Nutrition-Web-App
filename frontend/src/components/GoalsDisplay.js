@@ -99,14 +99,14 @@ function GoalsDisplay()
                                 Daily
                             </Card.Header>
                             <ListGroup>
-                                <ListGroup.Item variant='dark'>Calories: <span id='Calories'/></ListGroup.Item>
-                                <ListGroup.Item variant='dark'>Protein: <span id='Protein'/> g</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Calories: <span id='Calories'/>kcal</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Protein: <span id='Protein'/>g</ListGroup.Item>
                                 <ListGroup.Item variant='dark'>Carbohydrates: <span id='Carbohydrates'/> g</ListGroup.Item>
-                                <ListGroup.Item variant='dark'>Fat: <span id='Fat'/> g</ListGroup.Item>
-                                <ListGroup.Item variant='dark'>Fiber: <span id='Fiber'/> g</ListGroup.Item>
-                                <ListGroup.Item variant='dark'>Sugar: <span id='Sugar'/> g</ListGroup.Item>
-                                <ListGroup.Item variant='dark'>Sodium: <span id='Sodium'/> mg</ListGroup.Item>
-                                <ListGroup.Item variant='dark'>Cholesterol: <span id='Cholesterol'/> mg</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Fat: <span id='Fat'/>g</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Fiber: <span id='Fiber'/>g</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Sugar: <span id='Sugar'/>g</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Sodium: <span id='Sodium'/>mg</ListGroup.Item>
+                                <ListGroup.Item variant='dark'>Cholesterol: <span id='Cholesterol'/>mg</ListGroup.Item>
                             </ListGroup>
                         </Col>
                     </Row>

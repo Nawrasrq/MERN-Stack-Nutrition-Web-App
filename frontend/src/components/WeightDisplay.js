@@ -92,6 +92,7 @@ function GoalsDisplay()
             window.location.reload();
             return;
         }
+        window.location.reload();
     };
 
     // Initialize list of foods on page
