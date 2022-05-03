@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Button, Container, Navbar, Nav, Form } from 'react-bootstrap';
+import '../css/LoginPage.css';
 
 function ResetPassword()
 {
@@ -50,14 +52,20 @@ function ResetPassword()
     }
 
     return(
-        <div>
-            <form onSubmit={doResetPassword}>
-                <input type="password" id="changedPassword" placeholder="New Password" ref={(c) => newPassword = c} />
-                <input type="password" id="repeatedChangedPassword" placeholder="Re-type new Password" ref={(c) => repeatedNewPassword = c} />
-                <input type="submit" id="resetPasswordButton" class="buttons" value = "Reset Password" onClick={doResetPassword} />
-            </form>
+        <Container id='loginPage'>
+            <Form className='mt-3'>
+                <Form.Group id="leftJustified">
+                    <Form.Label>New Password</Form.Label>
+                    <Form.Control className="mb-3" type="password" id="changedPassword" placeholder="New Password" ref={(c) => newPassword = c} />
+                </Form.Group>
+                <Form.Group id="leftJustified">
+                    <Form.Label>Re-type New Password</Form.Label>
+                    <Form.Control id="leftJustified" className="mb-3" type="password" id="repeatedChangedPassword" placeholder="Re-type new Password" ref={(c) => repeatedNewPassword = c} />
+                </Form.Group>
+                <Button variant='success' type="button" id="resetPasswordButton" onClick={doResetPassword} >Reset Password</Button>
+            </Form>
             <span id="resetPasswordResult">{message}</span>
-        </div>
+        </Container>
       );
 };
 export default ResetPassword;
