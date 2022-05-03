@@ -981,12 +981,12 @@ exports.setApp = function ( app, client )
             //success
             error = '';
             ret = { error: error, jwtToken:refreshedToken };  
-            res.status(200).json(ret);
         }
         catch(e) {
             error = e.toString();
             ret = { error: error, jwtToken:refreshedToken };
-            res.status(200).json(ret);  
+            res.status(200).json(ret);
+            return;
         }
 
         res.status(200).json(ret);
@@ -1040,12 +1040,10 @@ exports.setApp = function ( app, client )
                 //success
                 error = '';
                 ret = { weights: weight, error: error, jwtToken:refreshedToken };
-                res.status(200).json(ret);  
             }
             else{
                 error = 'No weight found';
                 ret = { weights: [], error: error, jwtToken:refreshedToken };
-                res.status(200).json(ret);
             }
         }
         catch(e) {
