@@ -430,7 +430,7 @@ function UsdaFood()
                             <span> {food.lowercaseDescription}</span>
                         </ListGroup.Item>
                         <ListGroup.Item style={{width: '20%'}} variant='dark'>
-                            <Button size='sm' className='mx-1' variant='success' id="addFoodToDailyConsumptionButton" onClick={() => showTrackFoodPopup(food)} > Add </Button>
+                            <Button size='sm' className='mx-1' variant='success' id="addFoodToDailyConsumptionButton" onClick={() => showTrackFoodPopup(food)} > Track </Button>
                             <Button size='sm' className='mr-1' variant='success' id="viewNutritionInfoButton" onClick={() => showInfoPopup(food)} > View </Button>
                         </ListGroup.Item>
                     </ListGroup>

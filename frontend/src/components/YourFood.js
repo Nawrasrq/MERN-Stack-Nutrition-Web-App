@@ -234,7 +234,7 @@ function YourFood()
                             <span> {food.Name}</span>
                         </ListGroup.Item>
                         <ListGroup.Item style={{width: '45%'}} variant='dark'>
-                            <Button size='sm' className='mx-1' variant='success' id="addFoodToDailyConsumptionButton" onClick={() => showTrackFoodPopup(food)} > Add </Button>
+                            <Button size='sm' className='mx-1' variant='success' id="addFoodToDailyConsumptionButton" onClick={() => showTrackFoodPopup(food)} > Track </Button>
                             <Button size='sm' className='mr-1' variant='success' id="viewNutritionInfoButton" onClick={() => showInfoPopup(food)} > View </Button>
                             <Button size='sm' className='m-1' variant='success'  id="editNutritionInfoButton" onClick={() => showEditInfoPopup(food)}>Edit </Button>
                             <Button size='sm' className='mr-1' variant='success' id="deleteFoodButton" onClick={() => showDeleteFoodPopup(food)} >Delete </Button>

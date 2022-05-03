@@ -105,7 +105,7 @@ function GoalsDisplay()
                     <Form.Control type="number" placeholder="Daily Sodium Goal (mg)" onInput={clearMessage} ref={(c) => sodium = c} />
                 </Form.Group>
                 <Form.Group id="leftJustified" className="mb-3" controlId="formCholesterol">
-                    <Form.Control type="number" placeholder="Daily Cholesterol Goal" onInput={clearMessage} ref={(c) => cholesterol = c} />
+                    <Form.Control type="number" placeholder="Daily Cholesterol Goal (mg)" onInput={clearMessage} ref={(c) => cholesterol = c} />
                 </Form.Group>
 
                 <Button 

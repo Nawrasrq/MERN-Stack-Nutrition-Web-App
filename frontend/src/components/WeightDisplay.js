@@ -82,12 +82,14 @@ function GoalsDisplay()
             }
             else
             {
-                setMessage('Goals set!');
+                window.location.reload();
+                setMessage('Weight set!');
             }
         }
         catch(e)
         {
             //alert(e.toString());
+            window.location.reload();
             return;
         }
     };
