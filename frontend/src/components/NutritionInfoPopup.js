@@ -76,7 +76,7 @@ export default class NutritionInfoPopup extends React.Component {
                     <ListGroup style={{height: '95%', overflowY: 'scroll'}}>
                         <ListGroup.Item active variant='dark' style={{width: '95%'}} className='m-auto'>{name}</ListGroup.Item>
                         <ListGroup.Item variant='dark' style={{width: '95%'}} hidden={!showServing} className='m-auto'>{servingLabel}</ListGroup.Item>
-                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Calories: {calories}</ListGroup.Item>
+                        <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Calories: {calories}kcal</ListGroup.Item>
                         <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Protein: {protein}g</ListGroup.Item>
                         <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Carbohydrates: {carbs}g</ListGroup.Item>
                         <ListGroup.Item variant='dark' style={{width: '95%'}} className='m-auto'>Fat: {fat}g</ListGroup.Item>

@@ -167,14 +167,14 @@ function TrackFoodPopup(props)
             <Form.Control size='sm' className='mb-3 mx-auto' style={{width: '20%'}} type="number" step="1" min="1" defaultValue="1" onInput={clearMessage} onKeyPress={preventInvalid} onChange={adjustNutritionalValues} ref={(c) => inputQty = c} />
               <ListGroup className='mx-5' style={{height: '70%', textAlign: 'center'}}>
                 <ListGroup.Item active variant='dark' style={{width: '100%'}}>{name}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Calories: {calories * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Protein: {protein * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Carbohydrates: {carbs * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Fat: {fat * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Fiber: {fiber * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Sugar: {sugar * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Sodium: {sodium * quantity}</ListGroup.Item>
-                <ListGroup.Item variant='dark' style={{width: '100%'}}>Cholesterol: {cholesterol * quantity}</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Calories: {calories * quantity}kcal</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Protein: {protein * quantity}g</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Carbohydrates: {carbs * quantity}g</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Fat: {fat * quantity}g</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Fiber: {fiber * quantity}g</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Sugar: {sugar * quantity}g</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Sodium: {sodium * quantity}mg</ListGroup.Item>
+                <ListGroup.Item variant='dark' style={{width: '100%'}}>Cholesterol: {cholesterol * quantity}mg</ListGroup.Item>
               </ListGroup>
               <Card.Text className='m-0'>{servingLabel}</Card.Text>{showServing && <br/>}
               <Card.Text className='m-1'>Choose meal (Optional):</Card.Text>
