@@ -522,9 +522,9 @@ exports.setApp = function ( app, client )
         const meal = await Meal.findById(id);
 
         // Check if anything will actually be updated
-        if (meal.Name === Name && meal.Calories === parseFloat(Calories) && meal.Protein === parseFloat(Protein)
-            && meal.Carbs === parseFloat(Carbs) && meal.Fat === parseFloat(Fat) && meal.Fiber === parseFloat(Fiber)
-            && meal.Sugar === parseFloat(Sugar) && meal.Sodium === parseFloat(Sodium) && meal.Cholesterol === parseFloat(Cholesterol))
+        if (Name && Calories && Protein
+            && Carbs && Fat && Fiber
+            && Sugar && Sodium && Cholesterol)
         {
             error = "No fields were edited.";
             ret = {meal: meal, error: error, jwtToken: refreshedToken};

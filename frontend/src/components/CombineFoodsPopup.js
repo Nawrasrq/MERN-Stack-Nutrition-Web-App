@@ -4,7 +4,7 @@ import '../css/CombineFoodsPopup.css';
 
 var center = {
     width: '40%',
-    height: '20%',
+    height: '25%',
     top: '40%',
     left: '50%',
     padding: '20px',

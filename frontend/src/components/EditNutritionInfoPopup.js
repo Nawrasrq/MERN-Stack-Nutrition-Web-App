@@ -105,7 +105,7 @@ function EditNutritionInfoPopup(props)
 
       var center = {
         width: '40%',
-        height: '50%',
+        height: '65%',
         top: '70%',
         left: '50%',
         padding: '20px',
