@@ -238,8 +238,8 @@ exports.setApp = function ( app, client )
         //get login from frontend
         const { Login } = req.body;
         
-        let error = '';
-        let ret = {};
+        var error = '';
+        var ret = {};
         
         //search the database for the user based on their id
         const findUser = await User.find({Login:Login});
