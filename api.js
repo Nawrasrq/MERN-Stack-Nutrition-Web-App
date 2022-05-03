@@ -522,9 +522,9 @@ exports.setApp = function ( app, client )
         const meal = await Meal.findById(id);
 
         // Check if anything will actually be updated
-        if (Name && Calories && Protein
-            && Carbs && Fat && Fiber
-            && Sugar && Sodium && Cholesterol)
+        if (!Name && !Calories && !Protein
+            && !Carbs && !Fat && !Fiber
+            && !Sugar && !Sodium && !Cholesterol)
         {
             error = "No fields were edited.";
             ret = {meal: meal, error: error, jwtToken: refreshedToken};
@@ -981,10 +981,12 @@ exports.setApp = function ( app, client )
             //success
             error = '';
             ret = { error: error, jwtToken:refreshedToken };  
+            res.status(200).json(ret);
         }
         catch(e) {
             error = e.toString();
-            ret = { error: error, jwtToken:refreshedToken };  
+            ret = { error: error, jwtToken:refreshedToken };
+            res.status(200).json(ret);  
         }
 
         res.status(200).json(ret);
