@@ -82,17 +82,14 @@ function GoalsDisplay()
             }
             else
             {
-                window.location.reload();
                 setMessage('Weight set!');
             }
         }
         catch(e)
         {
             //alert(e.toString());
-            window.location.reload();
             return;
         }
-        window.location.reload();
     };
 
     // Initialize list of foods on page
@@ -119,7 +116,7 @@ function GoalsDisplay()
                                 <Col>
                                 <Card.Text style={{width: '180px', 'textAlign': 'center'}} id='leftJustified'>
                                     Last Recorded: <span id='weightDate'></span><br/>
-                                    Weight: <span id='displayWeight'></span> lbs
+                                    Weight: <span id='displayWeight'></span>lbs
                                 </Card.Text>
                                 </Col>
                                 <Form style={{width: '150px'}}>
