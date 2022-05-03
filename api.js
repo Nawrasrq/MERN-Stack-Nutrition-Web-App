@@ -247,12 +247,12 @@ exports.setApp = function ( app, client )
         //if user found 
         if(findUser.length > 0){
             //send email to reset your password
-            Email = findUser[0].Email;
-            id = findUser[0].UserId;
+            let Email = findUser[0].Email;
+            let id = findUser[0].UserId;
 
             // Made this to test api on local
-            linkPath = ""; //needs to be a link to a page in the frontend
-            route = "api/passwordreset/" + id;
+            let linkPath = ""; //needs to be a link to a page in the frontend
+            let route = "api/passwordreset/" + id;
             if (process.env.NODE_ENV === 'production'){
                 linkPath = 'https://' + app_name +  '.herokuapp.com/' + route;
             }

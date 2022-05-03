@@ -52,34 +52,6 @@ describe('login', () => {
     });
 });
 
-/*describe('passwordresetrequest', () => {
-    describe('/POST passwordresetrequest', () => {
-        it('password reset has been sent to email', (done) => {
-            chai.request('https://nutrition-app-27.herokuapp.com')
-                .post('/api/passwordresetrequest')
-                .send(({Login: "user10",}))
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    done();
-                });
-        });
-    });
-});
-
-describe('passwordreset', () => {
-    describe('/POST passwordreset', () => {
-        it('password has been successfully reset/changed', (done) => {
-            chai.request('https://nutrition-app-27.herokuapp.com')
-                .post('/api/passwordreset/7')
-                .send(({NewPassword: "passto3"}))
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    done();
-                });
-        });
-    });
-});*/
-
 describe('addmeal', () => {
     describe('/POST addmeal', () => {
         it('meal successfully added', (done) => {
@@ -164,8 +136,8 @@ describe('editgoal', () => {
     describe('/PUT editgoal', () => {
         it('goal successfully edited', (done) => {
             chai.request('https://nutrition-app-27.herokuapp.com')
-                .put('/api/editgoal/62583f742262e3508d88f9a5')
-                .send(({Calories: "500", Protein: "42", Carbs: "80", Fat: "15", Fiber:"5", Sugar: "0", Sodium: "200", Cholesterol: "20"}))
+                .put('/api/editgoal/')
+                .send(({UserId: "7", Calories: "500", Protein: "42", Carbs: "80", Fat: "15", Fiber:"5", Sugar: "0", Sodium: "200", Cholesterol: "20"}))
                 .end((err, res) => {
                     res.should.have.status(200);
                     done();
@@ -207,6 +179,47 @@ describe('deletetracked', () => {
         it('tracked meal successfully deleted', (done) => {
             chai.request('https://nutrition-app-27.herokuapp.com')
                 .delete('/api/deletemeal/62698bbc081ad916baf4d3d6')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('addweight', () => {
+    describe('/POST addweight', () => {
+        it('weight successfully added', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .post('/api/addweight')
+                .send(({UserId: "7", newWeight: "150", Date: "04/20/22"}))
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('retrieveweights', () => {
+    describe('/POST retrieveweights', () => {
+        it('weight successfully received', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .post('/api/retrievetracked/')
+                .send(({UserId: "7"}))
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+
+describe('deleteweight', () => {
+    describe('/DELETE deleteweight', () => {
+        it('weight successfully deleted', (done) => {
+            chai.request('https://nutrition-app-27.herokuapp.com')
+                .delete('/api/deletemeal/626f07b091129f07dc123f4d')
                 .end((err, res) => {
                     res.should.have.status(200);
                     done();
