@@ -1039,11 +1039,13 @@ exports.setApp = function ( app, client )
             if(weight.length > 0){
                 //success
                 error = '';
-                ret = { weights: weight, error: error, jwtToken:refreshedToken };  
+                ret = { weights: weight, error: error, jwtToken:refreshedToken };
+                res.status(200).json(ret);  
             }
             else{
                 error = 'No weight found';
                 ret = { weights: [], error: error, jwtToken:refreshedToken };
+                res.status(200).json(ret);
             }
         }
         catch(e) {
