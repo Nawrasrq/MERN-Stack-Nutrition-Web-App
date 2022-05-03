@@ -255,7 +255,7 @@ exports.setApp = function ( app, client )
                 to: Email,   // reciever
                 subject: 'Reset Password',
                 text: 'Click the url to reset your password',
-                html: "nutrition-app-27.herokuapp.com/api/api/passwordreset/" + id
+                html: "nutrition-app-27.herokuapp.com/api/passwordreset/" + id
             };
             transporter.sendMail(mailData, function (err, info) {
                 if(err){
