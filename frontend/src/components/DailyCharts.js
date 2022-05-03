@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, ProgressBar } from 'react-bootstrap';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import '../css/DailyCharts.css';
 
 import 'chart.js/auto';
 import {Pie, Doughnut} from 'react-chartjs-2';
