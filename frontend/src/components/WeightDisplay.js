@@ -87,7 +87,7 @@ function GoalsDisplay()
         }
         catch(e)
         {
-            alert(e.toString());
+            //alert(e.toString());
             return;
         }
     };
