@@ -250,22 +250,12 @@ exports.setApp = function ( app, client )
             let Email = findUser[0].Email;
             let id = findUser[0].UserId;
 
-            // Made this to test api on local
-            let linkPath = ""; //needs to be a link to a page in the frontend
-            let route = "api/passwordreset/" + id;
-            if (process.env.NODE_ENV === 'production'){
-                linkPath = 'https://' + app_name +  '.herokuapp.com/' + route;
-            }
-            else{        
-                linkPath = 'http://localhost:3000/' + route;
-            }
-
             const mailData = {
                 from: 'nutritionapp315@gmail.com',  // sender address
                 to: Email,   // reciever
                 subject: 'Reset Password',
                 text: 'Click the url to reset your password',
-                html: linkPath
+                html: "nutrition-app-27.herokuapp.com/api/api/passwordreset/" + id
             };
             transporter.sendMail(mailData, function (err, info) {
                 if(err){
