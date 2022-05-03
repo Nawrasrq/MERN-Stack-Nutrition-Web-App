@@ -487,7 +487,6 @@ exports.setApp = function ( app, client )
         
         const {Name, Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Cholesterol, jwtToken} = req.body;
         const id = req.params.id;
-        alert(id);
 
         let refreshedToken = null;
         let error = '';
