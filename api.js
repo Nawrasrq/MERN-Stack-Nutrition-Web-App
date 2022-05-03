@@ -238,8 +238,8 @@ exports.setApp = function ( app, client )
         //get login from frontend
         const { Login } = req.body;
         
-        var error = '';
-        var ret = {};
+        let error = '';
+        let ret = {};
         
         //search the database for the user based on their id
         const findUser = await User.find({Login:Login});
@@ -277,6 +277,7 @@ exports.setApp = function ( app, client )
         }
         
         //send error json data
+        ret = {error: error};
         res.status(200).json(ret);
     });
 
@@ -322,6 +323,7 @@ exports.setApp = function ( app, client )
         }
 
         //send error json data
+        ret = {error: error};
         res.status(200).json(ret);
     });
 
